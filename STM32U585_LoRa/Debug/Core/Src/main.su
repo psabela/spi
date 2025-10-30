@@ -1,0 +1,12 @@
+/home/peter/Documents/stm_projects/STM/wks2/STM32U585_LoRa/Drivers/CMSIS/Include/core_cm33.h:3212:26:ITM_SendChar	16	static,ignoring_inline_asm
+../Core/Src/main.c:20:5:_write	32	static
+../Core/Src/main.c:36:5:main	8	static
+../Core/Src/main.c:81:6:NVIC_Interupts_Enable	8	static
+../Core/Src/main.c:87:6:TIM8_UP_IRQHandler	8	static
+../Core/Src/main.c:95:6:SPI1_IRQHandler	16	static
+../Core/Src/main.c:198:6:RCC_init	8	static
+../Core/Src/main.c:233:6:GPIO_SPI_init	8	static
+../Core/Src/main.c:260:6:SPI_init	8	static
+../Core/Src/main.c:489:6:SPI_start	8	static
+../Core/Src/main.c:512:6:TIM8_init	8	static
+../Core/Src/main.c:531:6:TIM8_start	8	static
