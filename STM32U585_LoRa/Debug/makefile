@@ -59,8 +59,8 @@ all: main-build
 main-build: STM32U585_LoRa.elf secondary-outputs
 
 # Tool invocations
-STM32U585_LoRa.elf STM32U585_LoRa.map: $(OBJS) $(USER_OBJS) /home/peter/Documents/stm_projects/STM/wks2/STM32U585_LoRa/STM32U585AIIXQ_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "STM32U585_LoRa.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m33 -T"/home/peter/Documents/stm_projects/STM/wks2/STM32U585_LoRa/STM32U585AIIXQ_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32U585_LoRa.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+STM32U585_LoRa.elf STM32U585_LoRa.map: $(OBJS) $(USER_OBJS) /home/peter/Documents/stm_projects/STM/wks2/spi/STM32U585_LoRa/STM32U585AIIXQ_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "STM32U585_LoRa.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m33 -T"/home/peter/Documents/stm_projects/STM/wks2/spi/STM32U585_LoRa/STM32U585AIIXQ_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32U585_LoRa.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

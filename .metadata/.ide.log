@@ -1,0 +1,33 @@
+2025-10-31 15:40:25,687 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] Oct 31, 2025 3:40:25 PM java.util.prefs.FileSystemPreferences checkLockFile0ErrorCode
+2025-10-31 15:40:25,697 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] WARNING: Could not lock System prefs. Unix error code 30658.
+2025-10-31 15:40:25,703 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 
+2025-10-31 15:40:25,704 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] Oct 31, 2025 3:40:25 PM java.util.prefs.FileSystemPreferences syncWorld
+2025-10-31 15:40:25,704 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] WARNING: Couldn't flush system prefs: java.util.prefs.BackingStoreException: Couldn't get file lock.
+2025-10-31 15:40:25,705 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 
+2025-10-31 15:40:27,554 [ERROR] ConfigurationRetriever:142 - IOException on connection: sw-center.st.com
+2025-10-31 15:40:27,560 [ERROR] ConfigurationRetriever:142 - IOException on connection: sw-center.st.com
+2025-10-31 15:40:27,571 [ERROR] ConfigurationRetriever:142 - IOException on connection: sw-center.st.com
+2025-10-31 15:40:55,709 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] Oct 31, 2025 3:40:55 PM java.util.prefs.FileSystemPreferences checkLockFile0ErrorCode
+2025-10-31 15:40:55,709 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] WARNING: Could not lock System prefs. Unix error code 30658.
+2025-10-31 15:40:55,709 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 
+2025-10-31 15:40:55,716 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] Oct 31, 2025 3:40:55 PM java.util.prefs.FileSystemPreferences syncWorld
+2025-10-31 15:40:55,716 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] WARNING: Couldn't flush system prefs: java.util.prefs.BackingStoreException: Couldn't get file lock.
+2025-10-31 15:40:55,716 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 
+2025-10-31 15:41:25,688 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] Oct 31, 2025 3:41:25 PM java.util.prefs.FileSystemPreferences checkLockFile0ErrorCode
+2025-10-31 15:41:25,688 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] WARNING: Could not lock System prefs. Unix error code 30658.
+2025-10-31 15:41:25,691 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 
+2025-10-31 15:41:25,692 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] Oct 31, 2025 3:41:25 PM java.util.prefs.FileSystemPreferences syncWorld
+2025-10-31 15:41:25,692 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] WARNING: Couldn't flush system prefs: java.util.prefs.BackingStoreException: Couldn't get file lock.
+2025-10-31 15:41:25,692 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 
+2025-10-31 15:41:55,701 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] Oct 31, 2025 3:41:55 PM java.util.prefs.FileSystemPreferences checkLockFile0ErrorCode
+2025-10-31 15:41:55,704 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] WARNING: Could not lock System prefs. Unix error code 30658.
+2025-10-31 15:41:55,704 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 
+2025-10-31 15:41:55,710 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] Oct 31, 2025 3:41:55 PM java.util.prefs.FileSystemPreferences syncWorld
+2025-10-31 15:41:55,711 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] WARNING: Couldn't flush system prefs: java.util.prefs.BackingStoreException: Couldn't get file lock.
+2025-10-31 15:41:55,711 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 
+2025-10-31 15:42:25,688 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] Oct 31, 2025 3:42:25 PM java.util.prefs.FileSystemPreferences checkLockFile0ErrorCode
+2025-10-31 15:42:25,688 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] WARNING: Could not lock System prefs. Unix error code 30658.
+2025-10-31 15:42:25,688 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 
+2025-10-31 15:42:25,690 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] Oct 31, 2025 3:42:25 PM java.util.prefs.FileSystemPreferences syncWorld
+2025-10-31 15:42:25,690 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] WARNING: Couldn't flush system prefs: java.util.prefs.BackingStoreException: Couldn't get file lock.
+2025-10-31 15:42:25,690 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 
