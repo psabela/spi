@@ -2,7 +2,6 @@
 #include <stdint.h>
 #include "stm32u585xx.h"
 #include "core_cm33.h"
-
 #include "rcc_assembly.h"
 #include "gpio_assembly.h"
 #include "spi_master_assembly.h"
@@ -24,58 +23,19 @@ int _write(int file, char *ptr, int len){
 	return len;
 }
 
-
-uint8_t *ptr_tx_buffer = NULL; //tx_buffer;
-uint8_t Opcode = 0x80;
-uint8_t STDBY_RC = 0;
-uint8_t tx_buffer[3];
-uint32_t rx_buffer;
-
-int stop_flag = 0;
-
 int main(void){
 
-	ASM_RCC_AHB2ENR1_GPIOEEN_Set();
-	ASM_RCC_AHB2ENR1_GPIODEN_Set();
-	GPIOE_MODER_BUSY_INPUT();
-	GPIOE_PURDR_BUSY_UP();
-	GPIOD_MODER_DIO_INPUT();
-	GPIOD_PUPDR_DIO_NPUPD();
-
 	RCC_init();
-	TIM8_init();
-	SPI_init();
+	//TIM8_init();
+	//SPI_init();
 
 	NVIC_Interupts_Enable();
 
-	tx_buffer[0] = Opcode;
-	tx_buffer[1] = STDBY_RC;
-	tx_buffer[2] = '$';
-	ptr_tx_buffer = tx_buffer;
-
-//	ASM_SPI_CR1_SSI_1();
-	TIM8_start();
-//
-//	ASM_SPI_CR1_SSI_1();
-//	ASM_SPI_CR1_SSI_0();
+	//TIM8_start();
 
 	//SPI_start();
-	ASM_SPI_CR1_SPE_1(); //enable spi
-	ASM_SPI_CR1_SSI_0(); //select slave
-	//ASM_SPI_CR1_CSTART_1(); //start spi
 
-	while(1){
-
-//		if (GPIOE_IDR_BUSY_GET() & (0x1U << 7))
-//		{
-//			printf("%d \n", 11);
-//		}
-//		else
-//		{
-//			//printf("%d \n", 0);
-//		}
-
-	}
+	while(1){}
 }
 
 void NVIC_Interupts_Enable(){
@@ -88,7 +48,7 @@ void TIM8_UP_IRQHandler(){
 	if(TIM8_Get_SR_Status() & 0x1){  //UIF on
 		TIM8_Clear_UIF_Flag();
 		tim_flag ^= 1;
-		//printf("%i \n", tim_flag);
+		printf("%i \n", tim_flag);
 	}
 }
 
@@ -139,14 +99,14 @@ void SPI1_IRQHandler(){
 	if(ASM_SPI_SR_Get() & (0x1U << 1)){
 		printf("Data packet space available\n");
 
-		if(ptr_tx_buffer != NULL){
-			//ASM_SPI_CR1_SSI_0();
-			for(int i = 0; i<2000; i++){}
-
-			//printf("----------------->>>>   %x \n", *ptr_tx_buffer);
-			//ASM_SPI_TXDR_Set(*ptr_tx_buffer);
-			//ptr_tx_buffer++;
-		}
+//		if(ptr_tx_buffer != NULL){
+//			//ASM_SPI_CR1_SSI_0();
+//			for(int i = 0; i<2000; i++){}
+//
+//			//printf("----------------->>>>   %x \n", *ptr_tx_buffer);
+//			//ASM_SPI_TXDR_Set(*ptr_tx_buffer);
+//			//ptr_tx_buffer++;
+//		}
 
 	}
 	else{
@@ -187,7 +147,7 @@ void SPI1_IRQHandler(){
 	* checked again once a complete data packet is read out from RxFIFO.
 	*/
 	while(ASM_SPI_SR_Get() & (0x1U)){
-		rx_buffer = ASM_SPI_RXDR_Get();
+		//rx_buffer = ASM_SPI_RXDR_Get();
 		printf("RxFIFO contains at least one data packet\n");
 //		ASM_SPI_CR1_SSI_1(); //unselect slave
 //		ASM_SPI_CR1_SPE_0(); //disable SPI1
@@ -234,27 +194,27 @@ void GPIO_SPI_init(){
 
 	ASM_RCC_AHB2ENR1_GPIOEEN_Set();
 	ASM_RCC_AHB2ENR1_GPIODEN_Set();
+	ASM_RCC_AHB2ENR1_GPIOCEN_Set();
 
 	//Configure GPIOE
 	GPIOE_MODER_Set_Alt_Function();
 	GPIOE_AFRH_Set_Alt_Function();
 	GPIOE_OSPEEDR_Set();
-  //GPIOE_PUPDR_Set();
-
+	GPIOE_PUPDR_NSS_UP();
 	GPIOE_PUPDR_MOSI_UP();
-  //GPIOE_PUPDR_MOSI_DOWN();
 	GPIOE_PUPDR_MISO_UP();
-  //GPIOE_PUPDR_MISO_DOWN();
+
 
   //** GPIO_PUPDR_SCK register bit value gets overwritten by SPI_CPOL bit (clock polarity)
   //GPIOE_PUPDR_SCK_UP();
   //GPIOE_PUPDR_CLEAR(26);
   //GPIOE_PUPDR_SCK_DOWN();
-  //** GPIOE_PUPDR_NSS register bit value gets overwritten by SPI_SSIOP bit (SS input/output polarity)
-	GPIOE_PUPDR_NSS_UP();
-  //GPIOE_PUPDR_NSS_DOWN();
-	//GPIOE_PUPDR_RDY_UP();
-    GPIOE_PUPDR_RDY_DOWN();
+
+    //Configure GPIOC for RDY
+    GPIOC_MODER_Set_Alt_Function();
+    GPIOC_AFRH_Set_Alt_Function();
+    GPIOC_PUPDR_RDY_UP();
+
 }
 
 void SPI_init(){
@@ -288,56 +248,13 @@ void SPI_init(){
 	ASM_SPI_CFG2_SSIOP_0();
 	//ASM_SPI_CFG2_SSIOP_1();  //High is active for SS signal
 
-	/**
-	 * SSOM: SS output management in Master mode
-	 * This bit is taken into account in Master mode when SSOE is enabled.
-	 * It allows the SS output to be configured between two consecutive data transfers.
-	 * 0: SS is kept at active level till data transfer is completed,
-	 *    it becomes inactive with with EOT flag
-	 * 1: SPI data frames are interleaved with SS non active pulses when MIDI[3:0]>1
-	 */
-	//ASM_SPI_CFG2_SSOM_1();	//SS output management, interleave with non-active pulse
-    ASM_SPI_CFG2_SSOM_0(); //SS output management, SS keep active till EOT flag
-
-	/**
-	 * Bits 7:4 MIDI[3:0]: master Inter-Data Idleness
-	 * Specifies minimum time delay (expressed in SPI clock cycles periods)
-	 * inserted between two consecutive data frames in Master mode.
-	 * 0000: no delay
-	 * 0001: 1 clock cycle period delay
-	 * ...
-	 * 1111: 15 clock cycle periods delay
-	 * Note: This feature is not supported in TI mode.
-	 */
-	ASM_SPI_CFG2_MIDI_Set();
-
-	/**
-	 * Bit 26 SSM: software management of SS signal input
-	 * 0: SS input value is determined by the SS PAD
-	 * 1: SS input value is determined by the SSI bit
-	 * When master uses hardware SS output (SSM = 0 and SSOE = 1)
-	 * the SS signal input is forced to not active state internally
-	 * to prevent master mode fault error.
-	 */
-  //ASM_SPI_CFG2_SSM_0();
-    ASM_SPI_CFG2_SSM_1();
-
-	/**
-	 * Bit 29 SSOE: SS output enable
-	 * This bit is taken into account in Master mode only
-	 * 0: SS output is disabled and the SPI can work in multimaster configuration
-	 * 1: SS output is enabled. The SPI cannot work in a multimaster environment.
-	 * It forces the SS pin at inactive level after the transfer is completed
-	 * or SPI is disabled with respect to SSOM, MIDI, MSSI, SSIOP bits setting
-	 */
-	ASM_SPI_CFG2_SSOE_1();	//SS output enabled(master mode only)
 
 	/**
 	 * Bit 22 MASTER: SPI Master
 	 * 0: SPI Slave
 	 * 1: SPI Master
 	 */
-	ASM_SPI_CFG2_MASTER_Set();
+	ASM_SPI_CFG2_MASTER_Set();  //set to slave
 
 	/**
 	 * Bits 18:17 COMM[1:0]: SPI Communication Mode
@@ -409,19 +326,6 @@ void SPI_init(){
 	*/
 	ASM_SPI_CFG1_FTHLV_2();
 
-	/**
-	 * Bits 3:0 MSSI[3:0]: Master SS Idleness
-	 * Specifies an extra delay, expressed in number of SPI clock cycle periods,
-	 * inserted additionally between active edge of SS opening a session
-	 * and the beginning of the first data frame of the session in Master mode when SSOE is enabled.
-	 * 0000: no extra delay
-	 * 0001: 1 clock cycle period delay added
-	 * ...
-	 * 1111: 15 clock cycle periods delay added
-	 * Note: This feature is not supported in TI mode.
-	 * To include the delay, the SPI must be disabled and re-enabled between sessions.
-	 */
-  //ASM_SPI_CFG2_MSSI_Set();  //default
 
 	/**
 	 * Bits 30:28 MBR[2:0]: master baud rate prescaler
@@ -477,6 +381,10 @@ void SPI_init(){
 	ASM_SPI_CR2_TSIZE();
 
 	//ASM_SPI_CFG2_RDIOM_1_SIMULATE_RDY();
+
+	ASM_SPI_UDRDR(); // set to asterisk
+	ASM_CFG1_UDRCFG_1(); //echo master
+
 
 	//Enable interrupts on SPI1
 	ASM_SPI_IER_EOTIE_Set();

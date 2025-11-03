@@ -49,5 +49,8 @@ extern uint8_t ASM_SPI_RXDR_Get(void);
 extern void ASM_SPI_CR1_SSI_0(void);
 extern void ASM_SPI_CR1_SSI_1(void);
 extern void ASM_SPI_CFG2_RDIOM_1_SIMULATE_RDY(void);
+extern void ASM_SPI_UDRDR(void);
+extern void ASM_CFG1_UDRCFG_1(void);
+extern void ASM_CFG1_UDRCFG_0(void);
 
 #endif /* SPI_MASTER_ASSEMBLY_H_ */
