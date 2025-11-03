@@ -24,58 +24,25 @@ int _write(int file, char *ptr, int len){
 	return len;
 }
 
+uint8_t *my_input;
 
-uint8_t *ptr_tx_buffer = NULL; //tx_buffer;
-uint8_t Opcode = 0x80;
-uint8_t STDBY_RC = 0;
-uint8_t tx_buffer[3];
-uint32_t rx_buffer;
-
-int stop_flag = 0;
 
 int main(void){
 
-	ASM_RCC_AHB2ENR1_GPIOEEN_Set();
-	ASM_RCC_AHB2ENR1_GPIODEN_Set();
-	GPIOE_MODER_BUSY_INPUT();
-	GPIOE_PURDR_BUSY_UP();
-	GPIOD_MODER_DIO_INPUT();
-	GPIOD_PUPDR_DIO_NPUPD();
+	uint8_t my_value = 43;
+	my_input = &my_value;
 
-	RCC_init();
-	TIM8_init();
+
+	//RCC_init();
+	//TIM8_init();
 	SPI_init();
 
 	NVIC_Interupts_Enable();
 
-	tx_buffer[0] = Opcode;
-	tx_buffer[1] = STDBY_RC;
-	tx_buffer[2] = '$';
-	ptr_tx_buffer = tx_buffer;
+	//TIM8_start();
+	SPI_start();
 
-//	ASM_SPI_CR1_SSI_1();
-	TIM8_start();
-//
-//	ASM_SPI_CR1_SSI_1();
-//	ASM_SPI_CR1_SSI_0();
-
-	//SPI_start();
-	ASM_SPI_CR1_SPE_1(); //enable spi
-	ASM_SPI_CR1_SSI_0(); //select slave
-	//ASM_SPI_CR1_CSTART_1(); //start spi
-
-	while(1){
-
-//		if (GPIOE_IDR_BUSY_GET() & (0x1U << 7))
-//		{
-//			printf("%d \n", 11);
-//		}
-//		else
-//		{
-//			//printf("%d \n", 0);
-//		}
-
-	}
+	while(1){}
 }
 
 void NVIC_Interupts_Enable(){
@@ -88,7 +55,7 @@ void TIM8_UP_IRQHandler(){
 	if(TIM8_Get_SR_Status() & 0x1){  //UIF on
 		TIM8_Clear_UIF_Flag();
 		tim_flag ^= 1;
-		//printf("%i \n", tim_flag);
+		printf("%i \n", tim_flag);
 	}
 }
 
@@ -119,8 +86,8 @@ void SPI1_IRQHandler(){
 		//* re-enabled before next transaction starts despite its setting is not changed.
 //		ASM_SPI_CR1_SPE_0();
 //		if(!stop_flag){
-//			SPI_init();
-//			SPI_start();
+			SPI_init();
+			SPI_start();
 //		}
 	}
 
@@ -139,14 +106,14 @@ void SPI1_IRQHandler(){
 	if(ASM_SPI_SR_Get() & (0x1U << 1)){
 		printf("Data packet space available\n");
 
-		if(ptr_tx_buffer != NULL){
-			//ASM_SPI_CR1_SSI_0();
-			for(int i = 0; i<2000; i++){}
-
-			//printf("----------------->>>>   %x \n", *ptr_tx_buffer);
-			//ASM_SPI_TXDR_Set(*ptr_tx_buffer);
-			//ptr_tx_buffer++;
-		}
+//		if(ptr_tx_buffer != NULL){
+//			//ASM_SPI_CR1_SSI_0();
+//			for(int i = 0; i<2000; i++){}
+//
+//			//printf("----------------->>>>   %x \n", *ptr_tx_buffer);
+			ASM_SPI_TXDR_Set(*my_input);
+//			//ptr_tx_buffer++;
+//		}
 
 	}
 	else{
@@ -156,6 +123,7 @@ void SPI1_IRQHandler(){
 	//Bit 6 OVR: overrun
 	if(ASM_SPI_SR_Get() & (0x1U << 6)){
 		printf("Overrun.\n");
+		ASM_SPI_RXDR_Get(); //clear RxFIFO
 		ASM_SPI_IFCR_OVRC();
 	}
 
@@ -187,7 +155,7 @@ void SPI1_IRQHandler(){
 	* checked again once a complete data packet is read out from RxFIFO.
 	*/
 	while(ASM_SPI_SR_Get() & (0x1U)){
-		rx_buffer = ASM_SPI_RXDR_Get();
+//		rx_buffer = ASM_SPI_RXDR_Get();
 		printf("RxFIFO contains at least one data packet\n");
 //		ASM_SPI_CR1_SSI_1(); //unselect slave
 //		ASM_SPI_CR1_SPE_0(); //disable SPI1
@@ -220,7 +188,7 @@ void RCC_init(){
 	// Read clock frequency
 			//ASM_RCC_CFGR1_MCOSEL_HSIor STM32U516();
 			//ASM_RCC_CFGR1_MCOSEL_HSI48();
-	 ASM_RCC_CFGR1_MCOSEL_SYSCLK();
+	ASM_RCC_CFGR1_MCOSEL_SYSCLK();
 			//ASM_RCC_CFGR1_MCOSEL_MSIK();
 			//ASM_RCC_CFGR1_MCOSEL_MSIS();
 			//ASM_RCC_CFGR1_MCOSEL_HSE();
@@ -233,6 +201,7 @@ void RCC_init(){
 void GPIO_SPI_init(){
 
 	ASM_RCC_AHB2ENR1_GPIOEEN_Set();
+	ASM_RCC_AHB2ENR1_GPIOCEN_Set();
 	ASM_RCC_AHB2ENR1_GPIODEN_Set();
 
 	//Configure GPIOE
@@ -254,7 +223,6 @@ void GPIO_SPI_init(){
 	GPIOE_PUPDR_NSS_UP();
   //GPIOE_PUPDR_NSS_DOWN();
 	//GPIOE_PUPDR_RDY_UP();
-    GPIOE_PUPDR_RDY_DOWN();
 }
 
 void SPI_init(){
@@ -270,8 +238,8 @@ void SPI_init(){
 	 */
 
 		//ASM_RCC_CCIPR1_SPI1SEL_HSI16();
-	ASM_RCC_CCIPR1_SPI1SEL_PCLK2();
-	  //ASM_RCC_CCIPR1_SPI1SEL_SYSCLK();
+	//ASM_RCC_CCIPR1_SPI1SEL_PCLK2();
+    ASM_RCC_CCIPR1_SPI1SEL_SYSCLK();
 	  //ASM_RCC_CFGR2_HPRE_2();
 	  //ASM_RCC_CFGR2_PCLK2_2();
 	ASM_RCC_APB2ENR_SPI1_Set();

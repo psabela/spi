@@ -1,0 +1,7 @@
+"./Core/Src/gpio_assembly.o"
+"./Core/Src/main.o"
+"./Core/Src/nvic_assembly.o"
+"./Core/Src/rcc_assembly.o"
+"./Core/Src/spi_master_assembly.o"
+"./Core/Src/tim8_assembly.o"
+"./Core/Startup/startup_stm32u585aiixq.o"

@@ -11,6 +11,7 @@
 extern void ASM_RCC_AHB2ENR1_GPIOEEN_Set(void);
 extern void ASM_RCC_AHB2ENR1_GPIOAEN_Set(void);
 extern void ASM_RCC_AHB2ENR1_GPIODEN_Set(void);
+extern void ASM_RCC_AHB2ENR1_GPIOCEN_Set(void);
 extern void ASM_RCC_APB2ENR_SPI1_Set(void);
 extern void ASM_RCC_APB2ENR_TIM8EN_Set(void);
 extern void ASM_RCC_CCIPR1_SPI1SEL_HSI16(void);
