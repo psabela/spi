@@ -30,11 +30,16 @@
 .global GPIOE_PUPDR_NSS_UP
 .global GPIOE_PUPDR_NSS_DOWN
 # PORT C
-.global GPIOC_MODER_Set_Alt_Function
-.global GPIOC_AFRH_Set_Alt_Function
+.global GPIOC_MODER_Output
+.global GPIOC_OTYPER_PP
+.global GPIOC_OSPEEDR
+.global GPIOC_BSRR_SET
+.global GPIOC_BSRR_RESET
 .global GPIOC_PUPDR_NUND
 .global GPIOC_PUPDR_RDY_UP
 .global GPIOC_PUPDR_RDY_DOWN
+
+
 
 // Define global variables
 
@@ -287,38 +292,47 @@ GPIOE_PUPDR_MOSI_UP:
 
 // GPIO C PORT
 // PC1-SPI1_RDY  PC1
-GPIOC_MODER_Set_Alt_Function:
-	//PC1
-	//MODER bits = 10: Alternate function mode
+
+GPIOC_MODER_Output:
+	//01   MODE1
 	LDR		R1, =GPIOC_BASE_ADDR
 	LDR		R2, =GPIOx_MODER_OFFSET
-	ADDS	R1,	R2
+	ADDS	R1, R2
 	LDR		R0, [R1]
-	MOVS	R2, 0x3
-	LSLS	R3, R2, #0	//PC1
-	MVNS	R3,	R3
-	ANDS	R0, R3		//clear bits
-	MOVS	R2, 0x2
-	LSLS	R3, R2, #0
+	MOVS	R3, 0x3
+	LSLS	R3, #2
+	MVNS	R3, R3
+	ANDS 	R0, R3  	//clear bits
+	MOVS	R3, 0x01	//01 General purpose output mode
+	LSLS	R3, #2
 	ORRS	R0, R3
-	STR		R0,	[R1]
+	STR		R0, [R1]
 	BX LR
 
-GPIOC_AFRH_Set_Alt_Function:
-	//0101: AF5 PC1
+GPIOC_OTYPER_PP:
+	//0	 Outupt push-pull
 	LDR		R1, =GPIOC_BASE_ADDR
-	LDR		R2, =GPIOx_AFRL_OFFSET
-	ADDS	R1,	R2
+	LDR		R2, =GPIOx_OTYPER_OFFSET
+	ADDS	R1, R2
 	LDR		R0, [R1]
-	#1
-	MOVS	R2, 0xF
-	LSLS	R2, #4
-	MVNS	R2,	R2
-	ANDS	R0, R2  // CLEAR BITS
-	MOVS	R2, 0x5
-	LSLS	R2, #4
-	ORRS	R0, R2
-	STR		R0,	[R1]
+	MOVS	R3, 0x1
+	LSLS	R3, #1
+	MVNS	R3, R3
+	ANDS	R0, R3
+	STR		R0, [R1]
+	BX LR
+
+GPIOC_OSPEEDR:
+	//00 LOW SPEED
+	LDR		R1, =GPIOC_BASE_ADDR
+	LDR		R2, =GPIOx_OSPEEDR_OFFSET
+	ADDS	R1, R2
+	LDR		R0, [R1]
+	MOVS	R3, 0x3
+	LSLS	R3, #2
+	MVNS	R3, R3
+	ANDS 	R0, R3  	//clear bits
+	STR		R0, [R1]
 	BX LR
 
 GPIOC_PUPDR_NUND:
@@ -352,6 +366,28 @@ GPIOC_PUPDR_RDY_DOWN:
 	LDR		R0, [R1]
 	MOVS	R2, 0x2
 	LSLS	R3, R2, #2
+	ORRS	R0, R3
+	STR		R0,	[R1]
+	BX LR
+
+GPIOC_BSRR_SET:
+	LDR		R1, =GPIOC_BASE_ADDR
+	LDR		R2, =GPIOx_BSRR_OFFSET
+	ADDS	R1,	R2
+	LDR		R0, [R1]
+	MOVS	R2, 0x1
+	LSLS	R3, R2, #1
+	ORRS	R0, R3
+	STR		R0,	[R1]
+	BX LR
+
+GPIOC_BSRR_RESET:
+	LDR		R1, =GPIOC_BASE_ADDR
+	LDR		R2, =GPIOx_BSRR_OFFSET
+	ADDS	R1,	R2
+	LDR		R0, [R1]
+	MOVS	R2, 0x1
+	LSLS	R3, R2, #17
 	ORRS	R0, R3
 	STR		R0,	[R1]
 	BX LR

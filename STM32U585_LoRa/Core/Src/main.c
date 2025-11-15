@@ -23,17 +23,19 @@ int _write(int file, char *ptr, int len){
 	return len;
 }
 
-int main(void){
 
-	RCC_init();
+uint8_t rx_buffer;
+
+
+int main(void){	RCC_init();
 	//TIM8_init();
-	//SPI_init();
+	SPI_init();
 
 	NVIC_Interupts_Enable();
 
 	//TIM8_start();
 
-	//SPI_start();
+	SPI_start();
 
 	while(1){}
 }
@@ -70,7 +72,7 @@ void SPI1_IRQHandler(){
 	* re-enabled before next transaction starts despite its setting is not changed.
 	*/
 	if(ASM_SPI_SR_Get() & (0x1U << 3)){
-		printf("transfer complete.\n");
+//		printf("transfer complete.\n");
 //		ASM_SPI_CR1_SSI_1();
 		ASM_SPI_IFCR_EOTC_Clear();
 		// to-do:
@@ -97,14 +99,15 @@ void SPI1_IRQHandler(){
 	* disabled.
 	*/
 	if(ASM_SPI_SR_Get() & (0x1U << 1)){
-		printf("Data packet space available\n");
+		//printf("Data packet space available\n");
 
 //		if(ptr_tx_buffer != NULL){
 //			//ASM_SPI_CR1_SSI_0();
 //			for(int i = 0; i<2000; i++){}
 //
 //			//printf("----------------->>>>   %x \n", *ptr_tx_buffer);
-//			//ASM_SPI_TXDR_Set(*ptr_tx_buffer);
+			//ASM_SPI_TXDR_Set(*ptr_tx_buffer);
+			ASM_SPI_TXDR_Set(rx_buffer);
 //			//ptr_tx_buffer++;
 //		}
 
@@ -132,7 +135,7 @@ void SPI1_IRQHandler(){
 	* calculating when to disable TXP and DXP interrupts.
 	*/
 	if(ASM_SPI_SR_Get() & (0x1U << 4)){
-		printf("TxFIFO upload is finished.\n");
+		//printf("TxFIFO upload is finished.\n");
 		ASM_SPI_IFCR_TXTFC();
 	}
 
@@ -147,8 +150,9 @@ void SPI1_IRQHandler(){
 	* checked again once a complete data packet is read out from RxFIFO.
 	*/
 	while(ASM_SPI_SR_Get() & (0x1U)){
-		//rx_buffer = ASM_SPI_RXDR_Get();
-		printf("RxFIFO contains at least one data packet\n");
+		rx_buffer = ASM_SPI_RXDR_Get();
+		//printf("RxFIFO contains at least one data packet\n");
+		printf("Received: %d \n", rx_buffer);
 //		ASM_SPI_CR1_SSI_1(); //unselect slave
 //		ASM_SPI_CR1_SPE_0(); //disable SPI1
 	}
@@ -211,9 +215,11 @@ void GPIO_SPI_init(){
   //GPIOE_PUPDR_SCK_DOWN();
 
     //Configure GPIOC for RDY
-    GPIOC_MODER_Set_Alt_Function();
-    GPIOC_AFRH_Set_Alt_Function();
-    GPIOC_PUPDR_RDY_UP();
+	// PC1
+	GPIOC_MODER_Output();
+	GPIOC_OTYPER_PP();
+	GPIOC_OSPEEDR();
+    GPIOC_PUPDR_RDY_DOWN();
 
 }
 
@@ -380,9 +386,9 @@ void SPI_init(){
 	*/
 	ASM_SPI_CR2_TSIZE();
 
-	//ASM_SPI_CFG2_RDIOM_1_SIMULATE_RDY();
 
-	ASM_SPI_UDRDR(); // set to asterisk
+
+//	ASM_SPI_UDRDR(); // set to asterisk
 	ASM_CFG1_UDRCFG_1(); //echo master
 
 
@@ -415,6 +421,8 @@ void SPI_start(){
 	 * only if any data is available 	 * in the transmission FIFO.
 	*/
 	ASM_SPI_CR1_CSTART_1();
+
+	GPIOC_BSRR_SET();
 }
 
 void TIM8_init(){
