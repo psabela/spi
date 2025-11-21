@@ -52,5 +52,7 @@ extern void ASM_SPI_CFG2_RDIOM_1_SIMULATE_RDY(void);
 extern void ASM_SPI_UDRDR(void);
 extern void ASM_CFG1_UDRCFG_1(void);
 extern void ASM_CFG1_UDRCFG_0(void);
+extern void ASM_SPI_IFCR_UDRC(void);
+extern void ASM_SPI_IER_UDRIE_Set(void);
 
 #endif /* SPI_MASTER_ASSEMBLY_H_ */

@@ -1,9 +1,10 @@
-15:41:40 **** Clean-only build of configuration Debug for project STM32U585_LoRa ****
-make -j16 clean 
-rm -rf ./Core/Startup/startup_stm32u585aiixq.d ./Core/Startup/startup_stm32u585aiixq.o
-rm -rf ./Core/Src/gpio_assembly.d ./Core/Src/gpio_assembly.o ./Core/Src/main.cyclo ./Core/Src/main.d ./Core/Src/main.o ./Core/Src/main.su ./Core/Src/nvic_assembly.d ./Core/Src/nvic_assembly.o ./Core/Src/rcc_assembly.d ./Core/Src/rcc_assembly.o ./Core/Src/spi_master_assembly.d ./Core/Src/spi_master_assembly.o ./Core/Src/tim8_assembly.d ./Core/Src/tim8_assembly.o
-rm -rf STM32U585_LoRa.elf STM32U585_LoRa.list STM32U585_LoRa.map default.size.stdout
+00:22:03 **** Incremental Build of configuration Debug for project STM32U585_LoRa ****
+make -j16 all 
+arm-none-eabi-size  STM32U585_LoRa.elf 
+   text	   data	    bss	    dec	    hex	filename
+   8428	     92	   1916	  10436	   28c4	STM32U585_LoRa.elf
+Finished building: default.size.stdout
  
 
-15:41:40 Build Finished. 0 errors, 0 warnings. (took 68ms)
+00:22:03 Build Finished. 0 errors, 0 warnings. (took 139ms)
 

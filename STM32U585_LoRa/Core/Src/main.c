@@ -16,6 +16,7 @@ void SPI_start(void);
 void TIM8_start(void);
 void NVIC_Interupts_Enable(void);
 
+
 int _write(int file, char *ptr, int len){
 	for(int i = 0; i < len; i++){
 		ITM_SendChar(*ptr++);
@@ -23,19 +24,18 @@ int _write(int file, char *ptr, int len){
 	return len;
 }
 
-
-uint8_t rx_buffer;
+uint8_t rx_buffer[2];
+int idx = 0;
 
 
 int main(void){	RCC_init();
-	//TIM8_init();
+	TIM8_init();
 	SPI_init();
-
 	NVIC_Interupts_Enable();
 
-	//TIM8_start();
-
+	TIM8_start();
 	SPI_start();
+
 
 	while(1){}
 }
@@ -50,6 +50,10 @@ void TIM8_UP_IRQHandler(){
 	if(TIM8_Get_SR_Status() & 0x1){  //UIF on
 		TIM8_Clear_UIF_Flag();
 		tim_flag ^= 1;
+		if(tim_flag == 1){
+			//GPIOC_BSRR_SET();
+		}
+
 		printf("%i \n", tim_flag);
 	}
 }
@@ -73,17 +77,7 @@ void SPI1_IRQHandler(){
 	*/
 	if(ASM_SPI_SR_Get() & (0x1U << 3)){
 //		printf("transfer complete.\n");
-//		ASM_SPI_CR1_SSI_1();
 		ASM_SPI_IFCR_EOTC_Clear();
-		// to-do:
-		//* In master, EOT event terminates the data transaction and handles SS output optionally.
-		//* To restart the internal state machine properly, SPI is strongly suggested to be disabled and
-		//* re-enabled before next transaction starts despite its setting is not changed.
-//		ASM_SPI_CR1_SPE_0();
-//		if(!stop_flag){
-//			SPI_init();
-//			SPI_start();
-//		}
 	}
 
 
@@ -99,28 +93,47 @@ void SPI1_IRQHandler(){
 	* disabled.
 	*/
 	if(ASM_SPI_SR_Get() & (0x1U << 1)){
-		//printf("Data packet space available\n");
-
-//		if(ptr_tx_buffer != NULL){
-//			//ASM_SPI_CR1_SSI_0();
-//			for(int i = 0; i<2000; i++){}
-//
-//			//printf("----------------->>>>   %x \n", *ptr_tx_buffer);
-			//ASM_SPI_TXDR_Set(*ptr_tx_buffer);
-			ASM_SPI_TXDR_Set(rx_buffer);
-//			//ptr_tx_buffer++;
-//		}
-
+		printf("Data packet space available\n");
+		idx ^= 1;
+		ASM_SPI_TXDR_Set(rx_buffer[idx]);
+		GPIOC_BSRR_SET();
 	}
-	else{
-		printf("Data packet space NOT available\n");
+
+	/*
+	* Bit 0 RXP: Rx-packet available
+	* 0: RxFIFO is empty or an incomplete data packet is received
+	* 1: RxFIFO contains at least one data packet
+	* The flag is changed by hardware. It monitors the total number of data currently available at
+	* RxFIFO if SPI is enabled. RXP value depends on the FIFO threshold (FTHLV[3:0]), data
+	* frame size (DSIZE[4:0] in SPI mode), and actual communication flow. If the data packet is
+	* read by performing consecutive read operations from SPI_RXDR, RXP flag must be
+	* checked again once a complete data packet is read out from RxFIFO.
+	*/
+	while(ASM_SPI_SR_Get() & (0x1U)){
+		//printf("RxFIFO contains at least one data packet\n");
+		GPIOC_BSRR_RESET();  //set ready to false
+		idx ^= 1;
+		rx_buffer[idx] = ASM_SPI_RXDR_Get();
+		printf("Received: %d \n", rx_buffer[idx]);
+		GPIOC_BSRR_SET();
 	}
+
 
 	//Bit 6 OVR: overrun
 	if(ASM_SPI_SR_Get() & (0x1U << 6)){
 		printf("Overrun.\n");
+		//GPIOC_BSRR_RESET();  //set ready to false
+		rx_buffer[0] = ASM_SPI_RXDR_Get();
 		ASM_SPI_IFCR_OVRC();
 	}
+
+
+	if(ASM_SPI_SR_Get() & (0x1U << 5)){
+		//underrun flag set
+		ASM_SPI_IFCR_UDRC();
+	}
+
+
 
 	/**
 	* Bit 4 TXTF: transmission transfer filled
@@ -139,23 +152,9 @@ void SPI1_IRQHandler(){
 		ASM_SPI_IFCR_TXTFC();
 	}
 
-	/*
-	* Bit 0 RXP: Rx-packet available
-	* 0: RxFIFO is empty or an incomplete data packet is received
-	* 1: RxFIFO contains at least one data packet
-	* The flag is changed by hardware. It monitors the total number of data currently available at
-	* RxFIFO if SPI is enabled. RXP value depends on the FIFO threshold (FTHLV[3:0]), data
-	* frame size (DSIZE[4:0] in SPI mode), and actual communication flow. If the data packet is
-	* read by performing consecutive read operations from SPI_RXDR, RXP flag must be
-	* checked again once a complete data packet is read out from RxFIFO.
-	*/
-	while(ASM_SPI_SR_Get() & (0x1U)){
-		rx_buffer = ASM_SPI_RXDR_Get();
-		//printf("RxFIFO contains at least one data packet\n");
-		printf("Received: %d \n", rx_buffer);
-//		ASM_SPI_CR1_SSI_1(); //unselect slave
-//		ASM_SPI_CR1_SPE_0(); //disable SPI1
-	}
+
+
+
 
 }
 
@@ -361,7 +360,8 @@ void SPI_init(){
 	 * 0: MSB transmitted first
 	 * 1: LSB transmitted first
 	 */
-	ASM_SPI_CFG2_LSBFRST_MSB();
+	//ASM_SPI_CFG2_LSBFRST_MSB();
+	ASM_SPI_CFG2_LSBFRST_LSB();
 
 	/**
 	 * Bit 31 AFCNTR: alternate function GPIOs control
@@ -397,6 +397,10 @@ void SPI_init(){
 	ASM_SPI_IER_TXPIE_Set();
 	ASM_SPI_IER_TXTFIE_Set();
 	ASM_SPI_IER_RXPIE_Set();
+	ASM_SPI_IER_UDRIE_Set();
+
+	//set slave to READY
+	GPIOC_BSRR_SET();
 
 }
 
@@ -408,21 +412,6 @@ void SPI_start(){
 	 * 1: Serial peripheral enabled
 	 */
 	ASM_SPI_CR1_SPE_1();
-
-	/**
-	 * Bit 9 CSTART: master transfer start
-	 * This bit can be set by software if SPI is enabled only to start an SPI communication.
-	 * it is cleared by hardware when end of transfer (EOT) flag is set
-	 * or when a transaction suspend request is accepted.
-	 * 0: master transfer is at idle
-	 * 1: master transfer is ongoing or temporary suspended by automatic suspend
-	 * In SPI mode, the bit is taken into account at master mode only.
-	 * If transmission is enabled, communication starts or continues
-	 * only if any data is available 	 * in the transmission FIFO.
-	*/
-	ASM_SPI_CR1_CSTART_1();
-
-	GPIOC_BSRR_SET();
 }
 
 void TIM8_init(){
