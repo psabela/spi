@@ -16,7 +16,6 @@ void SPI_start(void);
 void TIM8_start(void);
 void NVIC_Interupts_Enable(void);
 
-
 int _write(int file, char *ptr, int len){
 	for(int i = 0; i < len; i++){
 		ITM_SendChar(*ptr++);
@@ -24,19 +23,18 @@ int _write(int file, char *ptr, int len){
 	return len;
 }
 
-uint8_t rx_buffer[2];
-int idx = 0;
+uint8_t rx_buffer;
+int tim_flag = 0;
+int ready 	 = 0;
 
-
-int main(void){	RCC_init();
+int main(void){
+	RCC_init();
+	rx_buffer = 0;
 	TIM8_init();
 	SPI_init();
 	NVIC_Interupts_Enable();
-
-	TIM8_start();
 	SPI_start();
-
-
+	TIM8_start();
 	while(1){}
 }
 
@@ -45,15 +43,15 @@ void NVIC_Interupts_Enable(){
 	NVIC_SPI1_Enable_Interupt();
 }
 
-int tim_flag = 0;
+
 void TIM8_UP_IRQHandler(){
 	if(TIM8_Get_SR_Status() & 0x1){  //UIF on
 		TIM8_Clear_UIF_Flag();
 		tim_flag ^= 1;
-		if(tim_flag == 1){
-			//GPIOC_BSRR_SET();
+		if(tim_flag == 1 & ready==0){
+			GPIOC_BSRR_SET();
+			ready = 1;
 		}
-
 		printf("%i \n", tim_flag);
 	}
 }
@@ -76,10 +74,9 @@ void SPI1_IRQHandler(){
 	* re-enabled before next transaction starts despite its setting is not changed.
 	*/
 	if(ASM_SPI_SR_Get() & (0x1U << 3)){
-//		printf("transfer complete.\n");
+		printf("transfer complete.\n");
 		ASM_SPI_IFCR_EOTC_Clear();
 	}
-
 
 	/**
 	* Bit 1 TXP: Tx-packet space available
@@ -94,9 +91,8 @@ void SPI1_IRQHandler(){
 	*/
 	if(ASM_SPI_SR_Get() & (0x1U << 1)){
 		printf("Data packet space available\n");
-		idx ^= 1;
-		ASM_SPI_TXDR_Set(rx_buffer[idx]);
-		GPIOC_BSRR_SET();
+		//ASM_SPI_TXDR_Set(rx_buffer);
+		ASM_SPI_TXDR_Set(66);
 	}
 
 	/*
@@ -109,31 +105,25 @@ void SPI1_IRQHandler(){
 	* read by performing consecutive read operations from SPI_RXDR, RXP flag must be
 	* checked again once a complete data packet is read out from RxFIFO.
 	*/
-	while(ASM_SPI_SR_Get() & (0x1U)){
+	while((ASM_SPI_SR_Get() & (0x1U)) && ready == 1){
 		//printf("RxFIFO contains at least one data packet\n");
-		GPIOC_BSRR_RESET();  //set ready to false
-		idx ^= 1;
-		rx_buffer[idx] = ASM_SPI_RXDR_Get();
-		printf("Received: %d \n", rx_buffer[idx]);
-		GPIOC_BSRR_SET();
+		GPIOC_BSRR_RESET();
+		rx_buffer = ASM_SPI_RXDR_Get();
+		ready = 0;
+		printf("Received: %d \n", rx_buffer);
 	}
-
 
 	//Bit 6 OVR: overrun
 	if(ASM_SPI_SR_Get() & (0x1U << 6)){
 		printf("Overrun.\n");
-		//GPIOC_BSRR_RESET();  //set ready to false
-		rx_buffer[0] = ASM_SPI_RXDR_Get();
+		//rx_buffer = ASM_SPI_RXDR_Get();
 		ASM_SPI_IFCR_OVRC();
 	}
-
 
 	if(ASM_SPI_SR_Get() & (0x1U << 5)){
 		//underrun flag set
 		ASM_SPI_IFCR_UDRC();
 	}
-
-
 
 	/**
 	* Bit 4 TXTF: transmission transfer filled
@@ -151,11 +141,6 @@ void SPI1_IRQHandler(){
 		//printf("TxFIFO upload is finished.\n");
 		ASM_SPI_IFCR_TXTFC();
 	}
-
-
-
-
-
 }
 
 void RCC_init(){
@@ -219,6 +204,7 @@ void GPIO_SPI_init(){
 	GPIOC_OTYPER_PP();
 	GPIOC_OSPEEDR();
     GPIOC_PUPDR_RDY_DOWN();
+    GPIOC_BSRR_RESET();
 
 }
 
@@ -329,7 +315,8 @@ void SPI_init(){
 	* FTHLV = 2, 4, 6, while if DSIZE ≤ 8bit, better to select FTHLV = 4, 8, 12.
 	* Note: FTHLV[3:2] bits are reserved at instances with limited set of features
 	*/
-	ASM_SPI_CFG1_FTHLV_2();
+	//ASM_SPI_CFG1_FTHLV_2();
+	ASM_SPI_CFG1_FTHLV_1();
 
 
 	/**
@@ -400,7 +387,8 @@ void SPI_init(){
 	ASM_SPI_IER_UDRIE_Set();
 
 	//set slave to READY
-	GPIOC_BSRR_SET();
+	//GPIOC_BSRR_SET();
+	//GPIOC_BSRR_RESET();
 
 }
 

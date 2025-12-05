@@ -29,6 +29,7 @@ extern void GPIOE_PUPDR_CLEAR(uint32_t x);
 // PORT C
 extern void GPIOC_MODER_Output(void);
 extern void GPIOC_OTYPER_PP(void);
+extern void GPIOC_OTYPER_OPENDRAIN(void);
 extern void GPIOC_OSPEEDR(void);
 extern void GPIOC_BSRR_SET(void);
 extern void GPIOC_BSRR_RESET(void);

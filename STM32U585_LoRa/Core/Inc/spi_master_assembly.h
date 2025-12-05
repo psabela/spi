@@ -32,6 +32,7 @@ extern void ASM_SPI_CFG1_BPASS_0(void);
 extern void ASM_SPI_CFG1_BPASS_1(void);
 extern void ASM_SPI_CFG1_DSIZE_8(void);
 extern void ASM_SPI_CFG1_FTHLV_2(void);
+extern void ASM_SPI_CFG1_FTHLV_1(void);
 extern void ASM_SPI_CR1_SPE_1(void);
 extern void ASM_SPI_CR1_CSTART_1(void);
 extern uint8_t ASM_SPI_TXDR_Set(uint8_t x);
