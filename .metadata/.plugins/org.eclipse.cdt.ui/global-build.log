@@ -1,4 +1,11 @@
-23:38:00 **** Incremental Build of configuration Debug for project STM32U585_LoRa ****
+09:12:07 **** Incremental Build of configuration Debug for project STM32U585_LoRa ****
+make -j2 all 
+arm-none-eabi-size  STM32U585_LoRa.elf 
+   text	   data	    bss	    dec	    hex	filename
+   8584	    100	   1916	  10600	   2968	STM32U585_LoRa.elf
+Finished building: default.size.stdout
+ 
+09:12:13 **** Incremental Build of configuration Debug for project STM32U585_LoRa ****
 make -j2 all 
 arm-none-eabi-size  STM32U585_LoRa.elf 
    text	   data	    bss	    dec	    hex	filename
