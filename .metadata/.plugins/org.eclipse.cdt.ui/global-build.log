@@ -59,3 +59,17 @@ arm-none-eabi-size  STM32U585_LoRa.elf
    8516	     92	   1916	  10524	   291c	STM32U585_LoRa.elf
 Finished building: default.size.stdout
  
+00:30:57 **** Incremental Build of configuration Debug for project STM32U585_LoRa ****
+make -j16 all 
+arm-none-eabi-size  STM32U585_LoRa.elf 
+   text	   data	    bss	    dec	    hex	filename
+   8516	     92	   1916	  10524	   291c	STM32U585_LoRa.elf
+Finished building: default.size.stdout
+ 
+01:30:18 **** Incremental Build of configuration Debug for project STM32U585_LoRa ****
+make -j16 all 
+arm-none-eabi-size  STM32U585_LoRa.elf 
+   text	   data	    bss	    dec	    hex	filename
+   8516	     92	   1916	  10524	   291c	STM32U585_LoRa.elf
+Finished building: default.size.stdout
+ 
