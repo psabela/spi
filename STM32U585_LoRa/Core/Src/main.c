@@ -24,24 +24,26 @@ int _write(int file, char *ptr, int len){
 	return len;
 }
 
-uint8_t *my_input;
+volatile uint32_t IDR_reg;
+volatile uint8_t rx_buffer;
+volatile uint8_t *tx_ptr;
+volatile uint8_t tx_buffer[] = {10,11,12,13,14,99};
+//uint8_t tx_buffer[] = {10};
 
+
+volatile int _counter = 0;
 
 int main(void){
-
-	uint8_t my_value = 43;
-	my_input = &my_value;
-
-
-	//RCC_init();
-	//TIM8_init();
+	IDR_reg = 0;
+	tx_ptr = &tx_buffer[0];
+	RCC_init();
+	TIM8_init();
+	GPIO_SPI_init();
 	SPI_init();
-
 	NVIC_Interupts_Enable();
-
-	//TIM8_start();
+//	TIM8_start();
+	ASM_SPI_CR1_SSI_0();
 	SPI_start();
-
 	while(1){}
 }
 
@@ -77,18 +79,15 @@ void SPI1_IRQHandler(){
 	* re-enabled before next transaction starts despite its setting is not changed.
 	*/
 	if(ASM_SPI_SR_Get() & (0x1U << 3)){
-		printf("transfer complete.\n");
-//		ASM_SPI_CR1_SSI_1();
+		// intf("transfer complete.\n");
 		ASM_SPI_IFCR_EOTC_Clear();
 		// to-do:
 		//* In master, EOT event terminates the data transaction and handles SS output optionally.
 		//* To restart the internal state machine properly, SPI is strongly suggested to be disabled and
 		//* re-enabled before next transaction starts despite its setting is not changed.
-//		ASM_SPI_CR1_SPE_0();
-//		if(!stop_flag){
-			SPI_init();
-			SPI_start();
-//		}
+		ASM_SPI_CR1_SPE_0();
+		SPI_init();
+    	SPI_start();
 	}
 
 
@@ -104,20 +103,38 @@ void SPI1_IRQHandler(){
 	* disabled.
 	*/
 	if(ASM_SPI_SR_Get() & (0x1U << 1)){
-		printf("Data packet space available\n");
+//		printf("Data packet space available\n");
+		IDR_reg = GPIOC_IDR_RDY_GET();
+		if (IDR_reg != 0){ //ready is ON
 
-//		if(ptr_tx_buffer != NULL){
-//			//ASM_SPI_CR1_SSI_0();
-//			for(int i = 0; i<2000; i++){}
-//
-//			//printf("----------------->>>>   %x \n", *ptr_tx_buffer);
-			ASM_SPI_TXDR_Set(*my_input);
-//			//ptr_tx_buffer++;
-//		}
+			ASM_SPI_TXDR_Set(*tx_ptr);
+			printf("Sent data: %d \n", *tx_ptr);
+			*(tx_ptr++);
+			if(*tx_ptr==99){
+				tx_ptr = &tx_buffer;
+			}
 
+		}
+		else{
+			printf("not");
+		}
 	}
-	else{
-		printf("Data packet space NOT available\n");
+
+	/*
+	* Bit 0 RXP: Rx-packet available
+	* 0: RxFIFO is empty or an incomplete data packet is received
+	* 1: RxFIFO contains at least one data packet
+	* The flag is changed by hardware. It monitors the total number of data currently available at
+	* RxFIFO if SPI is enabled. RXP value depends on the FIFO threshold (FTHLV[3:0]), data
+	* frame size (DSIZE[4:0] in SPI mode), and actual communication flow. If the data packet is
+	* read by performing consecutive read operations from SPI_RXDR, RXP flag must be
+	* checked again once a complete data packet is read out from RxFIFO.
+	*/
+	while(ASM_SPI_SR_Get() & (0x1U)){
+		//printf("RxFIFO contains at least one data packet\n");
+		rx_buffer = ASM_SPI_RXDR_Get();
+		printf("Received: %d \n", rx_buffer);
+
 	}
 
 	//Bit 6 OVR: overrun
@@ -140,26 +157,11 @@ void SPI1_IRQHandler(){
 	* calculating when to disable TXP and DXP interrupts.
 	*/
 	if(ASM_SPI_SR_Get() & (0x1U << 4)){
-		printf("TxFIFO upload is finished.\n");
+		//printf("TxFIFO upload is finished.\n");
 		ASM_SPI_IFCR_TXTFC();
 	}
 
-	/*
-	* Bit 0 RXP: Rx-packet available
-	* 0: RxFIFO is empty or an incomplete data packet is received
-	* 1: RxFIFO contains at least one data packet
-	* The flag is changed by hardware. It monitors the total number of data currently available at
-	* RxFIFO if SPI is enabled. RXP value depends on the FIFO threshold (FTHLV[3:0]), data
-	* frame size (DSIZE[4:0] in SPI mode), and actual communication flow. If the data packet is
-	* read by performing consecutive read operations from SPI_RXDR, RXP flag must be
-	* checked again once a complete data packet is read out from RxFIFO.
-	*/
-	while(ASM_SPI_SR_Get() & (0x1U)){
-//		rx_buffer = ASM_SPI_RXDR_Get();
-		printf("RxFIFO contains at least one data packet\n");
-//		ASM_SPI_CR1_SSI_1(); //unselect slave
-//		ASM_SPI_CR1_SPE_0(); //disable SPI1
-	}
+
 
 }
 
@@ -167,17 +169,17 @@ void RCC_init(){
 
 	ASM_RCC_CR_HSI16();
 	while(!ASM_RCC_CR_HSI16RDY());
+//
+//	ASM_RCC_PLL1CFGR_PLL1SRC_HSI16();
+//	ASM_RCC_PLL1CFGR_PLL1M_3();
+//	ASM_RCC_PLL1DIVR_PLL1N_4();
+//	ASM_RCC_PLL1CFGR_PLL1REN();
+//	ASM_RCC_PLL1CFGR_PLL1PEN();
+//	ASM_RCC_PLL1CFGR_PLL1QEN();
 
-	ASM_RCC_PLL1CFGR_PLL1SRC_HSI16();
-	ASM_RCC_PLL1CFGR_PLL1M_3();
-	ASM_RCC_PLL1DIVR_PLL1N_4();
-	ASM_RCC_PLL1CFGR_PLL1REN();
-	ASM_RCC_PLL1CFGR_PLL1PEN();
-	ASM_RCC_PLL1CFGR_PLL1QEN();
 
-
-	ASM_RCC_CR_PLL1();
-	while(!ASM_RCC_CR_PLL1RDY());
+	//ASM_RCC_CR_PLL1();
+	//while(!ASM_RCC_CR_PLL1RDY());
 
 	//Activate MCO gpio pin PA8
 	ASM_RCC_AHB2ENR1_GPIOAEN_Set();
@@ -185,17 +187,24 @@ void RCC_init(){
 	GPIOA_AFRH_Set_Alt_Function();
 	GPIOA_OSPEEDR_Set();
 
+
+	uint8_t msik_range = 4;
+	ASM_RCC_ICSCR1_MSIKRANGE_SET(msik_range);
+	ASM_RCC_ICSCR1_MSIRGSEL_1();
+
 	// Read clock frequency
-			//ASM_RCC_CFGR1_MCOSEL_HSIor STM32U516();
+			//
+
+			ASM_RCC_CFGR1_MCOSEL_HSI16();
 			//ASM_RCC_CFGR1_MCOSEL_HSI48();
-	ASM_RCC_CFGR1_MCOSEL_SYSCLK();
+	//ASM_RCC_CFGR1_MCOSEL_SYSCLK();
 			//ASM_RCC_CFGR1_MCOSEL_MSIK();
 			//ASM_RCC_CFGR1_MCOSEL_MSIS();
 			//ASM_RCC_CFGR1_MCOSEL_HSE();
-			//ASM_RCC_CFGR1_MCOSEL_PLL1();
+	//		ASM_RCC_CFGR1_MCOSEL_PLL1();
 
 //	  ASM_RCC_CFGR1_SW_PLL1();
-//	  while(!(ASM_RCC_CFGR1_SWS() & 0x3U));
+	//  while(!(ASM_RCC_CFGR1_SWS() & 0x3U));
 }
 
 void GPIO_SPI_init(){
@@ -219,29 +228,38 @@ void GPIO_SPI_init(){
   //GPIOE_PUPDR_SCK_UP();
   //GPIOE_PUPDR_CLEAR(26);
   //GPIOE_PUPDR_SCK_DOWN();
+
   //** GPIOE_PUPDR_NSS register bit value gets overwritten by SPI_SSIOP bit (SS input/output polarity)
 	GPIOE_PUPDR_NSS_UP();
   //GPIOE_PUPDR_NSS_DOWN();
-	//GPIOE_PUPDR_RDY_UP();
+
+	//Configure GPIOC for RDY
+	//Configure GPIOC for RDY
+		// PC1
+	GPIOC_MODER_Input();
+	GPIOC_PUPDR_RDY_DOWN();
+	//lock
+//	GPIOC_LCKR_PIN1_LCKK_0();
+//	GPIOC_LCKR_PIN1_LCKK_1();
+//	GPIOC_LCKR_PIN1_LCKK_0();
+//	GPIOC_LCKR_PIN1_LCKK_1();
 }
 
 void SPI_init(){
 
 	/**
-	 * Configure GPIO pins for SPI
-	 */
-
-	GPIO_SPI_init();
-
-	/**
 	 * Select clock for SPI
 	 */
 
-		//ASM_RCC_CCIPR1_SPI1SEL_HSI16();
 	//ASM_RCC_CCIPR1_SPI1SEL_PCLK2();
-    ASM_RCC_CCIPR1_SPI1SEL_SYSCLK();
-	  //ASM_RCC_CFGR2_HPRE_2();
-	  //ASM_RCC_CFGR2_PCLK2_2();
+	//ASM_RCC_CCIPR1_SPI1SEL_SYSCLK();
+	//ASM_RCC_CCIPR1_SPI1SEL_HSI16();
+	ASM_RCC_CCIPR1_SPI1SEL_MSIK();
+
+
+
+	//ASM_RCC_CFGR2_HPRE_2();
+	//ASM_RCC_CFGR2_PCLK2_2();
 	ASM_RCC_APB2ENR_SPI1_Set();
 
 	/**
@@ -375,7 +393,8 @@ void SPI_init(){
 	* FTHLV = 2, 4, 6, while if DSIZE ≤ 8bit, better to select FTHLV = 4, 8, 12.
 	* Note: FTHLV[3:2] bits are reserved at instances with limited set of features
 	*/
-	ASM_SPI_CFG1_FTHLV_2();
+	//ASM_SPI_CFG1_FTHLV_2();
+	ASM_SPI_CFG1_FTHLV_1();
 
 	/**
 	 * Bits 3:0 MSSI[3:0]: Master SS Idleness
@@ -419,7 +438,8 @@ void SPI_init(){
 	 * 0: MSB transmitted first
 	 * 1: LSB transmitted first
 	 */
-	ASM_SPI_CFG2_LSBFRST_MSB();
+	//ASM_SPI_CFG2_LSBFRST_MSB();
+	ASM_SPI_CFG2_LSBFRST_LSB();
 
 	/**
 	 * Bit 31 AFCNTR: alternate function GPIOs control
@@ -451,7 +471,6 @@ void SPI_init(){
 	ASM_SPI_IER_TXPIE_Set();
 	ASM_SPI_IER_TXTFIE_Set();
 	ASM_SPI_IER_RXPIE_Set();
-
 }
 
 void SPI_start(){
@@ -462,7 +481,6 @@ void SPI_start(){
 	 * 1: Serial peripheral enabled
 	 */
 	ASM_SPI_CR1_SPE_1();
-
 	/**
 	 * Bit 9 CSTART: master transfer start
 	 * This bit can be set by software if SPI is enabled only to start an SPI communication.
@@ -498,6 +516,7 @@ void TIM8_init(){
 
 void TIM8_start(){
 	TIM8_Set_CEN_Counter_Enable();
+	//RUN_COUNTER();
 }
 
 /*

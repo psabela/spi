@@ -30,6 +30,7 @@
 .global ASM_SPI_CFG2_SSIOP_1
 .global ASM_SPI_CFG1_DSIZE_8
 .global ASM_SPI_CFG1_FTHLV_2
+.global ASM_SPI_CFG1_FTHLV_1
 .global ASM_SPI_CFG1_MBR_256
 .global ASM_SPI_CFG1_MBR_64
 .global ASM_SPI_CFG1_MBR_4
@@ -301,6 +302,21 @@ ASM_SPI_CFG1_FTHLV_2:
 	ORRS 	R0, R2
 	STR		R0, [R1]
 	BX LR
+
+ASM_SPI_CFG1_FTHLV_1:
+	LDR		R1, =SPI_BASE_ADDR
+	LDR		R2, =SPI_CFG1_OFFSET
+	ADDS	R1, R2
+	LDR		R0, [R1]
+	MOVS	R2, 0xf
+	LSLS	R2, #5
+	MVNS	R2, R2
+	ANDS 	R0, R2	//clear bits
+	STR		R0, [R1]
+	BX LR
+
+
+
 
 //Bit 30 SSOM: SS output management in Master mode
 //0: SS is kept at active level till data transfer is completed, it becomes inactive with EOT flag

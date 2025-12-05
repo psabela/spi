@@ -17,6 +17,7 @@ extern void ASM_RCC_APB2ENR_TIM8EN_Set(void);
 extern void ASM_RCC_CCIPR1_SPI1SEL_HSI16(void);
 extern void ASM_RCC_CCIPR1_SPI1SEL_PCLK2(void);
 extern void ASM_RCC_CCIPR1_SPI1SEL_SYSCLK(void);
+extern void ASM_RCC_CCIPR1_SPI1SEL_MSIK(void);
 extern void ASM_RCC_CFGR2_HPRE_2(void);
 extern void ASM_RCC_CFGR2_PCLK2_2(void);
 extern void ASM_RCC_CFGR1_MCOSEL_HSI16(void);
@@ -50,6 +51,11 @@ extern void ASM_RCC_PLL1DIVR_PLL1N_5(void);
 extern void ASM_RCC_PLL1DIVR_PLL1N_6(void);
 extern void ASM_RCC_CFGR1_SW_PLL1(void);
 extern uint32_t ASM_RCC_CFGR1_SWS(void);
+extern void ASM_RCC_ICSCR1_MSIKRANGE_SET(uint8_t x);
+extern void ASM_RCC_ICSCR1_MSIRGSEL_1(void);
+
+extern void RUN_COUNTER(void);
+extern uint32_t RESET_COUNTER(void);
 
 
 #endif /* RCC_ASSEMBLY_H_ */

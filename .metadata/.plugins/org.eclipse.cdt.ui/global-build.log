@@ -1,38 +1,7 @@
-03:33:33 **** Incremental Build of configuration Debug for project STM32U585_LoRa ****
-make -j2 all 
-arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m33 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32U585xx -c -I"/home/peter/Documents/stm_projects/STM/wks2/spi/STM32U585_LoRa/Drivers/CMSIS/Device" -I"/home/peter/Documents/stm_projects/STM/wks2/spi/STM32U585_LoRa/Drivers/CMSIS/Include" -I"/home/peter/Documents/stm_projects/STM/wks2/spi/STM32U585_LoRa/Core/Inc" -I"/home/peter/Documents/stm_projects/STM/wks2/spi/STM32U585_LoRa/sx126x_driver/inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
-arm-none-eabi-gcc -o "STM32U585_LoRa.elf" @"objects.list"   -mcpu=cortex-m33 -T"/home/peter/Documents/stm_projects/STM/wks2/spi/STM32U585_LoRa/STM32U585AIIXQ_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32U585_LoRa.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
-/opt/st/stm32cubeide_1.15.0_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.linux64_1.0.100.202403111256/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld: /opt/st/stm32cubeide_1.15.0_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.linux64_1.0.100.202403111256/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(libc_a-closer.o): in function `_close_r':
-(.text._close_r+0xc): warning: _close is not implemented and will always fail
-/opt/st/stm32cubeide_1.15.0_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.linux64_1.0.100.202403111256/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld: /opt/st/stm32cubeide_1.15.0_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.linux64_1.0.100.202403111256/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(libc_a-fstatr.o): in function `_fstat_r':
-(.text._fstat_r+0xe): warning: _fstat is not implemented and will always fail
-/opt/st/stm32cubeide_1.15.0_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.linux64_1.0.100.202403111256/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld: /opt/st/stm32cubeide_1.15.0_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.linux64_1.0.100.202403111256/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(libc_a-isattyr.o): in function `_isatty_r':
-(.text._isatty_r+0xc): warning: _isatty is not implemented and will always fail
-/opt/st/stm32cubeide_1.15.0_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.linux64_1.0.100.202403111256/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld: /opt/st/stm32cubeide_1.15.0_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.linux64_1.0.100.202403111256/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(libc_a-lseekr.o): in function `_lseek_r':
-(.text._lseek_r+0x10): warning: _lseek is not implemented and will always fail
-/opt/st/stm32cubeide_1.15.0_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.linux64_1.0.100.202403111256/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld: /opt/st/stm32cubeide_1.15.0_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.linux64_1.0.100.202403111256/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(libc_a-readr.o): in function `_read_r':
-(.text._read_r+0x10): warning: _read is not implemented and will always fail
-Finished building target: STM32U585_LoRa.elf
- 
-arm-none-eabi-size  STM32U585_LoRa.elf 
-arm-none-eabi-objdump -h -S STM32U585_LoRa.elf  > "STM32U585_LoRa.list"
-   text	   data	    bss	    dec	    hex	filename
-   8332	     92	   1908	  10332	   285c	STM32U585_LoRa.elf
-Finished building: default.size.stdout
- 
-Finished building: STM32U585_LoRa.list
- 
-03:33:37 **** Incremental Build of configuration Debug for project STM32U585_LoRa ****
+23:38:00 **** Incremental Build of configuration Debug for project STM32U585_LoRa ****
 make -j2 all 
 arm-none-eabi-size  STM32U585_LoRa.elf 
    text	   data	    bss	    dec	    hex	filename
-   8332	     92	   1908	  10332	   285c	STM32U585_LoRa.elf
-Finished building: default.size.stdout
- 
-03:35:42 **** Incremental Build of configuration Debug for project STM32U585_LoRa ****
-make -j2 all 
-arm-none-eabi-size  STM32U585_LoRa.elf 
-   text	   data	    bss	    dec	    hex	filename
-   8332	     92	   1908	  10332	   285c	STM32U585_LoRa.elf
+   8584	    100	   1916	  10600	   2968	STM32U585_LoRa.elf
 Finished building: default.size.stdout
  
