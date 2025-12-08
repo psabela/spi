@@ -24,28 +24,26 @@ int _write(int file, char *ptr, int len){
 	return len;
 }
 
-uint8_t *tx_ptr;
-uint8_t rx_buffer;
-uint8_t tx_buffer[] = {10,11,12,13,14,99};
-//uint8_t tx_buffer[] = {10};
-
+volatile uint32_timer_pulse;
+volatile uint32_t slave_ready;
+volatile uint8_t rx_buffer;
+volatile uint8_t *tx_buffer_ptr;
+volatile uint8_t tx_buffer[] = {10,11,12,13,14,99};
 
 volatile int _counter = 0;
 
 int main(void){
-
-	tx_ptr = &tx_buffer[0];
-
+	timer_pulse = 0;
+	slave_ready = 0;
+	tx_buffer_ptr = &tx_buffer[0];
 	RCC_init();
 	TIM8_init();
+	GPIO_SPI_init();
 	SPI_init();
 	NVIC_Interupts_Enable();
-	TIM8_start();
-
+//	TIM8_start();
 	ASM_SPI_CR1_SSI_0();
-
 	SPI_start();
-
 	while(1){}
 }
 
@@ -54,13 +52,12 @@ void NVIC_Interupts_Enable(){
 	NVIC_SPI1_Enable_Interupt();
 }
 
-int tim_flag = 0;
+
 void TIM8_UP_IRQHandler(){
 	if(TIM8_Get_SR_Status() & 0x1){  //UIF on
 		TIM8_Clear_UIF_Flag();
-		tim_flag ^= 1;
-
-		printf("%i \n", tim_flag);
+		timer_pulse ^= 1;
+		printf("%i \n", timer_pulse);
 	}
 }
 
@@ -107,14 +104,17 @@ void SPI1_IRQHandler(){
 	*/
 	if(ASM_SPI_SR_Get() & (0x1U << 1)){
 //		printf("Data packet space available\n");
-
-		if (GPIOC_IDR_RDY_GET() != 0){ //ready is ON
-			ASM_SPI_TXDR_Set(*tx_ptr);
-			printf("Sent data: %d \n", *tx_ptr);
-			*(tx_ptr++);
-			if(*tx_ptr==99){
-				tx_ptr = &tx_buffer;
+		slave_ready = GPIOC_IDR_RDY_GET();
+		if (slave_ready != 0){ //ready is ON
+			ASM_SPI_TXDR_Set(*tx_buffer_ptr);
+			printf("Sent data: %d \n", *tx_buffer_ptr);
+			*(tx_buffer_ptr++);
+			if(*tx_buffer_ptr==99){
+				tx_buffer_ptr = &tx_buffer;
 			}
+		}
+		else{
+			printf("not");
 		}
 	}
 
@@ -132,13 +132,12 @@ void SPI1_IRQHandler(){
 		//printf("RxFIFO contains at least one data packet\n");
 		rx_buffer = ASM_SPI_RXDR_Get();
 		printf("Received: %d \n", rx_buffer);
-
 	}
 
 	//Bit 6 OVR: overrun
 	if(ASM_SPI_SR_Get() & (0x1U << 6)){
 		printf("Overrun.\n");
-//		ASM_SPI_RXDR_Get(); //clear RxFIFO
+		ASM_SPI_RXDR_Get(); //clear RxFIFO
 		ASM_SPI_IFCR_OVRC();
 	}
 
@@ -236,15 +235,14 @@ void GPIO_SPI_init(){
 		// PC1
 	GPIOC_MODER_Input();
 	GPIOC_PUPDR_RDY_DOWN();
+	//lock
+//	GPIOC_LCKR_PIN1_LCKK_0();
+//	GPIOC_LCKR_PIN1_LCKK_1();
+//	GPIOC_LCKR_PIN1_LCKK_0();
+//	GPIOC_LCKR_PIN1_LCKK_1();
 }
 
 void SPI_init(){
-
-	/**
-	 * Configure GPIO pins for SPI
-	 */
-
-	GPIO_SPI_init();
 
 	/**
 	 * Select clock for SPI
@@ -392,7 +390,8 @@ void SPI_init(){
 	* FTHLV = 2, 4, 6, while if DSIZE ≤ 8bit, better to select FTHLV = 4, 8, 12.
 	* Note: FTHLV[3:2] bits are reserved at instances with limited set of features
 	*/
-	ASM_SPI_CFG1_FTHLV_2();
+	//ASM_SPI_CFG1_FTHLV_2();
+	ASM_SPI_CFG1_FTHLV_1();
 
 	/**
 	 * Bits 3:0 MSSI[3:0]: Master SS Idleness
@@ -469,7 +468,6 @@ void SPI_init(){
 	ASM_SPI_IER_TXPIE_Set();
 	ASM_SPI_IER_TXTFIE_Set();
 	ASM_SPI_IER_RXPIE_Set();
-
 }
 
 void SPI_start(){
@@ -480,7 +478,6 @@ void SPI_start(){
 	 * 1: Serial peripheral enabled
 	 */
 	ASM_SPI_CR1_SPE_1();
-
 	/**
 	 * Bit 9 CSTART: master transfer start
 	 * This bit can be set by software if SPI is enabled only to start an SPI communication.

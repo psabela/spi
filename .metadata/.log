@@ -3356,3 +3356,675 @@ java.lang.Exception: Unable to read memory.
 
 !ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2025-12-05 09:12:18.085
 !MESSAGE SWV configuration; base: 192000000; minDiv: 16; maxDiv: 65535; maxSWO: 12000000; limit: 12000000 => SWO: 4000000; CPU: 4000000; div: 1
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2025-12-06 21:34:09.237
+!MESSAGE SWV configuration; base: 192000000; minDiv: 16; maxDiv: 65535; maxSWO: 12000000; limit: 12000000 => SWO: 4000000; CPU: 4000000; div: 1
+
+!ENTRY org.eclipse.cdt.dsf 4 10005 2025-12-06 22:48:44.669
+!MESSAGE Request for monitor: '76^error,msg="Unable to read memory."' resulted in an error.
+!SUBENTRY 1 org.eclipse.cdt.dsf.gdb 4 10004 2025-12-06 22:48:44.669
+!MESSAGE Failed to execute MI command:
+-data-read-memory 0xe000ee08 d 1 1 4
+Error message from debugger back end:
+Unable to read memory.
+!STACK 0
+java.lang.Exception: Unable to read memory.
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2025-12-06 22:48:56.864
+!MESSAGE SWV configuration; base: 192000000; minDiv: 16; maxDiv: 65535; maxSWO: 12000000; limit: 12000000 => SWO: 4000000; CPU: 4000000; div: 1
+
+!ENTRY org.eclipse.cdt.dsf 4 10005 2025-12-06 22:49:31.983
+!MESSAGE Request for monitor: '75^error,msg="Unable to read memory."' resulted in an error.
+!SUBENTRY 1 org.eclipse.cdt.dsf.gdb 4 10004 2025-12-06 22:49:31.983
+!MESSAGE Failed to execute MI command:
+-data-read-memory 0xe000ee08 d 1 1 4
+Error message from debugger back end:
+Unable to read memory.
+!STACK 0
+java.lang.Exception: Unable to read memory.
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2025-12-06 22:49:45.475
+!MESSAGE SWV configuration; base: 192000000; minDiv: 16; maxDiv: 65535; maxSWO: 12000000; limit: 12000000 => SWO: 4000000; CPU: 4000000; div: 1
+
+!ENTRY org.eclipse.cdt.dsf 4 10005 2025-12-07 00:26:54.076
+!MESSAGE Request for monitor: '75^error,msg="Unable to read memory."' resulted in an error.
+!SUBENTRY 1 org.eclipse.cdt.dsf.gdb 4 10004 2025-12-07 00:26:54.076
+!MESSAGE Failed to execute MI command:
+-data-read-memory 0xe000ee08 d 1 1 4
+Error message from debugger back end:
+Unable to read memory.
+!STACK 0
+java.lang.Exception: Unable to read memory.
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2025-12-07 01:50:05.502
+!MESSAGE SWV configuration; base: 192000000; minDiv: 16; maxDiv: 65535; maxSWO: 12000000; limit: 12000000 => SWO: 4000000; CPU: 4000000; div: 1
+
+!ENTRY org.eclipse.cdt.dsf 4 10005 2025-12-07 01:52:12.017
+!MESSAGE Request for monitor: '78^error,msg="Unable to read memory."' resulted in an error.
+!SUBENTRY 1 org.eclipse.cdt.dsf.gdb 4 10004 2025-12-07 01:52:12.017
+!MESSAGE Failed to execute MI command:
+-data-read-memory 0xe000ee08 d 1 1 4
+Error message from debugger back end:
+Unable to read memory.
+!STACK 0
+java.lang.Exception: Unable to read memory.
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2025-12-07 01:52:55.194
+!MESSAGE SWV configuration; base: 192000000; minDiv: 16; maxDiv: 65535; maxSWO: 12000000; limit: 12000000 => SWO: 4000000; CPU: 4000000; div: 1
+
+!ENTRY org.eclipse.cdt.dsf 4 10005 2025-12-07 02:14:06.294
+!MESSAGE Request for monitor: '319^error,msg="Unable to read memory."' resulted in an error.
+!SUBENTRY 1 org.eclipse.cdt.dsf.gdb 4 10004 2025-12-07 02:14:06.294
+!MESSAGE Failed to execute MI command:
+-data-read-memory 0xe000ee08 d 1 1 4
+Error message from debugger back end:
+Unable to read memory.
+!STACK 0
+java.lang.Exception: Unable to read memory.
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2025-12-07 02:19:58.917
+!MESSAGE SWV configuration; base: 192000000; minDiv: 16; maxDiv: 65535; maxSWO: 12000000; limit: 12000000 => SWO: 4000000; CPU: 4000000; div: 1
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2025-12-07 13:57:14.806
+!MESSAGE SWV configuration; base: 192000000; minDiv: 16; maxDiv: 65535; maxSWO: 12000000; limit: 12000000 => SWO: 4000000; CPU: 4000000; div: 1
+
+!ENTRY org.eclipse.cdt.dsf 4 10005 2025-12-07 19:14:29.057
+!MESSAGE Request for monitor: '76^error,msg="Unable to read memory."' resulted in an error.
+!SUBENTRY 1 org.eclipse.cdt.dsf.gdb 4 10004 2025-12-07 19:14:29.057
+!MESSAGE Failed to execute MI command:
+-data-read-memory 0xe000ee08 d 1 1 4
+Error message from debugger back end:
+Unable to read memory.
+!STACK 0
+java.lang.Exception: Unable to read memory.
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2025-12-07 19:14:44.433
+!MESSAGE SWV configuration; base: 192000000; minDiv: 16; maxDiv: 65535; maxSWO: 12000000; limit: 12000000 => SWO: 4000000; CPU: 4000000; div: 1
+
+!ENTRY org.eclipse.cdt.dsf 4 10005 2025-12-07 22:03:07.209
+!MESSAGE Request for monitor: '73^error,msg="Unable to read memory."' resulted in an error.
+!SUBENTRY 1 org.eclipse.cdt.dsf.gdb 4 10004 2025-12-07 22:03:07.209
+!MESSAGE Failed to execute MI command:
+-data-read-memory 0xe000ee08 d 1 1 4
+Error message from debugger back end:
+Unable to read memory.
+!STACK 0
+java.lang.Exception: Unable to read memory.
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2025-12-07 22:04:11.589
+!MESSAGE SWV configuration; base: 192000000; minDiv: 16; maxDiv: 65535; maxSWO: 12000000; limit: 12000000 => SWO: 4000000; CPU: 4000000; div: 1
+
+!ENTRY org.eclipse.cdt.dsf 4 10005 2025-12-07 22:05:10.224
+!MESSAGE Request for monitor: '75^error,msg="Unable to read memory."' resulted in an error.
+!SUBENTRY 1 org.eclipse.cdt.dsf.gdb 4 10004 2025-12-07 22:05:10.224
+!MESSAGE Failed to execute MI command:
+-data-read-memory 0xe000ee08 d 1 1 4
+Error message from debugger back end:
+Unable to read memory.
+!STACK 0
+java.lang.Exception: Unable to read memory.
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2025-12-07 22:06:02.764
+!MESSAGE SWV configuration; base: 192000000; minDiv: 16; maxDiv: 65535; maxSWO: 12000000; limit: 12000000 => SWO: 4000000; CPU: 4000000; div: 1
+
+!ENTRY org.eclipse.cdt.dsf 4 10005 2025-12-07 23:05:27.890
+!MESSAGE Request for monitor: '477^error,msg="Unable to read memory."' resulted in an error.
+!SUBENTRY 1 org.eclipse.cdt.dsf.gdb 4 10004 2025-12-07 23:05:27.890
+!MESSAGE Failed to execute MI command:
+-data-read-memory 0xe000ee08 d 1 1 4
+Error message from debugger back end:
+Unable to read memory.
+!STACK 0
+java.lang.Exception: Unable to read memory.
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+!SESSION 2025-12-07 23:09:20.463 -----------------------------------------------
+eclipse.buildId=Version 1.15.0
+java.version=17.0.8.1
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2025-12-07 23:44:35.092
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2025-12-07 23:44:35.094
+!MESSAGE Log4j2 initialized with config file /home/peter/Documents/stm_projects/STM/wks2/spi/.metadata/.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2025-12-07 23:44:46.597
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2025-12-07 23:48:40.924
+!MESSAGE SWV configuration; base: 192000000; minDiv: 16; maxDiv: 65535; maxSWO: 12000000; limit: 12000000 => SWO: 4000000; CPU: 4000000; div: 1
+
+!ENTRY org.eclipse.cdt.dsf 4 10005 2025-12-08 00:06:53.899
+!MESSAGE Request for monitor: '57^error,msg="Unable to read memory."' resulted in an error.
+!SUBENTRY 1 org.eclipse.cdt.dsf.gdb 4 10004 2025-12-08 00:06:53.899
+!MESSAGE Failed to execute MI command:
+-data-read-memory 0xe000ee08 d 1 1 4
+Error message from debugger back end:
+Unable to read memory.
+!STACK 0
+java.lang.Exception: Unable to read memory.
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2025-12-08 00:07:50.186
+!MESSAGE SWV configuration; base: 192000000; minDiv: 16; maxDiv: 65535; maxSWO: 12000000; limit: 12000000 => SWO: 4000000; CPU: 4000000; div: 1
+
+!ENTRY org.eclipse.cdt.dsf 4 10005 2025-12-08 00:09:31.301
+!MESSAGE Request for monitor: '60^error,msg="Unable to read memory."' resulted in an error.
+!SUBENTRY 1 org.eclipse.cdt.dsf.gdb 4 10004 2025-12-08 00:09:31.301
+!MESSAGE Failed to execute MI command:
+-data-read-memory 0xe000ee08 d 1 1 4
+Error message from debugger back end:
+Unable to read memory.
+!STACK 0
+java.lang.Exception: Unable to read memory.
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2025-12-08 00:09:46.489
+!MESSAGE SWV configuration; base: 192000000; minDiv: 16; maxDiv: 65535; maxSWO: 12000000; limit: 12000000 => SWO: 4000000; CPU: 4000000; div: 1
+
+!ENTRY org.eclipse.cdt.dsf 4 10005 2025-12-08 00:13:45.818
+!MESSAGE Request for monitor: '59^error,msg="Unable to read memory."' resulted in an error.
+!SUBENTRY 1 org.eclipse.cdt.dsf.gdb 4 10004 2025-12-08 00:13:45.819
+!MESSAGE Failed to execute MI command:
+-data-read-memory 0xe000ee08 d 1 1 4
+Error message from debugger back end:
+Unable to read memory.
+!STACK 0
+java.lang.Exception: Unable to read memory.
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2025-12-08 00:16:28.000
+!MESSAGE SWV configuration; base: 192000000; minDiv: 16; maxDiv: 65535; maxSWO: 12000000; limit: 12000000 => SWO: 4000000; CPU: 4000000; div: 1
+
+!ENTRY org.eclipse.cdt.dsf 4 10005 2025-12-08 00:24:42.747
+!MESSAGE Request for monitor: '60^error,msg="Unable to read memory."' resulted in an error.
+!SUBENTRY 1 org.eclipse.cdt.dsf.gdb 4 10004 2025-12-08 00:24:42.747
+!MESSAGE Failed to execute MI command:
+-data-read-memory 0xe000ee08 d 1 1 4
+Error message from debugger back end:
+Unable to read memory.
+!STACK 0
+java.lang.Exception: Unable to read memory.
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2025-12-08 00:25:01.405
+!MESSAGE SWV configuration; base: 192000000; minDiv: 16; maxDiv: 65535; maxSWO: 12000000; limit: 12000000 => SWO: 4000000; CPU: 4000000; div: 1
+
+!ENTRY org.eclipse.cdt.dsf 4 10005 2025-12-08 00:25:59.961
+!MESSAGE Request for monitor: '60^error,msg="Unable to read memory."' resulted in an error.
+!SUBENTRY 1 org.eclipse.cdt.dsf.gdb 4 10004 2025-12-08 00:25:59.961
+!MESSAGE Failed to execute MI command:
+-data-read-memory 0xe000ee08 d 1 1 4
+Error message from debugger back end:
+Unable to read memory.
+!STACK 0
+java.lang.Exception: Unable to read memory.
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2025-12-08 00:26:23.859
+!MESSAGE SWV configuration; base: 192000000; minDiv: 16; maxDiv: 65535; maxSWO: 12000000; limit: 12000000 => SWO: 4000000; CPU: 4000000; div: 1
+
+!ENTRY org.eclipse.cdt.dsf 4 10005 2025-12-08 00:28:18.488
+!MESSAGE Request for monitor: '60^error,msg="Unable to read memory."' resulted in an error.
+!SUBENTRY 1 org.eclipse.cdt.dsf.gdb 4 10004 2025-12-08 00:28:18.488
+!MESSAGE Failed to execute MI command:
+-data-read-memory 0xe000ee08 d 1 1 4
+Error message from debugger back end:
+Unable to read memory.
+!STACK 0
+java.lang.Exception: Unable to read memory.
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2025-12-08 00:28:34.359
+!MESSAGE SWV configuration; base: 192000000; minDiv: 16; maxDiv: 65535; maxSWO: 12000000; limit: 12000000 => SWO: 4000000; CPU: 4000000; div: 1
+
+!ENTRY org.eclipse.cdt.dsf 4 10005 2025-12-08 00:55:16.344
+!MESSAGE Request for monitor: '61^error,msg="Unable to read memory."' resulted in an error.
+!SUBENTRY 1 org.eclipse.cdt.dsf.gdb 4 10004 2025-12-08 00:55:16.344
+!MESSAGE Failed to execute MI command:
+-data-read-memory 0xe000ee08 d 1 1 4
+Error message from debugger back end:
+Unable to read memory.
+!STACK 0
+java.lang.Exception: Unable to read memory.
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+!SESSION 2025-12-08 00:56:39.250 -----------------------------------------------
+eclipse.buildId=Version 1.15.0
+java.version=17.0.8.1
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2025-12-08 00:58:05.732
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2025-12-08 00:58:05.734
+!MESSAGE Log4j2 initialized with config file /home/peter/Documents/stm_projects/STM/wks2/spi/.metadata/.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2025-12-08 00:58:16.756
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2025-12-08 01:01:19.541
+!MESSAGE SWV configuration; base: 192000000; minDiv: 16; maxDiv: 65535; maxSWO: 12000000; limit: 12000000 => SWO: 4000000; CPU: 4000000; div: 1
+
+!ENTRY org.eclipse.cdt.dsf 4 10005 2025-12-08 16:02:01.676
+!MESSAGE Request for monitor: '43^error,msg="Unable to read memory."' resulted in an error.
+!SUBENTRY 1 org.eclipse.cdt.dsf.gdb 4 10004 2025-12-08 16:02:01.676
+!MESSAGE Failed to execute MI command:
+-data-read-memory 0xe000ee08 d 1 1 4
+Error message from debugger back end:
+Unable to read memory.
+!STACK 0
+java.lang.Exception: Unable to read memory.
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2025-12-08 17:51:58.983
+!MESSAGE SWV configuration; base: 192000000; minDiv: 16; maxDiv: 65535; maxSWO: 12000000; limit: 12000000 => SWO: 4000000; CPU: 4000000; div: 1
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:52:49.699
+!MESSAGE Failed to read from target
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:52:49.700
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:52:49.700
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:52:49.700
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:52:49.701
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:52:49.701
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:52:49.702
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:52:49.702
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:52:49.704
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:52:49.704
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:52:49.704
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:52:49.705
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:52:49.705
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:52:49.707
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY org.eclipse.cdt.dsf 4 10005 2025-12-08 17:53:03.703
+!MESSAGE Request for monitor: '47^error,msg="Unable to read memory."' resulted in an error.
+!SUBENTRY 1 org.eclipse.cdt.dsf.gdb 4 10004 2025-12-08 17:53:03.703
+!MESSAGE Failed to execute MI command:
+-data-read-memory 0xe000ee08 d 1 1 4
+Error message from debugger back end:
+Unable to read memory.
+!STACK 0
+java.lang.Exception: Unable to read memory.
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:53:03.754
+!MESSAGE Failed to read from target
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:53:03.754
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:53:03.755
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:53:03.755
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:53:03.755
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:53:03.755
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:53:03.755
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:53:03.757
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:53:03.758
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:53:03.758
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:53:03.758
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:53:03.758
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:53:03.758
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:53:03.758
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2025-12-08 17:54:00.258
+!MESSAGE SWV configuration; base: 192000000; minDiv: 16; maxDiv: 65535; maxSWO: 12000000; limit: 12000000 => SWO: 4000000; CPU: 4000000; div: 1
+
+!ENTRY org.eclipse.cdt.dsf 4 10005 2025-12-08 17:58:01.432
+!MESSAGE Request for monitor: '47^error,msg="Unable to read memory."' resulted in an error.
+!SUBENTRY 1 org.eclipse.cdt.dsf.gdb 4 10004 2025-12-08 17:58:01.433
+!MESSAGE Failed to execute MI command:
+-data-read-memory 0xe000ee08 d 1 1 4
+Error message from debugger back end:
+Unable to read memory.
+!STACK 0
+java.lang.Exception: Unable to read memory.
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:58:01.495
+!MESSAGE Failed to read from target
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:58:01.496
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:58:01.496
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:58:01.496
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:58:01.496
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:58:01.496
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:58:01.496
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:58:01.497
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:58:01.501
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:58:01.501
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:58:01.502
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:58:01.503
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:58:01.503
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 17:58:01.503
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2025-12-08 17:58:17.839
+!MESSAGE SWV configuration; base: 192000000; minDiv: 16; maxDiv: 65535; maxSWO: 12000000; limit: 12000000 => SWO: 4000000; CPU: 4000000; div: 1
+
+!ENTRY org.eclipse.cdt.dsf 4 10005 2025-12-08 18:00:15.673
+!MESSAGE Request for monitor: '47^error,msg="Unable to read memory."' resulted in an error.
+!SUBENTRY 1 org.eclipse.cdt.dsf.gdb 4 10004 2025-12-08 18:00:15.673
+!MESSAGE Failed to execute MI command:
+-data-read-memory 0xe000ee08 d 1 1 4
+Error message from debugger back end:
+Unable to read memory.
+!STACK 0
+java.lang.Exception: Unable to read memory.
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:00:15.754
+!MESSAGE Failed to read from target
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:00:15.754
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:00:15.755
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:00:15.756
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:00:15.756
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:00:15.756
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:00:15.756
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:00:15.756
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:00:15.757
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:00:15.757
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:00:15.757
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:00:15.763
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:00:15.763
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:00:15.763
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2025-12-08 18:01:02.969
+!MESSAGE SWV configuration; base: 192000000; minDiv: 16; maxDiv: 65535; maxSWO: 12000000; limit: 12000000 => SWO: 4000000; CPU: 4000000; div: 1
+
+!ENTRY org.eclipse.cdt.dsf 4 10005 2025-12-08 18:03:51.784
+!MESSAGE Request for monitor: '46^error,msg="Unable to read memory."' resulted in an error.
+!SUBENTRY 1 org.eclipse.cdt.dsf.gdb 4 10004 2025-12-08 18:03:51.784
+!MESSAGE Failed to execute MI command:
+-data-read-memory 0xe000ee08 d 1 1 4
+Error message from debugger back end:
+Unable to read memory.
+!STACK 0
+java.lang.Exception: Unable to read memory.
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:03:51.835
+!MESSAGE Failed to read from target
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:03:51.836
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:03:51.836
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:03:51.836
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:03:51.836
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:03:51.837
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:03:51.837
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:03:51.837
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:03:51.837
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:03:51.837
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:03:51.837
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:03:51.837
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:03:51.837
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:03:51.838
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2025-12-08 18:04:24.339
+!MESSAGE SWV configuration; base: 192000000; minDiv: 16; maxDiv: 65535; maxSWO: 12000000; limit: 12000000 => SWO: 4000000; CPU: 4000000; div: 1
+
+!ENTRY org.eclipse.cdt.dsf 4 10005 2025-12-08 18:12:23.119
+!MESSAGE Request for monitor: '47^error,msg="Unable to read memory."' resulted in an error.
+!SUBENTRY 1 org.eclipse.cdt.dsf.gdb 4 10004 2025-12-08 18:12:23.119
+!MESSAGE Failed to execute MI command:
+-data-read-memory 0xe000ee08 d 1 1 4
+Error message from debugger back end:
+Unable to read memory.
+!STACK 0
+java.lang.Exception: Unable to read memory.
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:12:23.187
+!MESSAGE Failed to read from target
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:12:23.187
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:12:23.188
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:12:23.188
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:12:23.188
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:12:23.188
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:12:23.189
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:12:23.190
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:12:23.190
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:12:23.192
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:12:23.193
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:12:23.193
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:12:23.193
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:12:23.193
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2025-12-08 18:15:19.633
+!MESSAGE SWV configuration; base: 192000000; minDiv: 16; maxDiv: 65535; maxSWO: 12000000; limit: 12000000 => SWO: 4000000; CPU: 4000000; div: 1
+
+!ENTRY org.eclipse.cdt.dsf 4 10005 2025-12-08 18:16:24.364
+!MESSAGE Request for monitor: '47^error,msg="Unable to read memory."' resulted in an error.
+!SUBENTRY 1 org.eclipse.cdt.dsf.gdb 4 10004 2025-12-08 18:16:24.364
+!MESSAGE Failed to execute MI command:
+-data-read-memory 0xe000ee08 d 1 1 4
+Error message from debugger back end:
+Unable to read memory.
+!STACK 0
+java.lang.Exception: Unable to read memory.
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:16:24.437
+!MESSAGE Failed to read from target
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:16:24.438
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:16:24.438
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:16:24.438
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:16:24.438
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:16:24.441
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:16:24.442
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:16:24.442
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:16:24.445
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:16:24.445
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:16:24.446
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:16:24.446
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:16:24.446
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'
+
+!ENTRY com.st.stm32cube.ide.mcu.sfrview 2 2 2025-12-08 18:16:24.446
+!MESSAGE Failed to evaluate disableCondition 'DCB->DSCSR->CDS == 0'

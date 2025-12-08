@@ -129,7 +129,6 @@ void SPI1_IRQHandler(){
 	while(ASM_SPI_SR_Get() & (0x1U)){
 		//printf("RxFIFO contains at least one data packet\n");
 		rx_buffer = ASM_SPI_RXDR_Get();
-		printf("Received: %d \n", rx_buffer);
 	}
 
 	//Bit 6 OVR: overrun
@@ -161,17 +160,17 @@ void RCC_init(){
 
 	ASM_RCC_CR_HSI16();
 	while(!ASM_RCC_CR_HSI16RDY());
-
+//
 //	ASM_RCC_PLL1CFGR_PLL1SRC_HSI16();
 //	ASM_RCC_PLL1CFGR_PLL1M_3();
 //	ASM_RCC_PLL1DIVR_PLL1N_4();
 //	ASM_RCC_PLL1CFGR_PLL1REN();
 //	ASM_RCC_PLL1CFGR_PLL1PEN();
 //	ASM_RCC_PLL1CFGR_PLL1QEN();
-//
-//
-//	ASM_RCC_CR_PLL1();
-//	while(!ASM_RCC_CR_PLL1RDY());
+
+
+	//ASM_RCC_CR_PLL1();
+	//while(!ASM_RCC_CR_PLL1RDY());
 
 	//Activate MCO gpio pin PA8
 	ASM_RCC_AHB2ENR1_GPIOAEN_Set();
@@ -196,7 +195,7 @@ void RCC_init(){
 	//		ASM_RCC_CFGR1_MCOSEL_PLL1();
 
 //	  ASM_RCC_CFGR1_SW_PLL1();
-//	  while(!(ASM_RCC_CFGR1_SWS() & 0x3U));
+	//  while(!(ASM_RCC_CFGR1_SWS() & 0x3U));
 }
 
 void GPIO_SPI_init(){
@@ -244,9 +243,9 @@ void SPI_init(){
 	 */
 
 	//ASM_RCC_CCIPR1_SPI1SEL_PCLK2();
-	ASM_RCC_CCIPR1_SPI1SEL_SYSCLK();
+	//ASM_RCC_CCIPR1_SPI1SEL_SYSCLK();
 	//ASM_RCC_CCIPR1_SPI1SEL_HSI16();
-	//ASM_RCC_CCIPR1_SPI1SEL_MSIK();
+	ASM_RCC_CCIPR1_SPI1SEL_MSIK();
 
 
 

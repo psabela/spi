@@ -1,3 +1,4 @@
 rx_buffer
-*tx_ptr
-tim_flag
+*tx_buffer_ptr
+timer_pulse
+slave_ready

@@ -36,18 +36,14 @@ volatile int _counter = 0;
 int main(void){
 	IDR_reg = 0;
 	tx_ptr = &tx_buffer[0];
-
 	RCC_init();
 	TIM8_init();
 	GPIO_SPI_init();
 	SPI_init();
 	NVIC_Interupts_Enable();
-	TIM8_start();
-
+//	TIM8_start();
 	ASM_SPI_CR1_SSI_0();
-
 	SPI_start();
-
 	while(1){}
 }
 
@@ -110,12 +106,14 @@ void SPI1_IRQHandler(){
 //		printf("Data packet space available\n");
 		IDR_reg = GPIOC_IDR_RDY_GET();
 		if (IDR_reg != 0){ //ready is ON
+
 			ASM_SPI_TXDR_Set(*tx_ptr);
 			printf("Sent data: %d \n", *tx_ptr);
 			*(tx_ptr++);
 			if(*tx_ptr==99){
 				tx_ptr = &tx_buffer;
 			}
+
 		}
 		else{
 			printf("not");
@@ -240,6 +238,11 @@ void GPIO_SPI_init(){
 		// PC1
 	GPIOC_MODER_Input();
 	GPIOC_PUPDR_RDY_DOWN();
+	//lock
+//	GPIOC_LCKR_PIN1_LCKK_0();
+//	GPIOC_LCKR_PIN1_LCKK_1();
+//	GPIOC_LCKR_PIN1_LCKK_0();
+//	GPIOC_LCKR_PIN1_LCKK_1();
 }
 
 void SPI_init(){
@@ -468,7 +471,6 @@ void SPI_init(){
 	ASM_SPI_IER_TXPIE_Set();
 	ASM_SPI_IER_TXTFIE_Set();
 	ASM_SPI_IER_RXPIE_Set();
-
 }
 
 void SPI_start(){
@@ -479,7 +481,6 @@ void SPI_start(){
 	 * 1: Serial peripheral enabled
 	 */
 	ASM_SPI_CR1_SPE_1();
-
 	/**
 	 * Bit 9 CSTART: master transfer start
 	 * This bit can be set by software if SPI is enabled only to start an SPI communication.
