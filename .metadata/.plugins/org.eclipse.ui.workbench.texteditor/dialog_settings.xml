@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="GPIOC_PUPDR_RDY_DOWN"/>
+		<item key="selection" value="ASM_RCC_PLL1CFGR_PLL1SRC"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="ASM_RCC_PLL1CFGR_PLL1SRC"/>
 			<item value="GPIOC_PUPDR_RDY_DOWN"/>
 			<item value="GPIOC_MODER_Input"/>
 			<item value="GPIOC_IDR_RDY_GET"/>

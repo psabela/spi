@@ -2573,3 +2573,21 @@
 2025-12-08 18:18:57,279 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] Dec 08, 2025 6:18:57 PM java.util.prefs.FileSystemPreferences syncWorld
 2025-12-08 18:18:57,279 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] WARNING: Couldn't flush system prefs: java.util.prefs.BackingStoreException: Couldn't get file lock.
 2025-12-08 18:18:57,279 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 
+2025-12-08 18:19:27,277 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] Dec 08, 2025 6:19:27 PM java.util.prefs.FileSystemPreferences checkLockFile0ErrorCode
+2025-12-08 18:19:27,278 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] WARNING: Could not lock System prefs. Unix error code 32506.
+2025-12-08 18:19:27,278 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 
+2025-12-08 18:19:27,278 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] Dec 08, 2025 6:19:27 PM java.util.prefs.FileSystemPreferences syncWorld
+2025-12-08 18:19:27,278 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] WARNING: Couldn't flush system prefs: java.util.prefs.BackingStoreException: Couldn't get file lock.
+2025-12-08 18:19:27,278 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 
+2025-12-08 18:19:57,278 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] Dec 08, 2025 6:19:57 PM java.util.prefs.FileSystemPreferences checkLockFile0ErrorCode
+2025-12-08 18:19:57,279 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] WARNING: Could not lock System prefs. Unix error code 32506.
+2025-12-08 18:19:57,279 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 
+2025-12-08 18:19:57,279 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] Dec 08, 2025 6:19:57 PM java.util.prefs.FileSystemPreferences syncWorld
+2025-12-08 18:19:57,279 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] WARNING: Couldn't flush system prefs: java.util.prefs.BackingStoreException: Couldn't get file lock.
+2025-12-08 18:19:57,280 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 
+2025-12-08 18:20:27,277 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] Dec 08, 2025 6:20:27 PM java.util.prefs.FileSystemPreferences checkLockFile0ErrorCode
+2025-12-08 18:20:27,277 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] WARNING: Could not lock System prefs. Unix error code 32506.
+2025-12-08 18:20:27,277 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 
+2025-12-08 18:20:27,278 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] Dec 08, 2025 6:20:27 PM java.util.prefs.FileSystemPreferences syncWorld
+2025-12-08 18:20:27,278 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] WARNING: Couldn't flush system prefs: java.util.prefs.BackingStoreException: Couldn't get file lock.
+2025-12-08 18:20:27,278 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 
