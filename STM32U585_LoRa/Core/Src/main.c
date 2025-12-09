@@ -24,12 +24,15 @@ int _write(int file, char *ptr, int len){
 }
 
 uint8_t rx_buffer;
-int tim_flag = 0;
-int ready 	 = 0;
+uint32_t timer_pulse;
+uint32_t slave_ready;
 
 int main(void){
-	RCC_init();
 	rx_buffer = 0;
+	timer_pulse = 0;
+	slave_ready = 0;
+
+	RCC_init();
 	TIM8_init();
 	SPI_init();
 	NVIC_Interupts_Enable();
@@ -43,16 +46,15 @@ void NVIC_Interupts_Enable(){
 	NVIC_SPI1_Enable_Interupt();
 }
 
-
 void TIM8_UP_IRQHandler(){
-	if(TIM8_Get_SR_Status() & 0x1){  //UIF on
+	if(TIM8_Get_SR_Status() & 0x1){  //UIF ON
 		TIM8_Clear_UIF_Flag();
-		tim_flag ^= 1;
-		if(tim_flag == 1 & ready==0){
+		timer_pulse ^= 1;
+		if(slave_ready==0){
 			GPIOC_BSRR_SET();
-			ready = 1;
+			slave_ready = 1;
 		}
-		printf("%i \n", tim_flag);
+		printf("%i \n", timer_pulse);
 	}
 }
 
@@ -71,11 +73,11 @@ void SPI1_IRQHandler(){
 	* In master, EOT event terminates the data transaction and handles SS output optionally.
 	* When CRC is applied, the EOT event is extended over the CRC frame transaction.
 	* To restart the internal state machine properly, SPI is strongly suggested to be disabled and
-	* re-enabled before next transaction starts despite its setting is not changed.
+	* re-enabled before next transact	}
 	*/
 	if(ASM_SPI_SR_Get() & (0x1U << 3)){
-		printf("transfer complete.\n");
 		ASM_SPI_IFCR_EOTC_Clear();
+		printf("transfer complete.\n");
 	}
 
 	/**
@@ -90,9 +92,9 @@ void SPI1_IRQHandler(){
 	* disabled.
 	*/
 	if(ASM_SPI_SR_Get() & (0x1U << 1)){
-		printf("Data packet space available\n");
-		//ASM_SPI_TXDR_Set(rx_buffer);
-		ASM_SPI_TXDR_Set(66);
+		//printf("Data packet space available\n");
+		ASM_SPI_TXDR_Set(rx_buffer);
+		//ASM_SPI_TXDR_Set(6);
 	}
 
 	/*
@@ -105,11 +107,11 @@ void SPI1_IRQHandler(){
 	* read by performing consecutive read operations from SPI_RXDR, RXP flag must be
 	* checked again once a complete data packet is read out from RxFIFO.
 	*/
-	while((ASM_SPI_SR_Get() & (0x1U)) && ready == 1){
+	while((ASM_SPI_SR_Get() & (0x1U)) && slave_ready == 1){
 		//printf("RxFIFO contains at least one data packet\n");
 		GPIOC_BSRR_RESET();
 		rx_buffer = ASM_SPI_RXDR_Get();
-		ready = 0;
+		slave_ready = 0;
 		printf("Received: %d \n", rx_buffer);
 	}
 

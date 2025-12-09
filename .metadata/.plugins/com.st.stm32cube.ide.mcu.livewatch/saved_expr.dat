@@ -1,2 +1,3 @@
 rx_buffer
-tim_flag
+timer_pulse
+slave_ready

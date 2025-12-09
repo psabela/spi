@@ -3,6 +3,8 @@
 	<item key="hasShownOverlayPopupBefore" value="true"/>
 	<item key="replaceBarOpen" value="false"/>
 	<list key="searchhistory">
+		<item value="ASM_SPI_IFCR_EOTC_Clear"/>
+		<item value="GPIOC_BSRR_SET"/>
 		<item value="GPIOC_PUPDR_RDY_DOWN"/>
 		<item value="GPIOC_PUPDR_RDY_UP"/>
 		<item value="ASM_SPI_IFCR_"/>
