@@ -25,6 +25,7 @@
 .global TIM8_Set_CC1P_Polarity_ActiveHigh
 .global TIM8_Set_CCnE_Output_Enable_To_GPIO
 .global TIM8_Set_CEN_Counter_Enable
+.global TIM8_Set_CEN_Counter_Disable
 .global TIM8_Set_UIF_Update_Interrupt_Enable
 .global	TIM8_Set_CC1IE_Update_Interrupt_Enable
 .global TIM8_Get_SR_Status
@@ -62,16 +63,17 @@
 .equ	TIMx_AF2_OFFSET,	0x64
 .equ	TIMx_DCR_OFFSET,	0x3DC
 .equ	TIMx_DMAR_OFFSET,	0x3E0
+.equ	TIM8_SR_ADDR,		0x40013410
 
 //PCLK2 clock 4MHz
-.equ	PRESCALER, 	0xF9F 	//3999
-.equ	ARRCOUNTTO, 0x3E7	//999	--0.000025
-.equ	CCRCOUNTTO, 0x3E7 // 99
+.equ	PRESCALER, 	0x1//0xF9F 	//3999
+.equ	ARRCOUNTTO, 0x1  // 0x3E7   //0x3E7	//999	--0.000025
+.equ	CCRCOUNTTO, 0x1 // 0x3E7   //99
 
 //HSI16 clock 16MHz
-//.equ	PRESCALER, 	0x32c7 	//15999
-//.equ	ARRCOUNTTO, 0x3E7	//999	--0.000025
-//.equ	CCRCOUNTTO, 0x3E7 // 999
+//.equ	PRESCALER, 	0x0f //15   //0x32c7 	//15999/
+//.equ	ARRCOUNTTO, 0x64 //100 //0x3E7	//999	--0.000025
+//.equ	CCRCOUNTTO, 0x64 //0x3E7// 999
 
 TIM8_Set_PSC_Value:
 	LDR		R1, =TIM8_BASE_OFFSET
@@ -219,6 +221,17 @@ TIM8_Set_CEN_Counter_Enable:
 	STR		R0, [R1]
 	BX LR
 
+TIM8_Set_CEN_Counter_Disable:
+	LDR		R1, =TIM8_BASE_OFFSET
+	LDR		R2, =TIMx_CR1_OFFSET
+	ADDS	R1, R2
+	LDR		R0, [R1]
+	MOVS	R2, 0x01
+	MVNS	R2, R2
+	ANDS	R0, R2
+	STR		R0, [R1]
+	BX LR
+
 TIM8_Set_MMS_Update_Trigger_Output:
 	LDR		R1, =TIM8_BASE_OFFSET
 	LDR		R2, =TIMx_CR2_OFFSET
@@ -257,9 +270,7 @@ TIM8_Set_CC1IE_Update_Interrupt_Enable:
 	BX LR
 
 TIM8_Get_SR_Status:
-	LDR		R1, =TIM8_BASE_OFFSET
-	LDR		R2, =TIMx_SR_OFFSET
-	ADDS	R1, R2
+	LDR		R1, =TIM8_RCR_Set
 	LDRH	R0, [R1]
 	BX LR
 

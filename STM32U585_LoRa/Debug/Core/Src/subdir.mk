@@ -5,6 +5,7 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 S_SRCS += \
+../Core/Src/exti_assembly.s \
 ../Core/Src/gpio_assembly.s \
 ../Core/Src/nvic_assembly.s \
 ../Core/Src/rcc_assembly.s \
@@ -15,6 +16,7 @@ C_SRCS += \
 ../Core/Src/main.c 
 
 OBJS += \
+./Core/Src/exti_assembly.o \
 ./Core/Src/gpio_assembly.o \
 ./Core/Src/main.o \
 ./Core/Src/nvic_assembly.o \
@@ -23,6 +25,7 @@ OBJS += \
 ./Core/Src/tim8_assembly.o 
 
 S_DEPS += \
+./Core/Src/exti_assembly.d \
 ./Core/Src/gpio_assembly.d \
 ./Core/Src/nvic_assembly.d \
 ./Core/Src/rcc_assembly.d \
@@ -42,7 +45,7 @@ Core/Src/%.o Core/Src/%.su Core/Src/%.cyclo: ../Core/Src/%.c Core/Src/subdir.mk
 clean: clean-Core-2f-Src
 
 clean-Core-2f-Src:
-	-$(RM) ./Core/Src/gpio_assembly.d ./Core/Src/gpio_assembly.o ./Core/Src/main.cyclo ./Core/Src/main.d ./Core/Src/main.o ./Core/Src/main.su ./Core/Src/nvic_assembly.d ./Core/Src/nvic_assembly.o ./Core/Src/rcc_assembly.d ./Core/Src/rcc_assembly.o ./Core/Src/spi_master_assembly.d ./Core/Src/spi_master_assembly.o ./Core/Src/tim8_assembly.d ./Core/Src/tim8_assembly.o
+	-$(RM) ./Core/Src/exti_assembly.d ./Core/Src/exti_assembly.o ./Core/Src/gpio_assembly.d ./Core/Src/gpio_assembly.o ./Core/Src/main.cyclo ./Core/Src/main.d ./Core/Src/main.o ./Core/Src/main.su ./Core/Src/nvic_assembly.d ./Core/Src/nvic_assembly.o ./Core/Src/rcc_assembly.d ./Core/Src/rcc_assembly.o ./Core/Src/spi_master_assembly.d ./Core/Src/spi_master_assembly.o ./Core/Src/tim8_assembly.d ./Core/Src/tim8_assembly.o
 
 .PHONY: clean-Core-2f-Src
 

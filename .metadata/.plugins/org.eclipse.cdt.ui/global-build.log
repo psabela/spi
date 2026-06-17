@@ -1,14 +1,113 @@
-18:15:10 **** Incremental Build of configuration Debug for project STM32U585_LoRa ****
+01:32:45 **** Incremental Build of configuration Debug for project STM32U585_LoRa ****
 make -j2 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m33 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32U585xx -c -I"/home/peter/Documents/stm_projects/STM/wks2/spi/STM32U585_LoRa/Drivers/CMSIS/Device" -I"/home/peter/Documents/stm_projects/STM/wks2/spi/STM32U585_LoRa/Drivers/CMSIS/Include" -I"/home/peter/Documents/stm_projects/STM/wks2/spi/STM32U585_LoRa/Core/Inc" -I"/home/peter/Documents/stm_projects/STM/wks2/spi/STM32U585_LoRa/sx126x_driver/inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'SubmitCommand':
+../Core/Src/main.c:109:6: warning: type of 'cmd_index' defaults to 'int' [-Wimplicit-int]
+  109 | void SubmitCommand(cmd_index){
+      |      ^~~~~~~~~~~~~
+../Core/Src/main.c:112:29: warning: implicit declaration of function 'lora_command' [-Wimplicit-function-declaration]
+  112 |         if(cmd_index == 0){ lora_command(SetStandby, (uint8_t)sizeof(SetStandby));      }
+      |                             ^~~~~~~~~~~~
+../Core/Src/main.c:126:17: warning: implicit declaration of function 'delay_us' [-Wimplicit-function-declaration]
+  126 |                 delay_us(50000);
+      |                 ^~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:148:6: warning: conflicting types for 'lora_command'; have 'void(uint8_t *, uint8_t)' {aka 'void(unsigned char *, unsigned char)'}
+  148 | void lora_command(uint8_t *cmd, uint8_t cmd_len){
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:112:29: note: previous implicit declaration of 'lora_command' with type 'void(uint8_t *, uint8_t)' {aka 'void(unsigned char *, unsigned char)'}
+  112 |         if(cmd_index == 0){ lora_command(SetStandby, (uint8_t)sizeof(SetStandby));      }
+      |                             ^~~~~~~~~~~~
+../Core/Src/main.c: In function 'SPI1_IRQHandler':
+../Core/Src/main.c:208:24: warning: zero-length gnu_printf format string [-Wformat-zero-length]
+  208 |                 printf("");
+      |                        ^~
+../Core/Src/main.c: In function 'TIM8_UP_IRQHandler':
+../Core/Src/main.c:430:26: warning: format '%i' expects argument of type 'int', but argument 2 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  430 |                 printf("%i \n", timer_pulse);
+      |                         ~^      ~~~~~~~~~~~
+      |                          |      |
+      |                          int    uint32_t {aka long unsigned int}
+      |                         %li
+../Core/Src/main.c: In function 'Get_SYSCLK_Freq':
+../Core/Src/main.c:445:91: warning: excess elements in array initializer
+  445 |                                 48000000, 24000000, 16000000, 12000000, 4000000, 2000000, 1330000
+      |                                                                                           ^~~~~~~
+../Core/Src/main.c:445:91: note: (near initialization for 'msis_freqs')
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:488:6: warning: conflicting types for 'delay_us'; have 'void(uint32_t)' {aka 'void(long unsigned int)'}
+  488 | void delay_us(uint32_t us){
+      |      ^~~~~~~~
+../Core/Src/main.c:126:17: note: previous implicit declaration of 'delay_us' with type 'void(uint32_t)' {aka 'void(long unsigned int)'}
+  126 |                 delay_us(50000);
+      |                 ^~~~~~~~
+arm-none-eabi-gcc -o "STM32U585_LoRa.elf" @"objects.list"   -mcpu=cortex-m33 -T"/home/peter/Documents/stm_projects/STM/wks2/spi/STM32U585_LoRa/STM32U585AIIXQ_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32U585_LoRa.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+/opt/st/stm32cubeide_1.15.0_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.linux64_1.0.100.202403111256/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld: /opt/st/stm32cubeide_1.15.0_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.linux64_1.0.100.202403111256/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(libc_a-closer.o): in function `_close_r':
+(.text._close_r+0xc): warning: _close is not implemented and will always fail
+/opt/st/stm32cubeide_1.15.0_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.linux64_1.0.100.202403111256/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld: /opt/st/stm32cubeide_1.15.0_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.linux64_1.0.100.202403111256/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(libc_a-fstatr.o): in function `_fstat_r':
+(.text._fstat_r+0xe): warning: _fstat is not implemented and will always fail
+/opt/st/stm32cubeide_1.15.0_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.linux64_1.0.100.202403111256/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld: /opt/st/stm32cubeide_1.15.0_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.linux64_1.0.100.202403111256/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(libc_a-isattyr.o): in function `_isatty_r':
+(.text._isatty_r+0xc): warning: _isatty is not implemented and will always fail
+/opt/st/stm32cubeide_1.15.0_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.linux64_1.0.100.202403111256/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld: /opt/st/stm32cubeide_1.15.0_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.linux64_1.0.100.202403111256/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(libc_a-lseekr.o): in function `_lseek_r':
+(.text._lseek_r+0x10): warning: _lseek is not implemented and will always fail
+/opt/st/stm32cubeide_1.15.0_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.linux64_1.0.100.202403111256/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld: /opt/st/stm32cubeide_1.15.0_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.linux64_1.0.100.202403111256/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(libc_a-readr.o): in function `_read_r':
+(.text._read_r+0x10): warning: _read is not implemented and will always fail
+Finished building target: STM32U585_LoRa.elf
+ 
 arm-none-eabi-size  STM32U585_LoRa.elf 
+arm-none-eabi-objdump -h -S STM32U585_LoRa.elf  > "STM32U585_LoRa.list"
    text	   data	    bss	    dec	    hex	filename
-   8366	    104	   1920	  10390	   2896	STM32U585_LoRa.elf
+   9939	    192	   1936	  12067	   2f23	STM32U585_LoRa.elf
 Finished building: default.size.stdout
  
-18:15:15 **** Incremental Build of configuration Debug for project STM32U585_LoRa ****
+Finished building: STM32U585_LoRa.list
+ 
+01:32:48 **** Incremental Build of configuration Debug for project STM32U585_LoRa ****
 make -j2 all 
 arm-none-eabi-size  STM32U585_LoRa.elf 
    text	   data	    bss	    dec	    hex	filename
-   8366	    104	   1920	  10390	   2896	STM32U585_LoRa.elf
+   9939	    192	   1936	  12067	   2f23	STM32U585_LoRa.elf
+Finished building: default.size.stdout
+ 
+01:33:18 **** Incremental Build of configuration Debug for project STM32U585_LoRa ****
+make -j2 all 
+arm-none-eabi-size  STM32U585_LoRa.elf 
+   text	   data	    bss	    dec	    hex	filename
+   9939	    192	   1936	  12067	   2f23	STM32U585_LoRa.elf
+Finished building: default.size.stdout
+ 
+01:34:31 **** Incremental Build of configuration Debug for project STM32U585_LoRa ****
+make -j2 all 
+arm-none-eabi-size  STM32U585_LoRa.elf 
+   text	   data	    bss	    dec	    hex	filename
+   9939	    192	   1936	  12067	   2f23	STM32U585_LoRa.elf
+Finished building: default.size.stdout
+ 
+01:35:42 **** Incremental Build of configuration Debug for project STM32U585_LoRa ****
+make -j2 all 
+arm-none-eabi-size  STM32U585_LoRa.elf 
+   text	   data	    bss	    dec	    hex	filename
+   9939	    192	   1936	  12067	   2f23	STM32U585_LoRa.elf
+Finished building: default.size.stdout
+ 
+01:38:03 **** Incremental Build of configuration Debug for project STM32U585_LoRa ****
+make -j2 all 
+arm-none-eabi-size  STM32U585_LoRa.elf 
+   text	   data	    bss	    dec	    hex	filename
+   9939	    192	   1936	  12067	   2f23	STM32U585_LoRa.elf
+Finished building: default.size.stdout
+ 
+01:38:34 **** Incremental Build of configuration Debug for project STM32U585_LoRa ****
+make -j2 all 
+arm-none-eabi-size  STM32U585_LoRa.elf 
+   text	   data	    bss	    dec	    hex	filename
+   9939	    192	   1936	  12067	   2f23	STM32U585_LoRa.elf
+Finished building: default.size.stdout
+ 
+01:39:21 **** Incremental Build of configuration Debug for project STM32U585_LoRa ****
+make -j2 all 
+arm-none-eabi-size  STM32U585_LoRa.elf 
+   text	   data	    bss	    dec	    hex	filename
+   9939	    192	   1936	  12067	   2f23	STM32U585_LoRa.elf
 Finished building: default.size.stdout
  

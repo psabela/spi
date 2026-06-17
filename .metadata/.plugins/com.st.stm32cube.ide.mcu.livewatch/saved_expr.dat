@@ -1,4 +1,10 @@
-rx_buffer
-*tx_buffer_ptr
-timer_pulse
 slave_ready
+tx_buffer
+cmd_index
+tsize
+rx_buffer
+command[0]
+command[1]
+timer_pulse
+num_of_cmds
+FLASH->ACR

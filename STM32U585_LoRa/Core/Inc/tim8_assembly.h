@@ -20,6 +20,7 @@ extern void TIM8_Set_OCnM_To_Toggle_Mode(void);
 extern void TIM8_Set_CC1P_Polarity_ActiveHigh(void);
 extern void TIM8_Set_CCnE_Output_Enable_To_GPIO(void);
 extern void TIM8_Set_CEN_Counter_Enable(void);
+extern void TIM8_Set_CEN_Counter_Disable(void);
 extern void TIM8_Set_UIF_Update_Interrupt_Enable(void);
 extern void TIM8_Set_CC1IE_Update_Interrupt_Enable(void);
 extern uint16_t TIM8_Get_SR_Status(void);

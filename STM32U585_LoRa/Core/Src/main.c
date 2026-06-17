@@ -7,14 +7,22 @@
 #include "spi_master_assembly.h"
 #include "nvic_assembly.h"
 #include "tim8_assembly.h"
+#include "exti_assembly.h"
 
+
+void DWT_Init(void);
 void RCC_init(void);
 void GPIO_SPI_init(void);
 void SPI_init(void);
+void DIO_EXTI_init(void);
 void TIM8_init(void);
 void SPI_start(void);
 void TIM8_start(void);
 void NVIC_Interupts_Enable(void);
+void GPIO_Lora_Init();
+uint32_t Get_SYSCLK_Freq(void);
+void SubmitCommand(int);
+
 
 int _write(int file, char *ptr, int len){
 	for(int i = 0; i < len; i++){
@@ -22,139 +30,200 @@ int _write(int file, char *ptr, int len){
 	}
 	return len;
 }
+/* USER CODE BEGIN 0 */
+int __io_putchar(int ch){
+	ITM_SendChar(ch);
+	return ch;
+}
+uint8_t ttest[]					= {0b01010101,0b01010101,0b01010101,0b01010101,0b01010101};
+uint8_t SetStandby[] 			= {0x80, 0x00};  //STDBY_RC = 0; STDBY_XOSC = 1
+uint8_t SetPacketType[] 		= {0x8A, 0x01}; //PACKET_TYPE_LoRa 0x01 LoRa mode
+uint8_t SetModulationParams[] 	= {0x8B, 0x07, 0x04, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00}; //REVIEWED: Opcode=0x8B, ModParam1=0x07(SF), ModParam2=0x04(125kHz), ModParam3=0x04(CR_4_8), ModParam4=0x00(DataRateOptimaze OFF), ModParam5-8=0x00
+uint8_t SetPacketParams[] 		= {0x8C, 0x00, 0x0C, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00}; //REVIEWED: Preamble MSB=0x00 LSB=0x0C (12) | Header-0x00 | Len=0x05 | CRC=0x0(oFF) | IQ=0x00(std)
+uint8_t SetTxParams[] 			= {0x8E, 0x16, 0x01};  //REVIEWED Opcode=0x8E, power=0x16(22dBm), RampTime=0x01(20us)
+uint8_t SetRfFrequency[] 		= {0x86, 0x39, 0x2E, 0x66, 0x66};
+uint8_t syncWord1[]  			= {0x0d, 0x07, 0x40, 0x14};	//MSB 0x14 //Set Sync Word (private network: 0x1424) //WriteRegister opcode 0x0D, address 0x0740 (2bytes)
+uint8_t syncWord2[]  			= {0x0d, 0x07, 0x41, 0x24};	//MSB 0x24
+uint8_t SetBufferBaseAddress[]  = {0x8F, 0x00, 0x00};
+uint8_t SetPaConfig[] 			= {0x95, 0x02, 0x03, 0x00, 0x01}; //REVIEWED Opcode=0x95, paDutyCycle=0x02, hpMax=0x03, deviceSel=0x00(SX1262), paLut=0x1(always 0x1) +17dBm
+uint8_t WriteBuffer[] 			= {0x0E, 0x00, 0x50, 0x45, 0x54, 0x45, 0x52};
+uint8_t SetTx[] 				= {0x83, 0x00, 0x00, 0x00};
+uint8_t SetDioIrqParams[]       = {0x08, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00}; //IrqMask byte 1-2, DIO1Mask byte 3-4
+uint8_t GetIrqStatus[] 		    = {0x12, 0x00, 0x00, 0x00};
+uint8_t ClearIrqStatus[]        = {0x02, 0x00, 0x01};
+
+uint8_t GetStatus[]				= {0xC0, 0x00};
+uint8_t SetRegulatorMode[]		= {0x96, 0x00};
+uint8_t ClearDeviceErrors[]		= {0x07, 0x00, 0x00};
+uint8_t SetDio2AsRfSwitchCtrl[] = {0x9D, 0x01};
+uint8_t SetDio3AsTcxoCtrl[]		= {0x97, 0x07, 0x00, 0x00, 0xFA};
+
+volatile int cmd = 0;
+uint8_t tsize = 0;
+volatile uint8_t	cmd_index;
+uint8_t *command;
+
+const int num_of_cmds = 18;
+
+//volatile uint8_t SetCadParams[] = {0x88, power, rampTime, 99};
+//volatile uint8_t SetLoRaSymbNumTimeout[] = {0xA0, power, rampTime, 99};
 
 volatile uint32_t timer_pulse;
 volatile uint32_t slave_ready;
-volatile uint8_t  rx_buffer;
-volatile uint8_t *tx_buffer_ptr;
-volatile uint8_t  tx_buffer[] = {10,11,12,13,14,15,16,17,18,19,99};
-
+volatile uint8_t  byte_index = 0;
+volatile uint32_t  rx_buffer = 0;
+volatile uint32_t  tx_buffer;
 volatile int _counter = 0;
+volatile uint32_t cpu_freq;
+volatile uint32_t txco;
 
 int main(void){
+	txco = 0;
 	timer_pulse = 0;
-	slave_ready = 0;
-	tx_buffer_ptr = &tx_buffer[0];
-
+	cmd_index = 0;
+	slave_ready = 2;
+	cpu_freq = Get_SYSCLK_Freq();
+	DWT_Init();
 	RCC_init();
-	TIM8_init();
+	GPIO_Lora_Init();
+	//TIM8_init();
 	GPIO_SPI_init();
+	DIO_EXTI_init();
 	SPI_init();
-	NVIC_Interupts_Enable();
-	ASM_SPI_CR1_SSI_0();
-	SPI_start();
-	TIM8_start();
+	//starting interrupt handlers
+	NVIC_IPR6_EXTI15_priority();
+	//NVIC_TIM8_Enable_Interupt();
+	NVIC_EXTI15_Enable_Interupt();
+
+//	uint32_t start = DWT->CYCCNT;
+//	__asm__ volatile("nop");
+//	uint32_t cycles = DWT->CYCCNT - start;
+//	uint32_t us = (uint64_t)cycles * 1000000ULL / cpu_freq;
+
+	//TIM8_Set_CEN_Counter_Enable();
+
+	SubmitCommand(cmd_index);
 	while(1){}
 }
 
-void NVIC_Interupts_Enable(){
-	NVIC_TIM8_Enable_Interupt();
-	NVIC_SPI1_Enable_Interupt();
+void SubmitCommand(cmd_index){
+
+    //After Reset
+	if(cmd_index == 0){ lora_command(SetStandby, (uint8_t)sizeof(SetStandby));	}
+	else if(cmd_index == 1){ lora_command(SetPacketType, (uint8_t)sizeof(SetPacketType));}
+	else if(cmd_index == 2){ lora_command(SetRfFrequency, (uint8_t)sizeof(SetRfFrequency));}
+	else if(cmd_index == 3){ lora_command(SetPaConfig, (uint8_t)sizeof(SetPaConfig));}
+	else if(cmd_index == 4){ lora_command(SetTxParams, (uint8_t)sizeof(SetTxParams));}
+	else if(cmd_index == 5){ lora_command(SetBufferBaseAddress, (uint8_t)sizeof(SetBufferBaseAddress));}
+	else if(cmd_index == 6){ lora_command(WriteBuffer, (uint8_t)sizeof(WriteBuffer));}
+	else if(cmd_index == 7){ lora_command(SetModulationParams, (uint8_t)sizeof(SetModulationParams));}
+	else if(cmd_index == 8){ lora_command(SetPacketParams, (uint8_t)sizeof(SetPacketParams));}
+	else if(cmd_index == 9){ lora_command(SetDioIrqParams, (uint8_t)sizeof(SetDioIrqParams));}
+	else if(cmd_index == 10){ lora_command(SetDio3AsTcxoCtrl, (uint8_t)sizeof(SetDio3AsTcxoCtrl));}
+	else if(cmd_index == 11){ lora_command(SetDio2AsRfSwitchCtrl, (uint8_t)sizeof(SetDio2AsRfSwitchCtrl));}
+	else if(cmd_index == 12){ lora_command(SetTx, (uint8_t)sizeof(SetTx));}
+	else if(cmd_index == 13){
+		delay_us(50000);
+		lora_command(ClearIrqStatus, (uint8_t)sizeof(ClearIrqStatus));
+	}
+	else if(cmd_index == 14){
+		//setpayloadlength  8421   1101 13=0XD
+		uint8_t SetPacketParams[] 		= {0x8C, 0x00, 0x0C, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x00, 0x00}; //REVIEWED: Preamble MSB=0x00 LSB=0x0C (12) | Header-0x00 | Len=0x05 | CRC=0x0(oFF) | IQ=0x00(std)
+		lora_command(SetPacketParams, (uint8_t)sizeof(SetPacketParams));
+	}
+	else if(cmd_index == 15){
+		//set writebuffer offset Pray for Paul 0x50,0x72,0x61,0x79,0x20,0x66,0x6F,0x72,0x20,0x50,0x61,0x75,0x6C
+		uint8_t WriteBuffer[] 			= {0x0E, 0x00, 0x50,0x72,0x61,0x79,0x20,0x66,0x6F,0x72,0x20,0x50,0x61,0x75,0x6C};
+		lora_command(WriteBuffer, (uint8_t)sizeof(WriteBuffer));
+	}
+	else if(cmd_index == 16){ lora_command(SetTx, (uint8_t)sizeof(SetTx));}
+	else if(cmd_index == 17){
+		delay_us(70000);
+		lora_command(ClearIrqStatus, (uint8_t)sizeof(ClearIrqStatus));
+	}
+	else if(cmd_index == 18){ lora_command(GetStatus, (uint8_t)sizeof(GetStatus)); }
+	else{ return;}
 }
 
-void TIM8_UP_IRQHandler(){
-	if(TIM8_Get_SR_Status() & 0x1){  //UIF ON
-		TIM8_Clear_UIF_Flag();
-		timer_pulse ^= 1;
-		printf("%i \n", timer_pulse);
-	}
+void lora_command(uint8_t *cmd, uint8_t cmd_len){
+
+	tsize   = cmd_len;
+	command = cmd;
+
+	ASM_SPI_CR1_SPE_0();
+	ASM_SPI_CFG1_FTHLV(tsize-1);
+	ASM_SPI_CR2_TSIZE(tsize);
+	ASM_SPI_CR1_SPE_1();
+
+	GPIOE_BSRR_NSS_RESET();  //LOW
+	NVIC_SPI1_Enable_Interupt();
 }
 
 void SPI1_IRQHandler(){
 
-	/**
-	* Bit 3 EOT: end of transfer
-	* EOT is set by hardware as soon as a full transfer is complete, that is when SPI is re-enabled
-	* or when TSIZE number of data have been transmitted and/or received on the SPI. EOT is
-	* cleared when SPI is re-enabled or by writing 1 to EOTC bit of SPI_IFCR optionally.
-	* EOT flag triggers an interrupt if EOTIE bit is set.
-	* If DXP flag is used until TXTF flag is set and DXPIE is cleared, EOT can be used to
-	* download the last packets contained into RxFIFO in one-shot.
-	* 0: transfer is ongoing or not started
-	* 1: transfer complete
-	* In master, EOT event terminates the data transaction and handles SS output optionally.
-	* When CRC is applied, the EOT event is extended over the CRC frame transaction.
-	* To restart the internal state machine properly, SPI is strongly suggested to be disabled and
-	* re-enabled before next transaction starts despite its setting is not changed.
-	*/
 	if(ASM_SPI_SR_Get() & (0x1U << 3)){
+		/**
+		 * 	EOT: end of transfer. 1: transfer complete.
+		 */
+//		printf("EOT: end of transfer/transfer complete.\n",cmd_index);
+		GPIOE_BSRR_NSS_SET(); //HIGH
 		ASM_SPI_IFCR_EOTC_Clear();
-		// to-do:
-		//* In master, EOT event terminates the data transaction and handles SS output optionally.
-		//* To restart the internal state machine properly, SPI is strongly suggested to be disabled and
-		//* re-enabled before next transaction starts despite its setting is not changed.
-		ASM_SPI_CR1_SPE_0();
-		SPI_init();
-    	SPI_start();
+		if(cmd_index <= num_of_cmds){
+			printf("SubmitCommand(%d)\n",cmd_index);
+			SubmitCommand(cmd_index);
+		}
 	}
-
-
-	/**
-	* Bit 1 TXP: Tx-packet space available
-	* 0: not enough free space at TxFIFO to host next data packet
-	* 1: enough free space at TxFIFO to host at least one data packet
-	* TXP flag can be changed only by hardware. Its value depends on the physical size of the
-	* FIFO and its threshold (FTHLV[3:0]), data frame size (DSIZE[4:0] in SPI mode), and actual
-	* communication flow. If the data packet is stored by performing consecutive write operations
-	* to SPI_TXDR, TXP flag must be checked again once a complete data packet is stored at
-	* TxFIFO. TXP is set despite SPI TxFIFO becomes inaccessible when SPI is reset or
-	* disabled.
-	*/
 	if(ASM_SPI_SR_Get() & (0x1U << 1)){
-		//printf("Data packet space available\n");
-		slave_ready = GPIOC_IDR_RDY_GET();
-		if (slave_ready != 0){
-			ASM_SPI_TXDR_Set(*tx_buffer_ptr);
-			//printf("Sent data: %d \n", *tx_buffer_ptr);
-			*(tx_buffer_ptr++);
-			if(*tx_buffer_ptr==99){
-				tx_buffer_ptr = &tx_buffer;
+		/**
+		 *	TXP: Data packet space available
+		 */
+		if(cmd_index <= num_of_cmds){ //
+			while(GPIOC_IDR_RDY_GET() == 2){} //wait until ready
+
+//			printf("About to exec %d-%x\n",cmd_index,command[0]);
+
+			//pre-load first byte of the command
+			tx_buffer = ASM_SPI_TXDR_Set(command[0]);
+			//load remaining bytes of the command
+			for(int i = 1; i<tsize; i++){
+				tx_buffer = ASM_SPI_TXDR_Set(command[i]);
 			}
-		}
-		else{
-			printf("not");
+//			printf("Finished exec %d-%x\n",cmd_index,command[0]);
+			//next command index
+			cmd_index = cmd_index + 1;
+//			printf("Next command is %d\n",cmd_index);
+			//pause
+			//start the transfer (clocks begin for TSIZE frames)
+			ASM_SPI_CR1_CSTART_1();
 		}
 	}
 
-	/*
-	* Bit 0 RXP: Rx-packet available
-	* 0: RxFIFO is empty or an incomplete data packet is received
-	* 1: RxFIFO contains at least one data packet
-	* The flag is changed by hardware. It monitors the total number of data currently available at
-	* RxFIFO if SPI is enabled. RXP value depends on the FIFO threshold (FTHLV[3:0]), data
-	* frame size (DSIZE[4:0] in SPI mode), and actual communication flow. If the data packet is
-	* read by performing consecutive read operations from SPI_RXDR, RXP flag must be
-	* checked again once a complete data packet is read out from RxFIFO.
-	*/
-	while(ASM_SPI_SR_Get() & (0x1U)){
-		//printf("RxFIFO contains at least one data packet\n");
+	//while(ASM_SPI_SR_Get() & (0x1U)){
+	if(ASM_SPI_SR_Get() & (0x1U)){
+		/**
+		 *  RXP: Rx-packet available. 1: RxFIFO contains at least one data packet
+		 */
 		rx_buffer = ASM_SPI_RXDR_Get();
-		printf("Received: %d \n", rx_buffer);
+		printf("");
+
 	}
 
-	//Bit 6 OVR: overrun
 	if(ASM_SPI_SR_Get() & (0x1U << 6)){
-		//printf("Overrun.\n");
+		//printf("OVR: Bit 6 OVR: overrun.\n");
 		ASM_SPI_RXDR_Get(); //clear RxFIFO
 		ASM_SPI_IFCR_OVRC();
 	}
 
-	/**
-	* Bit 4 TXTF: transmission transfer filled
-	* 0: upload of TxFIFO is ongoing or not started
-	* 1: TxFIFO upload is finished
-	* TXTF is set by hardware as soon as all of the data packets in a transfer have been submitted
-	* for transmission by application software or DMA, that is when TSIZE number of data have
-	* been pushed into the TxFIFO.
-	* This bit is cleared by software write 1 to TXTFC bit of SPI_IFCR exclusively.
-	* TXTF flag triggers an interrupt if TXTFIE bit is set.
-	* TXTF setting clears the TXPIE and DXPIE masks so to off-load application software from
-	* calculating when to disable TXP and DXP interrupts.
-	*/
 	if(ASM_SPI_SR_Get() & (0x1U << 4)){
-		//printf("TxFIFO upload is finished.\n");
+		//printf("TXTF: transmission transfer filled/TxFIFO upload is finished.\n");
+		delay_us(50);
 		ASM_SPI_IFCR_TXTFC();
 	}
+}
+
+void EXTI15_IRQHandler(){
+	//printf("Inside EXTI 15 interrupt\n");
+	EXTI_RPR1_15_SET();  //to clear bit
 }
 
 void RCC_init(){
@@ -162,16 +231,16 @@ void RCC_init(){
 	ASM_RCC_CR_HSI16();
 	while(!ASM_RCC_CR_HSI16RDY());
 
-//	ASM_RCC_PLL1CFGR_PLL1SRC_HSI16();
-//	ASM_RCC_PLL1CFGR_PLL1M_3();
-//	ASM_RCC_PLL1DIVR_PLL1N_4();
-//	ASM_RCC_PLL1CFGR_PLL1REN();
-//	ASM_RCC_PLL1CFGR_PLL1PEN();
-//	ASM_RCC_PLL1CFGR_PLL1QEN();
-//
-//
-//	ASM_RCC_CR_PLL1();
-//	while(!ASM_RCC_CR_PLL1RDY());
+	ASM_RCC_PLL1CFGR_PLL1SRC_HSI16();
+	ASM_RCC_PLL1CFGR_PLL1M_3();
+	ASM_RCC_PLL1DIVR_PLL1N_4();
+	ASM_RCC_PLL1CFGR_PLL1REN();
+	ASM_RCC_PLL1CFGR_PLL1PEN();
+	ASM_RCC_PLL1CFGR_PLL1QEN();
+
+
+	ASM_RCC_CR_PLL1();
+	while(!ASM_RCC_CR_PLL1RDY());
 
 	//Activate MCO gpio pin PA8
 	ASM_RCC_AHB2ENR1_GPIOAEN_Set();
@@ -185,25 +254,46 @@ void RCC_init(){
 	ASM_RCC_ICSCR1_MSIRGSEL_1();
 
 	// Read clock frequency
-			//
 
-			ASM_RCC_CFGR1_MCOSEL_HSI16();
-			//ASM_RCC_CFGR1_MCOSEL_HSI48();
-	//ASM_RCC_CFGR1_MCOSEL_SYSCLK();
-			//ASM_RCC_CFGR1_MCOSEL_MSIK();
-			//ASM_RCC_CFGR1_MCOSEL_MSIS();
-			//ASM_RCC_CFGR1_MCOSEL_HSE();
-	//		ASM_RCC_CFGR1_MCOSEL_PLL1();
+	//ASM_RCC_CFGR1_MCOSEL_HSI16();
+	//ASM_RCC_CFGR1_MCOSEL_HSI48();
+	ASM_RCC_CFGR1_MCOSEL_SYSCLK();
+	//ASM_RCC_CFGR1_MCOSEL_MSIK();
+	//ASM_RCC_CFGR1_MCOSEL_MSIS();
+	//ASM_RCC_CFGR1_MCOSEL_HSE();
+	//ASM_RCC_CFGR1_MCOSEL_PLL1();
 
-//	  ASM_RCC_CFGR1_SW_PLL1();
-//	  while(!(ASM_RCC_CFGR1_SWS() & 0x3U));
+//	ASM_RCC_CFGR1_SW_PLL1();
+//	while(!(ASM_RCC_CFGR1_SWS() & 0x3U));
+}
+
+void GPIO_Lora_Init(){
+	//pin8 D7 ARD.D7_IO  PF13  GPIO
+	//This pin controls LORA RESET
+	//The pin should be held low for typically 100µs for the Reset to happen.
+
+	//enable clock on GPIOF
+	ASM_RCC_AHB2ENR1_GPIOFEN_Set();
+	//configure gpio pin PF13
+	GPIOF_MODER_RESET_Output();
+	GPIOF_OSPEEDR_SET_LOW();
+	GPIOF_PUPDR_RESET_NPUPD();
+	//GPIOF_PUPDR_RESET_UP();
+	GPIOF_BSRR_RESET_SET();
+}
+
+void Lora_Reset(){
+	GPIOF_BSRR_RESET_RESET();
+	delay_us(100);
+	GPIOF_BSRR_RESET_SET();
+	//automatic calibration follows
 }
 
 void GPIO_SPI_init(){
 
 	ASM_RCC_AHB2ENR1_GPIOEEN_Set();
 	ASM_RCC_AHB2ENR1_GPIOCEN_Set();
-	ASM_RCC_AHB2ENR1_GPIODEN_Set();
+
 
 	//Configure GPIOE
 	GPIOE_MODER_Set_Alt_Function();
@@ -211,8 +301,8 @@ void GPIO_SPI_init(){
 	GPIOE_OSPEEDR_Set();
   //GPIOE_PUPDR_Set();
 
-	GPIOE_PUPDR_MOSI_UP();
-  //GPIOE_PUPDR_MOSI_DOWN();
+  //GPIOE_PUPDR_MOSI_UP();
+    GPIOE_PUPDR_MOSI_DOWN();
 	GPIOE_PUPDR_MISO_UP();
   //GPIOE_PUPDR_MISO_DOWN();
 
@@ -221,270 +311,84 @@ void GPIO_SPI_init(){
   //GPIOE_PUPDR_CLEAR(26);
   //GPIOE_PUPDR_SCK_DOWN();
 
+	GPIOE_MODER_NSS_Output();
+	GPIOE_OSPEEDR_NSS_HIGH();
+	GPIOE_BSRR_NSS_SET();
+
   //** GPIOE_PUPDR_NSS register bit value gets overwritten by SPI_SSIOP bit (SS input/output polarity)
-	GPIOE_PUPDR_NSS_UP();
+	//GPIOE_PUPDR_NSS_UP();
   //GPIOE_PUPDR_NSS_DOWN();
 
 	//Configure GPIOC for RDY
 	//Configure GPIOC for RDY
-		// PC1
+	// PC1
 	GPIOC_MODER_Input();
-	GPIOC_PUPDR_RDY_DOWN();
+
 	//lock
 //	GPIOC_LCKR_PIN1_LCKK_0();
 //	GPIOC_LCKR_PIN1_LCKK_1();
 //	GPIOC_LCKR_PIN1_LCKK_0();
 //	GPIOC_LCKR_PIN1_LCKK_1();
+
+
+
+}
+
+void DIO_EXTI_init(){
+
+	//PD15 for DIO1
+	//ASM_RCC_APB3ENR_SYSCFGEN_Set();
+	ASM_RCC_AHB2ENR1_GPIODEN_Set();
+
+	GPIOD_MODER_DIO_INPUT();
+	//GPIOD_PUPDR_DIO_NPUPD();
+	GPIOD_PUPDR_DIO_DOWN();
+	//GPIOD_PUPDR_DIO_UP();
+
+	//EXTI rising edge enable bit
+	EXTI_RTSR1_15_SET();
+	//EXTI port selection
+	EXTI_EXTICR15_DPORT();
+	//EXTI interrupt mask bit
+	EXTI_IMR1_15_SET();
+
 }
 
 void SPI_init(){
-
-	/**
-	 * Select clock for SPI
-	 */
-
 	//ASM_RCC_CCIPR1_SPI1SEL_PCLK2();
-	ASM_RCC_CCIPR1_SPI1SEL_SYSCLK();
+	//ASM_RCC_CCIPR1_SPI1SEL_SYSCLK();
 	//ASM_RCC_CCIPR1_SPI1SEL_HSI16();
-	//ASM_RCC_CCIPR1_SPI1SEL_MSIK();
-
-
-
+	ASM_RCC_CCIPR1_SPI1SEL_MSIK();
 	//ASM_RCC_CFGR2_HPRE_2();
 	//ASM_RCC_CFGR2_PCLK2_2();
 	ASM_RCC_APB2ENR_SPI1_Set();
+    ASM_SPI_CFG2_SSM_1();	//external NSS pin is disconnected from the SPI peripheral's internal SS logic, external pin is treated as GPIO
+    ASM_SPI_CR1_SSI_1();	//force internal NSS high -> no MODF fault
+    ASM_SPI_CFG2_SSOE_0();  //do not try to output via hardware NSS.
+    ASM_SPI_CFG2_MASTER_Set();
 
-	/**
-	 * Configure SPI
-	 */
+    ASM_SPI_CFG2_MIDI_Set(4);
+    ASM_SPI_CFG2_MSSI_Set(4);
 
-	/**
-	 * SSIOP: SS input/output polarity.
-	 * 0: low level is active for SS signal
-	 * 1: high level is active for SS signal
-	 */
-	ASM_SPI_CFG2_SSIOP_0();
-	//ASM_SPI_CFG2_SSIOP_1();  //High is active for SS signal
-
-	/**
-	 * SSOM: SS output management in Master mode
-	 * This bit is taken into account in Master mode when SSOE is enabled.
-	 * It allows the SS output to be configured between two consecutive data transfers.
-	 * 0: SS is kept at active level till data transfer is completed,
-	 *    it becomes inactive with with EOT flag
-	 * 1: SPI data frames are interleaved with SS non active pulses when MIDI[3:0]>1
-	 */
-	//ASM_SPI_CFG2_SSOM_1();	//SS output management, interleave with non-active pulse
-    ASM_SPI_CFG2_SSOM_0(); //SS output management, SS keep active till EOT flag
-
-	/**
-	 * Bits 7:4 MIDI[3:0]: master Inter-Data Idleness
-	 * Specifies minimum time delay (expressed in SPI clock cycles periods)
-	 * inserted between two consecutive data frames in Master mode.
-	 * 0000: no delay
-	 * 0001: 1 clock cycle period delay
-	 * ...
-	 * 1111: 15 clock cycle periods delay
-	 * Note: This feature is not supported in TI mode.
-	 */
-	ASM_SPI_CFG2_MIDI_Set();
-
-	/**
-	 * Bit 26 SSM: software management of SS signal input
-	 * 0: SS input value is determined by the SS PAD
-	 * 1: SS input value is determined by the SSI bit
-	 * When master uses hardware SS output (SSM = 0 and SSOE = 1)
-	 * the SS signal input is forced to not active state internally
-	 * to prevent master mode fault error.
-	 */
-  //ASM_SPI_CFG2_SSM_0();
-    ASM_SPI_CFG2_SSM_1();
-
-	/**
-	 * Bit 29 SSOE: SS output enable
-	 * This bit is taken into account in Master mode only
-	 * 0: SS output is disabled and the SPI can work in multimaster configuration
-	 * 1: SS output is enabled. The SPI cannot work in a multimaster environment.
-	 * It forces the SS pin at inactive level after the transfer is completed
-	 * or SPI is disabled with respect to SSOM, MIDI, MSSI, SSIOP bits setting
-	 */
-	ASM_SPI_CFG2_SSOE_1();	//SS output enabled(master mode only)
-
-	/**
-	 * Bit 22 MASTER: SPI Master
-	 * 0: SPI Slave
-	 * 1: SPI Master
-	 */
-	ASM_SPI_CFG2_MASTER_Set();
-
-	/**
-	 * Bits 18:17 COMM[1:0]: SPI Communication Mode
-	 * 00: full-duplex
-	 * 01: simplex transmitter
-	 * 10: simplex receiver
-	 * 11: half-duplex
-	 */
-	ASM_SPI_CFG2_COMM_Full_Duplex();
-
-	/**
-	 * Bit 25 CPOL: clock polarity
-	 * 0: SCK signal is at 0 when idle
-	 * 1: SCK signal is at 1 when idle
-	 */
+    ASM_SPI_CFG2_COMM_Full_Duplex();
 	ASM_SPI_CFG2_CPOL_0();
-
-	/**
-	 * Bit 24 CPHA: clock phase
-	 * 0: the first clock transition is the first data capture edge
-	 * 1: the second clock transition is the first data capture edge
-	 */
 	ASM_SPI_CFG2_CPHA_0();
-
-	/**
-	 * Bits 4:0 DSIZE[4:0]: number of bits in at single SPI data frame
-	 * 00000: not used
-	 * 00001: not used
-	 * 00010: not used
-	 * 00011: 4 bits
-	 * 00100: 5 bits
-	 * 00101: 6 bits
-	 * 00110: 7 bits
-	 * 00111: 8 bits
-	 * .....
-	 * 11101: 30 bits
-	 * 11110: 31 bits
-	 * 11111: 32 bits
-	 */
 	ASM_SPI_CFG1_DSIZE_8();
 
-	/**
-	* Bits 8:5 FTHLV[3:0]: FIFO threshold level
-	* Defines number of data frames at single data packet. Size of the packet should not exceed
-	* 1/2 of FIFO space.
-	* 0000: 1-data
-	* 0001: 2-data
-	* 0010: 3-data
-	* 0011: 4-data
-	* 0100: 5-data
-	* 0101: 6-data
-	* 0110: 7-data
-	* 0111: 8-data
-	* 1000: 9-data
-	* 1001: 10-data
-	* 1010: 11-data
-	* 1011: 12-data
-	* 1100: 13-data
-	* 1101: 14-data
-	* 1110: 15-data
-	* 1111: 16-data
-	* SPI interface is more efficient if configured packet sizes are aligned with data register access
-	* parallelism:
-	* – If SPI data register is accessed as a 16-bit register and DSIZE ≤ 8 bit, better to select
-	* FTHLV = 2, 4, 6.
-	* – If SPI data register is accessed as a 32-bit register and DSIZE> 8 bit, better to select
-	* FTHLV = 2, 4, 6, while if DSIZE ≤ 8bit, better to select FTHLV = 4, 8, 12.
-	* Note: FTHLV[3:2] bits are reserved at instances with limited set of features
-	*/
-	//ASM_SPI_CFG1_FTHLV_2();
-	ASM_SPI_CFG1_FTHLV_1();
-
-	/**
-	 * Bits 3:0 MSSI[3:0]: Master SS Idleness
-	 * Specifies an extra delay, expressed in number of SPI clock cycle periods,
-	 * inserted additionally between active edge of SS opening a session
-	 * and the beginning of the first data frame of the session in Master mode when SSOE is enabled.
-	 * 0000: no extra delay
-	 * 0001: 1 clock cycle period delay added
-	 * ...
-	 * 1111: 15 clock cycle periods delay added
-	 * Note: This feature is not supported in TI mode.
-	 * To include the delay, the SPI must be disabled and re-enabled between sessions.
-	 */
-  //ASM_SPI_CFG2_MSSI_Set();  //default
-
-	/**
-	 * Bits 30:28 MBR[2:0]: master baud rate prescaler
-	 * 000: SPI master clock/2
-	 * 001: SPI master clock/4
-	 * 010: SPI master clock/8
-	 * 011: SPI master clock/16
-	 * 100: SPI master clock/32
-	 * 101: SPI master clock/64
-	 * 110: SPI master clock/128
-	 * 111: SPI master clock/256
-	 */
-  //ASM_SPI_CFG1_MBR_256();
-  //ASM_SPI_CFG1_MBR_64();
-  //ASM_SPI_CFG1_MBR_4();  //APB2ENR bus is 48MHz / 4 = 12MHz for SPI lora
-
-	/**
-	 * Bit 31 BPASS: bypass of the prescaler at master baud rate clock generator
-	 * 0: bypass is disabled
-	 * 1: bypass is enabled
-	 */
-  //ASM_SPI_CFG1_BPASS_0();
+	//baut rate
+	ASM_SPI_CFG1_MBR_256();
 	ASM_SPI_CFG1_BPASS_1();
+	//ASM_SPI_CFG1_BPASS_0();
 
-	/**
-	 * Bit 23 LSBFRST: data frame format
-	 * 0: MSB transmitted first
-	 * 1: LSB transmitted first
-	 */
-	//ASM_SPI_CFG2_LSBFRST_MSB();
-	ASM_SPI_CFG2_LSBFRST_LSB();
+	ASM_SPI_CFG2_LSBFRST_MSB();
+	//ASM_SPI_CFG2_LSBFRST_LSB();
 
-	/**
-	 * Bit 31 AFCNTR: alternate function GPIOs control
-	 * This bit is taken into account when SPE = 0 only
-	 * 0: The peripheral takes no control of GPIOs while it is disabled
-	 * 1: The peripheral keeps always control of all associated GPIOs
-	 * When SPI must be disabled temporary for a specific configuration reason
-	 * (for example CRC reset, CPHA or HDDIR change) setting this bit prevents
-	 * any glitches on the associated outputs configured at alternate function mode
-	 * by keeping them forced at state corresponding the current SPI configuration.
-	 */
-  //ASM_SPI_CFG2_AFCNTR_1();
-
-
-	/**
-	* Bits 15:0 TSIZE[15:0]: number of data (data = data frame) at current transfer
-	* When these bits are changed by software, the SPI must be disabled.
-	* Endless transaction is initialized when CSTART is set while zero value is stored at TSIZE.
-	* TSIZE cannot be set to 0xFFFF respective 0x3FFF value when CRC is enabled.
-	* Note: TSIZE[15:10] bits are reserved at limited feature set instances and must be kept at reset
-	* value.
-	*/
-	ASM_SPI_CR2_TSIZE();
-
-	//ASM_SPI_CFG2_RDIOM_1_SIMULATE_RDY();
-
-	//Enable interrupts on SPI1
 	ASM_SPI_IER_EOTIE_Set();
 	ASM_SPI_IER_TXPIE_Set();
 	ASM_SPI_IER_TXTFIE_Set();
 	ASM_SPI_IER_RXPIE_Set();
-}
 
-void SPI_start(){
-	/**
-	 * Bit 0 SPE: serial peripheral enable
-	 * This bit is set by and cleared by software.
-	 * 0: Serial peripheral disabled.
-	 * 1: Serial peripheral enabled
-	 */
-	ASM_SPI_CR1_SPE_1();
-	/**
-	 * Bit 9 CSTART: master transfer start
-	 * This bit can be set by software if SPI is enabled only to start an SPI communication.
-	 * it is cleared by hardware when end of transfer (EOT) flag is set
-	 * or when a transaction suspend request is accepted.
-	 * 0: master transfer is at idle
-	 * 1: master transfer is ongoing or temporary suspended by automatic suspend
-	 * In SPI mode, the bit is taken into account at master mode only.
-	 * If transmission is enabled, communication starts or continues
-	 * only if any data is available 	 * in the transmission FIFO.
-	*/
-	ASM_SPI_CR1_CSTART_1();
+	ASM_SPI_CR1_SPE_0();
 }
 
 void TIM8_init(){
@@ -494,12 +398,14 @@ void TIM8_init(){
 	TIM8_Set_PSC_Value();
 	TIM8_Set_ARR_Value();
 	TIM8_Clear_UIF_Flag();
+
 	TIM8_Set_CCnS_To_Channel_Output();
 	TIM8_Set_DITHEN_False();
 	TIM8_Set_CCRn_WaveGen_Value();
 	TIM8_Set_DIR_UpCounter();
 	TIM8_Set_MMS_Update_Trigger_Output();
 	//TIM8_Set_OCnM_To_Toggle_Mode();
+
 	TIM8_Set_CC1P_Polarity_ActiveHigh();
 	TIM8_Set_CCnE_Output_Enable_To_GPIO();
 	TIM8_Set_UIF_Update_Interrupt_Enable();
@@ -511,11 +417,84 @@ void TIM8_start(){
 	//RUN_COUNTER();
 }
 
+void TIM8_UP_IRQHandler(){
+	if(TIM8_Get_SR_Status() & 0x1){  //UIF ON
+		//GPIOF_BSRR_RESET_SET();
+		//GPIOF_BSRR_RESET_RESET();
+		TIM8_Clear_UIF_Flag();
+		//TIM8_Clear_UIF_Flag();
+		//TIM8_Set_CEN_Counter_Disable();
+		//timer_pulse ^= 1;
+
+		printf("%i \n", timer_pulse);
+	}
+}
+
+uint32_t Get_SYSCLK_Freq(void)
+{
+    uint32_t freq = 0;
+    uint32_t sws = (RCC->CFGR1 & RCC_CFGR1_SWS_Msk) >> RCC_CFGR1_SWS_Pos;
+
+    switch (sws)
+    {
+        case 0x0:  // MSIS is SYSCLK source
+        {
+            uint32_t range = (RCC->ICSCR1 & RCC_ICSCR1_MSISRANGE_Msk) >> RCC_ICSCR1_MSISRANGE_Pos;
+            const uint32_t msis_freqs[6] = {
+				48000000, 24000000, 16000000, 12000000, 4000000, 2000000, 1330000
+            };
+            freq = msis_freqs[range];
+            break;
+        }
+
+        case 0x1:  // HSI16 (16 MHz)
+            freq = 16000000UL;
+            break;
+
+        case 0x2:  // HSE
+            // Change this if you know your HSE crystal frequency
+            freq = 16000000UL;   // ←←← Update if you use different HSE
+            break;
+
+        case 0x3:  // PLL1
+            // PLL calculation is more complex - tell me if you use PLL
+            freq = 0;   // Placeholder
+            break;
+
+        default:
+            freq = 4000000UL;  // safe default
+            break;
+    }
+
+    // Apply AHB prescaler (HPRE)
+    uint32_t hpre = (RCC->CFGR2 & RCC_CFGR2_HPRE_Msk) >> RCC_CFGR2_HPRE_Pos;
+    if (hpre >= 8) {
+        freq /= (1 << (hpre - 7));   // /2, /4, /8 ...
+    }
+
+    return freq;
+}
+
+void DWT_Init(void){
+	//Enable Trace and Debug(TRCENA)
+	CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+	//Enable the cycle counter
+	DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
+	//Reset counter
+	DWT->CYCCNT = 0;
+}
+
+void delay_us(uint32_t us){
+	uint32_t start = DWT->CYCCNT;
+	uint32_t cycles = us * (cpu_freq/1000000ULL);
+	while((DWT->CYCCNT - start)<cycles);
+}
 /*
 SetStandby()
 SetPacketType()
 SetRfFrequency()
-SetPaConfig()
+SetPaConfig()	GPIOE_BSRR_NSS_RESET();
+	for(int i=0; i<10; i++){}
 SetTxParams(...)
 SetBufferBaseAddress(...)
 WriteBuffer(...)
@@ -527,7 +506,8 @@ SetTx()
 
 
 
-//SetPacketType(...)
+//SetPacketType(...)	GPIOE_BSRR_NSS_RESET();
+	for(int i=0; i<10; i++){}
 Lora | FSK
 
 //SetModulationParams(...)

@@ -23,6 +23,10 @@ extern void GPIOE_PUPDR_SCK_UP(void);
 extern void GPIOE_PUPDR_SCK_DOWN(void);
 extern void GPIOE_PUPDR_NSS_UP(void);
 extern void GPIOE_PUPDR_NSS_DOWN(void);
+extern void GPIOE_BSRR_NSS_SET(void);
+extern void GPIOE_BSRR_NSS_RESET(void);
+extern void GPIOE_MODER_NSS_Output(void);
+extern void GPIOE_OSPEEDR_NSS_HIGH(void);
 
 extern void GPIOE_PUPDR_CLEAR(uint32_t x);
 
@@ -31,6 +35,8 @@ extern void GPIOE_PURDR_BUSY_NPUPD(void);
 extern void GPIOE_PURDR_BUSY_UP(void);
 extern void GPIOD_MODER_DIO_INPUT(void);
 extern void GPIOD_PUPDR_DIO_NPUPD(void);
+extern void GPIOD_PUPDR_DIO_DOWN(void);
+extern void GPIOD_PUPDR_DIO_UP(void);
 extern uint16_t GPIOD_IDR_DIO_GET(void);
 extern uint16_t GPIOE_IDR_BUSY_GET(void);
 
@@ -41,6 +47,15 @@ extern void GPIOC_PUPDR_RDY_DOWN(void);
 extern uint32_t GPIOC_IDR_RDY_GET(void);
 extern void GPIOC_LCKR_PIN1_LCKK_0(void);
 extern void GPIOC_LCKR_PIN1_LCKK_1(void);
+
+extern void GPIOF_MODER_RESET_Output(void);
+extern void GPIOF_PUPDR_RESET_NPUPD(void);
+extern void GPIOF_PUPDR_RESET_UP(void);
+extern void GPIOF_PUPDR_RESET_DOWN(void);
+extern void GPIOF_BSRR_RESET_SET(void);
+extern void GPIOF_BSRR_RESET_RESET(void);
+extern void GPIOF_BSRR_RESET_SETRESET(void);
+extern void GPIOF_OSPEEDR_SET_LOW(void);
 
 
 #endif /* GPIO_ASSEMBLY_H_ */

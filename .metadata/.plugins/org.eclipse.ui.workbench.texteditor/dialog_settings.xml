@@ -1,28 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="ASM_RCC_PLL1CFGR_PLL1SRC"/>
+		<item key="selection" value="System"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
-			<item value="ASM_RCC_PLL1CFGR_PLL1SRC"/>
-			<item value="GPIOC_PUPDR_RDY_DOWN"/>
-			<item value="GPIOC_MODER_Input"/>
-			<item value="GPIOC_IDR_RDY_GET"/>
-			<item value="tx_ptr"/>
-			<item value="ptr_tx_buffer"/>
-			<item value="ASM_RCC_APB2ENR_SPI1_Set"/>
-			<item value="ASM_RCC_CR_HSI16"/>
+			<item value="SystemCore"/>
+			<item value="System"/>
+			<item value="SystemCoreClock"/>
+			<item value="TIM8_Get_SR_Status"/>
+			<item value="TIM8_Set_CEN_Counter_Disable"/>
+			<item value="RUN_COUNTER"/>
+			<item value="TIM8_Set_CEN_Counter_Enable"/>
+			<item value="for"/>
+			<item value="NVIC_EXTI15_Enable_Interupt"/>
+			<item value="ASM_SPI_CFG2_MIDI_Set"/>
+			<item value="ASM_SPI_CFG1_FTHLV_2"/>
+			<item value="TSIZE"/>
+			<item value="ASM_SPI_CR2_TSIZE"/>
+			<item value="GPIOE_BSRR_NSS_RESET"/>
+			<item value="GPIO_SPI_init"/>
 		</list>
 		<list key="replacehistory">
+			<item value=""/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
-		<item key="DIALOG_X_ORIGIN" value="899"/>
-		<item key="DIALOG_Y_ORIGIN" value="97"/>
+		<item key="DIALOG_X_ORIGIN" value="762"/>
+		<item key="DIALOG_Y_ORIGIN" value="279"/>
 		<item key="DIALOG_WIDTH" value="363"/>
 		<item key="DIALOG_HEIGHT" value="437"/>
 		<item key="DIALOG_FONT_NAME" value="1|Ubuntu|11.0|0|GTK|1|"/>

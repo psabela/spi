@@ -310,7 +310,7 @@ typedef struct
 } DAC_TypeDef;
 
 /**
-  * @brief Clock Recovery System
+  * @brief Clock Recovery
   */
 typedef struct
 {

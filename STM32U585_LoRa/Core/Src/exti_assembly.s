@@ -1,0 +1,86 @@
+/*
+ * exti_assembly.s
+ *
+ *  Created on: Jan 5, 2026
+ *      Author: peter
+ */
+
+.syntax unified
+.cpu cortex-m33
+.fpu softvfp
+.thumb
+
+.text
+.global EXTI_RTSR1_15_SET
+.global EXTI_EXTICR15_DPORT
+.global EXTI_IMR1_15_SET
+.global EXTI_RPR1_15_SET
+
+
+// Define global variables
+
+.equ EXTI_BASE_ADDR, 		0x46022000U
+.equ EXTI_RTSR1_OFFSET, 	0x000
+.equ EXTI_FTSR1_OFFSET, 	0x004
+.equ EXTI_SWIER1_OFFSET, 	0x008
+.equ EXTI_RPR1_OFFSET, 		0x00C
+.equ EXTI_FPR1_OFFSET, 		0x010
+.equ EXTI_SECCFGR1_OFFSET, 	0x014
+.equ EXTI_PRIVCFGR1_OFFSET, 0x018
+.equ EXTI_EXTICRm_OFFSET, 	0x060
+.equ EXTI_LOCKR_OFFSET, 	0x070
+.equ EXTI_IMR1_OFFSET, 		0x080
+.equ EXTI_EMR1_OFFSET, 		0x084
+
+
+
+//PD15 pin
+
+//EXTI rising trigger selection register (EXTI_RTSR1)
+EXTI_RTSR1_15_SET:
+	LDR		R1, =EXTI_BASE_ADDR
+	LDR		R2, =EXTI_RTSR1_OFFSET
+	ADDS	R1,	R2
+	LDR		R0, [R1]
+	MOVS	R2, 0x1
+	LSLS	R3, R2, #15
+	ORRS	R0, R3
+	STR		R0,	[R1]
+	BX LR
+
+
+//select port
+EXTI_EXTICR15_DPORT:
+	LDR		R1, =EXTI_BASE_ADDR
+	LDR		R2, =0x6c //EXTI_EXTICR4_OFFSET
+	ADDS	R1,	R2
+	LDR		R0, [R1]
+	MOVS	R2, 0x03 //D port
+	LSLS	R3, R2, #24
+	ORRS	R0, R3
+	STR		R0,	[R1]
+	BX LR
+
+//EXTI CPU wake-up with interrupt mask register (EXTI_IMR1)
+EXTI_IMR1_15_SET:
+	LDR		R1, =EXTI_BASE_ADDR
+	LDR		R2, =EXTI_IMR1_OFFSET
+	ADDS	R1,	R2
+	LDR		R0, [R1]
+	MOVS	R2, 0x1
+	LSLS	R3, R2, #15
+	ORRS	R0, R3
+	STR		R0,	[R1]
+	BX LR
+
+
+EXTI_RPR1_15_SET:
+	LDR		R1, =EXTI_BASE_ADDR
+	LDR		R2, =EXTI_RPR1_OFFSET
+	ADDS	R1,	R2
+	LDR		R0, [R1]
+	MOVS	R2, 0x1
+	LSLS	R3, R2, #15
+	ORRS	R0, R3
+	STR		R0,	[R1]
+	BX LR
