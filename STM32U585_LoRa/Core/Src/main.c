@@ -50,6 +50,11 @@ uint8_t SetDioIrqParams[]       = {0x08, 0x00, 0x02, 0x00, 0x02, 0x00, 0x00, 0x0
 uint8_t GetIrqStatus[] 		    = {0x12, 0x00, 0x00, 0x00};
 uint8_t ClearIrqStatus[]        = {0x02, 0x00, 0x02};
 
+uint8_t payloadLen, startAddr;
+uint8_t rx[3];
+int idx = 0;
+uint8_t GetRxBufferStatus[]		= {0x13,0x00, 0x00, 0x00};
+
 uint8_t GetStatus[]				= {0xC0, 0x00};
 uint8_t SetRegulatorMode[]		= {0x96, 0x00};
 uint8_t ClearDeviceErrors[]		= {0x07, 0x00, 0x00};
@@ -61,7 +66,7 @@ uint8_t tsize = 0;
 volatile uint8_t	cmd_index;
 uint8_t *command;
 
-const int num_of_cmds = 11;
+const int num_of_cmds = 9;
 
 //volatile uint8_t SetCadParams[] = {0x88, power, rampTime, 99};
 //volatile uint8_t SetLoRaSymbNumTimeout[] = {0xA0, power, rampTime, 99};
@@ -70,6 +75,7 @@ volatile uint32_t timer_pulse;
 volatile uint32_t slave_ready;
 volatile uint8_t  byte_index = 0;
 volatile uint32_t  rx_buffer = 0;
+
 volatile uint32_t  tx_buffer;
 volatile int _counter = 0;
 volatile uint32_t cpu_freq;
@@ -91,7 +97,7 @@ int main(void){
 	//starting interrupt handlers
 	NVIC_IPR6_EXTI15_priority();
 	//NVIC_TIM8_Enable_Interupt();
-NVIC_EXTI15_Enable_Interupt();
+    NVIC_EXTI15_Enable_Interupt();
 
 //	uint32_t start = DWT->CYCCNT;
 //	__asm__ volatile("nop");
@@ -116,12 +122,26 @@ void SubmitCommand(cmd_index){
 	else if(cmd_index == 6){ lora_command(SetDioIrqParams, (uint8_t)sizeof(SetDioIrqParams));}
 	else if(cmd_index == 7){ lora_command(SetDio3AsTcxoCtrl, (uint8_t)sizeof(SetDio3AsTcxoCtrl));}
 	else if(cmd_index == 8){ lora_command(SetDio2AsRfSwitchCtrl, (uint8_t)sizeof(SetDio2AsRfSwitchCtrl));}
-	else if(cmd_index == 9){ lora_command(SetRx, (uint8_t)sizeof(SetRx));}
-	else if(cmd_index == 10){
-		delay_us(50000);
-		lora_command(ClearIrqStatus, (uint8_t)sizeof(ClearIrqStatus));
+
+	/*
+	The pointer to the first byte of the last packet received and the packet length can be read with the command GetRxbufferStatus().
+	In single mode, RxDataPointer is automatically initialized to RxBaseAddr each time the transceiver enters Rx mode. In continuous mode the
+	pointer is incremented starting from the previous position.
+	*/
+
+	else if(cmd_index == 9){
+		idx = 0;
+		lora_command(GetRxBufferStatus, (uint8_t)sizeof(GetRxBufferStatus));
 	}
-	else if(cmd_index == 11){ lora_command(GetStatus, (uint8_t)sizeof(GetStatus)); }
+
+
+//
+//	else if(cmd_index == 10){ lora_command(SetRx, (uint8_t)sizeof(SetRx));}
+//	else if(cmd_index == 11){
+//		delay_us(50000);
+//		lora_command(ClearIrqStatus, (uint8_t)sizeof(ClearIrqStatus));
+//	}
+//	else if(cmd_index == 12){ lora_command(GetStatus, (uint8_t)sizeof(GetStatus)); }
 	else{ return;}
 }
 
@@ -142,10 +162,7 @@ void lora_command(uint8_t *cmd, uint8_t cmd_len){
 void SPI1_IRQHandler(){
 
 	if(ASM_SPI_SR_Get() & (0x1U << 3)){
-		/**
-		 * 	EOT: end of transfer. 1: transfer complete.
-		 */
-//		printf("EOT: end of transfer/transfer complete.\n",cmd_index);
+		//printf("EOT: end of transfer/transfer complete.\n",cmd_index);
 		GPIOE_BSRR_NSS_SET(); //HIGH
 		ASM_SPI_IFCR_EOTC_Clear();
 		if(cmd_index <= num_of_cmds){
@@ -160,7 +177,7 @@ void SPI1_IRQHandler(){
 		if(cmd_index <= num_of_cmds){ //
 			while(GPIOC_IDR_RDY_GET() == 2){} //wait until ready
 
-//			printf("About to exec %d-%x\n",cmd_index,command[0]);
+			//printf("About to exec %d-%x\n",cmd_index,command[0]);
 
 			//pre-load first byte of the command
 			tx_buffer = ASM_SPI_TXDR_Set(command[0]);
@@ -168,29 +185,37 @@ void SPI1_IRQHandler(){
 			for(int i = 1; i<tsize; i++){
 				tx_buffer = ASM_SPI_TXDR_Set(command[i]);
 			}
-//			printf("Finished exec %d-%x\n",cmd_index,command[0]);
+			//printf("Finished exec %d-%x\n",cmd_index,command[0]);
 			//next command index
-			if(cmd_index == 11){
+			if(cmd_index == 9){
 				cmd_index = 9;
 			}
 			else{
 				cmd_index = cmd_index + 1;
 			}
-//			printf("Next command is %d\n",cmd_index);
+			//printf("Next command is %d\n",cmd_index);
 			//pause
 			//start the transfer (clocks begin for TSIZE frames)
 			ASM_SPI_CR1_CSTART_1();
 		}
 	}
 
-	//while(ASM_SPI_SR_Get() & (0x1U)){
-	if(ASM_SPI_SR_Get() & (0x1U)){
+	while(ASM_SPI_SR_Get() & (0x1U)){
 		/**
 		 *  RXP: Rx-packet available. 1: RxFIFO contains at least one data packet
 		 */
-		rx_buffer = ASM_SPI_RXDR_Get();
-		printf(rx_buffer);
+		if(cmd_index >= 9){
 
+			if (idx < 3) {              // prevent buffer overflow
+			        rx[idx] = ASM_SPI_RXDR_Get();
+			        printf(rx);
+			        idx++;                  // move to next position
+			}
+
+		}
+		else{
+			ASM_SPI_RXDR_Get();
+		}
 	}
 
 	if(ASM_SPI_SR_Get() & (0x1U << 6)){
