@@ -1,10 +1,7 @@
-slave_ready
-tx_buffer
-cmd_index
+i
+command
+rx_data
+rx_flag
 tsize
-rx_buffer
-command[0]
-command[1]
-timer_pulse
-num_of_cmds
-FLASH->ACR
+payloadLen
+rx_data

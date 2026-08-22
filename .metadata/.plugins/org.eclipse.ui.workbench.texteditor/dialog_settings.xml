@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
+	<item key="hasShownOverlayPopupBefore" value="true"/>
+	<item key="replaceBarOpen" value="false"/>
+	<list key="searchhistory">
+		<item value="payloadLen"/>
+		<item value="startAddr"/>
+		<item value="txco"/>
+		<item value="_counter"/>
+		<item value="tx_buffer"/>
+		<item value="rx_buffer"/>
+		<item value="byte_index"/>
+		<item value="slave_ready"/>
+		<item value="timer_pulse"/>
+		<item value="execd_command"/>
+		<item value="idx"/>
+		<item value="command"/>
+		<item value="txpie"/>
+	</list>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item key="selection" value="System"/>
 		<item key="wrap" value="true"/>

@@ -45,7 +45,14 @@ extern void ASM_SPI_IFCR_EOTC_Clear(void);
 extern void ASM_SPI_IER_EOTIE_Set(void);
 extern void ASM_SPI_IER_TXPIE_Set(void);
 extern void ASM_SPI_IER_TXTFIE_Set(void);
+extern void ASM_SPI_IER_EOTIE_Clear(void);
+extern void ASM_SPI_IER_TXPIE_Clear(void);
+extern void ASM_SPI_IER_TXTFIE_Clear(void);
+extern void ASM_SPI_IER_RXPIE_Clear(void);
+
+
 extern uint32_t ASM_SPI_SR_Get(void);
+extern uint32_t ASM_SPI_IER_Get(void);
 extern void ASM_SPI_CR2_TSIZE(uint32_t x);
 extern void ASM_SPI_IER_RXPIE_Set(void);
 extern uint32_t ASM_SPI_RXDR_Get(void);

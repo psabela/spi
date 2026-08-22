@@ -37,55 +37,54 @@ int __io_putchar(int ch){
 	ITM_SendChar(ch);
 	return ch;
 }
+uint8_t SetSleep[]	 			= {0x84, 0x04}; //cold = 0x00, warm = 0x04
 uint8_t SetStandby[] 			= {0x80, 0x00};  //STDBY_RC = 0; STDBY_XOSC = 1
 uint8_t SetPacketType[] 		= {0x8A, 0x01}; //PACKET_TYPE_LoRa 0x01 LoRa mode
-uint8_t SetModulationParams[] 	= {0x8B, 0x07, 0x04, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00}; //REVIEWED: Opcode=0x8B, ModParam1=0x07(SF), ModParam2=0x04(125kHz), ModParam3=0x04(CR_4_8), ModParam4=0x00(DataRateOptimaze OFF), ModParam5-8=0x00
-uint8_t SetPacketParams[] 		= {0x8C, 0x00, 0x0C, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00}; //REVIEWED: Preamble MSB=0x00 LSB=0x0C (12) | Header-0x00 | Len=0x05 | CRC=0x0(oFF) | IQ=0x00(std)
+//uint8_t SetModulationParams[] = {0x8B, 0x07, 0x04, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00}; //REVIEWED: Opcode=0x8B, ModParam1=0x07(SF), ModParam2=0x04(125kHz), ModParam3=0x04(CR_4_8), ModParam4=0x00(DataRateOptimaze OFF), ModParam5-8=0x00
+uint8_t SetModulationParams[] 	= {0x8B, 0x07, 0x04, 0x04, 0x01}; //REVIEWED: Opcode=0x8B, ModParam1=0x07(SF), ModParam2=0x04(125kHz), ModParam3=0x04(CR_4_8), ModParam4=0x00(DataRateOptimaze OFF), ModParam5-8=0x00
+uint8_t SetPacketParams[] 		= {0x8C, 0x00, 0x0C, 0x00, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00}; //REVIEWED: Preamble MSB=0x00 LSB=0x0C (12) | Header-0x00 | Len=0x05 | CRC=0x0(oFF) | IQ=0x00(std)
 uint8_t SetRfFrequency[] 		= {0x86, 0x39, 0x2E, 0x66, 0x66};
-uint8_t syncWord1[]  			= {0x0d, 0x07, 0x40, 0x14};	//MSB 0x14 //Set Sync Word (private network: 0x1424) //WriteRegister opcode 0x0D, address 0x0740 (2bytes)
-uint8_t syncWord2[]  			= {0x0d, 0x07, 0x41, 0x24};	//MSB 0x24
+uint8_t SetPaConfig[]			= {0x95, 0x02, 0x03, 0x00, 0x01};
+uint8_t syncWord[]  			= {0x0d, 0x07, 0x40, 0x4D};	//MSB 0x14 //Set Sync Word (private network: 0x1424) //WriteRegister opcode 0x0D, address 0x0740 (2bytes)
+//uint8_t syncWord1[]  			= {0x0d, 0x07, 0x40, 0x14};	//MSB 0x14 //Set Sync Word (private network: 0x1424) //WriteRegister opcode 0x0D, address 0x0740 (2bytes)
+//uint8_t syncWord2[]  			= {0x0d, 0x07, 0x41, 0x24};	//MSB 0x24
 uint8_t SetBufferBaseAddress[]  = {0x8F, 0x00, 0x00};
-uint8_t SetRx[] 				= {0x82, 0xff, 0xff, 0xff}; //Rx opcode 0x82, timeout(23:0) 0xffffff continuous mode.
-uint8_t SetDioIrqParams[]       = {0x08, 0x00, 0x02, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00}; //IrqMask byte 1-2, DIO1Mask byte 3-4
+uint8_t SetRx[] 				= {0x82, 0x00, 0x7d, 0x00}; //Rx opcode 0x82, timeout(23:0)
+//uint8_t SetRx[] 				= {0x82, 0xFF, 0xFF, 0xFF}; //0xffffff continuous mode.
+uint8_t SetCadParams[]			= {0x88, 0x03, 0x16, 0x0A, 0x01, 0x00, 0x19, 0x00};
+//uint8_t SetCadParams[]			= {0x88, 0x02, 0x12, 0x0A, 0x00, 0x00, 0x00, 0x00};
+uint8_t SetCAD[]				= {0xC5};
+uint8_t SetDioIrqParams[]       = {0x08, 0x01, 0x82, 0x01, 0x82, 0x00, 0x00, 0x00, 0x00}; //IrqMask byte 1-2, DIO1Mask byte 3-4
+//uint8_t SetDioIrqParams[]       = {0x08, 0x01, 0x00, 0x01, 0x00,0x00, 0x00, 0x00, 0x00}; //IrqMask byte 1-2, DIO1Mask byte 3-4
+//uint8_t SetDioIrqParams[]       = {0x08, 0x03, 0xFF, 0x03, 0xFF, 0x00, 0x00, 0x00, 0x00};
 uint8_t GetIrqStatus[] 		    = {0x12, 0x00, 0x00, 0x00};
-uint8_t ClearIrqStatus[]        = {0x02, 0x00, 0x02};
-
-uint8_t payloadLen, startAddr;
-uint8_t rx[3];
-int idx = 0;
+uint8_t ClearIrqStatus[]        = {0x02, 0xff, 0xff};
+uint8_t NOP[]					= {0x00};
 uint8_t GetRxBufferStatus[]		= {0x13,0x00, 0x00, 0x00};
-
 uint8_t GetStatus[]				= {0xC0, 0x00};
 uint8_t SetRegulatorMode[]		= {0x96, 0x00};
 uint8_t ClearDeviceErrors[]		= {0x07, 0x00, 0x00};
 uint8_t SetDio2AsRfSwitchCtrl[] = {0x9D, 0x01};
 uint8_t SetDio3AsTcxoCtrl[]		= {0x97, 0x07, 0x00, 0x00, 0xFA};
 
-volatile int cmd = 0;
-uint8_t tsize = 0;
-volatile uint8_t	cmd_index;
+uint8_t payloadLen, startAddr;
+volatile int cmd 	= 0;
+uint8_t tsize 		= 0;
 uint8_t *command;
 
-const int num_of_cmds = 9;
+volatile uint32_t rx_data;
+volatile uint32_t rx_data2;
+volatile uint32_t rx_data3;
+volatile uint32_t rx_data4;
 
-//volatile uint8_t SetCadParams[] = {0x88, power, rampTime, 99};
-//volatile uint8_t SetLoRaSymbNumTimeout[] = {0xA0, power, rampTime, 99};
-
+volatile uint32_t rx_flag = 0;
 volatile uint32_t timer_pulse;
-volatile uint32_t slave_ready;
-volatile uint8_t  byte_index = 0;
-volatile uint32_t  rx_buffer = 0;
-
-volatile uint32_t  tx_buffer;
-volatile int _counter = 0;
 volatile uint32_t cpu_freq;
-volatile uint32_t txco;
+
+int flg = 0;
 
 int main(void){
-	txco = 0;
 	timer_pulse = 0;
-	cmd_index = 0;
-	slave_ready = 2;
 	cpu_freq = Get_SYSCLK_Freq();
 	DWT_Init();
 	RCC_init();
@@ -106,44 +105,59 @@ int main(void){
 
 	//TIM8_Set_CEN_Counter_Enable();
 
-	SubmitCommand(cmd_index);
-	while(1){}
-}
+	delay_us(50000);
 
-void SubmitCommand(cmd_index){
+	lora_command(SetStandby, (uint8_t)sizeof(SetStandby));
+	lora_command(SetPacketType, (uint8_t)sizeof(SetPacketType));
+	lora_command(SetRfFrequency, (uint8_t)sizeof(SetRfFrequency));
+	lora_command(SetBufferBaseAddress, (uint8_t)sizeof(SetBufferBaseAddress));
+	lora_command(SetModulationParams, (uint8_t)sizeof(SetModulationParams));
+	lora_command(SetPacketParams, (uint8_t)sizeof(SetPacketParams));
+	lora_command(syncWord, (uint8_t)sizeof(syncWord));
+	lora_command(SetCadParams, (uint8_t)sizeof(SetCadParams));
+	lora_command(ClearDeviceErrors, (uint8_t)sizeof(ClearDeviceErrors));
+	lora_command(ClearIrqStatus, (uint8_t)sizeof(ClearIrqStatus));
+	lora_command(SetDioIrqParams, (uint8_t)sizeof(SetDioIrqParams));
+	lora_command(SetDio3AsTcxoCtrl, (uint8_t)sizeof(SetDio3AsTcxoCtrl));
+	lora_command(SetDio2AsRfSwitchCtrl, (uint8_t)sizeof(SetDio2AsRfSwitchCtrl));
+	lora_command(SetCAD, (uint8_t)sizeof(SetCAD));
+	//lora_command(SetRx, (uint8_t)sizeof(SetRx));
 
-    //After Reset
-	if(cmd_index == 0){ lora_command(SetStandby, (uint8_t)sizeof(SetStandby));	}
-	else if(cmd_index == 1){ lora_command(SetPacketType, (uint8_t)sizeof(SetPacketType));}
-	else if(cmd_index == 2){ lora_command(SetRfFrequency, (uint8_t)sizeof(SetRfFrequency));}
-	else if(cmd_index == 3){ lora_command(SetBufferBaseAddress, (uint8_t)sizeof(SetBufferBaseAddress));}
-	else if(cmd_index == 4){ lora_command(SetModulationParams, (uint8_t)sizeof(SetModulationParams));}
-	else if(cmd_index == 5){ lora_command(SetPacketParams, (uint8_t)sizeof(SetPacketParams));}
-	else if(cmd_index == 6){ lora_command(SetDioIrqParams, (uint8_t)sizeof(SetDioIrqParams));}
-	else if(cmd_index == 7){ lora_command(SetDio3AsTcxoCtrl, (uint8_t)sizeof(SetDio3AsTcxoCtrl));}
-	else if(cmd_index == 8){ lora_command(SetDio2AsRfSwitchCtrl, (uint8_t)sizeof(SetDio2AsRfSwitchCtrl));}
+	while(1){
 
-	/*
-	The pointer to the first byte of the last packet received and the packet length can be read with the command GetRxbufferStatus().
-	In single mode, RxDataPointer is automatically initialized to RxBaseAddr each time the transceiver enters Rx mode. In continuous mode the
-	pointer is incremented starting from the previous position.
-	*/
 
-	else if(cmd_index == 9){
-		idx = 0;
-		lora_command(GetRxBufferStatus, (uint8_t)sizeof(GetRxBufferStatus));
+		//delay_us(500000);
+
+		if(rx_flag == 1){
+
+			lora_command(GetIrqStatus, (uint8_t)sizeof(GetIrqStatus));
+			lora_command(SetBufferBaseAddress, (uint8_t)sizeof(SetBufferBaseAddress));
+//			lora_command(ClearIrqStatus, (uint8_t)sizeof(ClearIrqStatus));
+//			lora_command(SetRx, (uint8_t)sizeof(SetRx));
+//			lora_command(GetRxBufferStatus, (uint8_t)sizeof(GetRxBufferStatus));
+
+			uint8_t ReadBuffer[]        = {0x1E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+			lora_command(ReadBuffer,(uint8_t)sizeof(ReadBuffer));
+
+			rx_flag = 0;
+
+//			lora_command(SetStandby, (uint8_t)sizeof(SetStandby));
+//			lora_command(SetSleep, (uint8_t)sizeof(SetSleep));
+//			delay_us(5000);
+
+//			lora_command(ClearIrqStatus, (uint8_t)sizeof(ClearIrqStatus));
+//			lora_command(ClearDeviceErrors, (uint8_t)sizeof(ClearDeviceErrors));
+//			lora_command(SetRx, (uint8_t)sizeof(SetRx));
+//			lora_command(SetCAD, (uint8_t)sizeof(SetCAD));
+
+		}
+		lora_command(ClearIrqStatus, (uint8_t)sizeof(ClearIrqStatus));
+		lora_command(SetCAD, (uint8_t)sizeof(SetCAD));
+
 	}
 
-
-//
-//	else if(cmd_index == 10){ lora_command(SetRx, (uint8_t)sizeof(SetRx));}
-//	else if(cmd_index == 11){
-//		delay_us(50000);
-//		lora_command(ClearIrqStatus, (uint8_t)sizeof(ClearIrqStatus));
-//	}
-//	else if(cmd_index == 12){ lora_command(GetStatus, (uint8_t)sizeof(GetStatus)); }
-	else{ return;}
 }
+
 
 void lora_command(uint8_t *cmd, uint8_t cmd_len){
 
@@ -156,66 +170,97 @@ void lora_command(uint8_t *cmd, uint8_t cmd_len){
 	ASM_SPI_CR1_SPE_1();
 
 	GPIOE_BSRR_NSS_RESET();  //LOW
+	ASM_SPI_IER_TXPIE_Set();
 	NVIC_SPI1_Enable_Interupt();
 }
 
+void Receive(){
+
+		int num_words = (tsize + 3) / 4;   // ceiling division
+		char buffer[tsize + 1];            // +1 for null terminator
+		int idx = 0;
+		uint16_t irq = 0;
+
+
+		for (int i = 0; i < num_words; i++) {
+		    uint32_t rx_data = ASM_SPI_RXDR_Get();
+		    if(rx_flag ==1 && *command==0x12){
+		    	irq = (rx_data >>  16) & 0xFFFF;
+
+				if (irq & 0x0200) {
+					// RxDone → valid packet received
+					printf("RxDone - valid packet received: %x\n", irq);
+					flg = 1;
+				}
+				else if (irq & 0x0002) {
+					// Timeout → CAD detected activity but no packet arrived in time
+					//printf("Timeout - CAD detected activity but no packet arrived in time: %x\n", irq);
+				}
+				else if (irq & 0x0001) {
+					// CadDetected (rare to see alone in CAD_RX)
+					//printf("CadDetected (rare to see alone in CAD_RX): %x\n", irq);
+
+				}
+				else if (irq & 0x8000) {
+					// Only CadDone → channel was free
+					//printf("Only CadDone - channel was free: %x\n", irq);
+				}
+		    }
+		    if (idx < tsize) buffer[idx++] = (rx_data >>  0) & 0xFF;
+		    if (idx < tsize) buffer[idx++] = (rx_data >>  8) & 0xFF;
+		    if (idx < tsize) buffer[idx++] = (rx_data >> 16) & 0xFF;
+		    if (idx < tsize) buffer[idx++] = (rx_data >> 24) & 0xFF;
+		}
+
+		if(rx_flag ==1 && *command==0x1e && flg == 1){
+
+			buffer[idx] = '\0';               // null-terminate
+
+			if (idx > 3) {
+			    printf("%s\n", buffer + 3);
+			} else {
+			    printf("\n");                 // nothing left to print
+			}
+			flg = 0;
+		}
+
+
+
+//		if(*command==0x13){
+//		    printf("GetRxBufferStatus: %x\n", buffer);
+//		}
+}
+
+
 void SPI1_IRQHandler(){
+
+	while(ASM_SPI_SR_Get() & (0x1U)){
+		/**
+		 *  RXP: Rx-packet available 1: RxFIFO contains at least one data packet
+        */
+		Receive();
+	}
 
 	if(ASM_SPI_SR_Get() & (0x1U << 3)){
 		//printf("EOT: end of transfer/transfer complete.\n",cmd_index);
 		GPIOE_BSRR_NSS_SET(); //HIGH
 		ASM_SPI_IFCR_EOTC_Clear();
-		if(cmd_index <= num_of_cmds){
-			printf("SubmitCommand(%d)\n",cmd_index);
-			SubmitCommand(cmd_index);
-		}
 	}
-	if(ASM_SPI_SR_Get() & (0x1U << 1)){
+
+	if((ASM_SPI_SR_Get() & (0x1U << 1)) && (ASM_SPI_IER_Get() & (0x1U << 1))){
 		/**
 		 *	TXP: Data packet space available
 		 */
-		if(cmd_index <= num_of_cmds){ //
-			while(GPIOC_IDR_RDY_GET() == 2){} //wait until ready
-
-			//printf("About to exec %d-%x\n",cmd_index,command[0]);
-
-			//pre-load first byte of the command
-			tx_buffer = ASM_SPI_TXDR_Set(command[0]);
-			//load remaining bytes of the command
-			for(int i = 1; i<tsize; i++){
-				tx_buffer = ASM_SPI_TXDR_Set(command[i]);
-			}
-			//printf("Finished exec %d-%x\n",cmd_index,command[0]);
-			//next command index
-			if(cmd_index == 9){
-				cmd_index = 9;
-			}
-			else{
-				cmd_index = cmd_index + 1;
-			}
-			//printf("Next command is %d\n",cmd_index);
-			//pause
-			//start the transfer (clocks begin for TSIZE frames)
-			ASM_SPI_CR1_CSTART_1();
+		while(GPIOC_IDR_RDY_GET() == 2){} //wait until ready
+		// first byte
+		ASM_SPI_TXDR_Set(command[0]);
+		// remaining bytes
+		for(int i = 1; i<tsize; i++){
+			ASM_SPI_TXDR_Set(command[i]);
 		}
-	}
 
-	while(ASM_SPI_SR_Get() & (0x1U)){
-		/**
-		 *  RXP: Rx-packet available. 1: RxFIFO contains at least one data packet
-		 */
-		if(cmd_index >= 9){
-
-			if (idx < 3) {              // prevent buffer overflow
-			        rx[idx] = ASM_SPI_RXDR_Get();
-			        printf(rx);
-			        idx++;                  // move to next position
-			}
-
-		}
-		else{
-			ASM_SPI_RXDR_Get();
-		}
+		//start the transfer (clocks begin for TSIZE frames)
+		ASM_SPI_CR1_CSTART_1();
 	}
 
 	if(ASM_SPI_SR_Get() & (0x1U << 6)){
@@ -232,8 +277,10 @@ void SPI1_IRQHandler(){
 }
 
 void EXTI15_IRQHandler(){
-	//printf("Inside EXTI 15 interrupt\n");
+
 	EXTI_RPR1_15_SET();  //to clear bit
+	//printf("Inside EXTI 15 interrupt\n");
+	rx_flag = 1;
 }
 
 void RCC_init(){
