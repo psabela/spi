@@ -12,5 +12,7 @@ extern void NVIC_TIM8_Enable_Interupt(void);
 extern void NVIC_SPI1_Enable_Interupt(void);
 extern void NVIC_EXTI15_Enable_Interupt(void);
 extern void NVIC_IPR6_EXTI15_priority(void);
+extern void NVIC_EXTI8_Enable_Interupt(void);
+extern void NVIC_IPR6_EXTI8_priority(void);
 
 #endif /* NVIC_ASSEMBLY_H_ */

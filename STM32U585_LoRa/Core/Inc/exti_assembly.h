@@ -13,5 +13,10 @@ extern void EXTI_EXTICR15_DPORT(void);
 extern void EXTI_IMR1_15_SET(void);
 extern void EXTI_RPR1_15_SET(void);
 
+extern void EXTI_RTSR1_PB8_SET(void);
+extern void EXTI_EXTICR8_BPORT(void);
+extern void EXTI_IMR1_8_SET(void);
+extern void EXTI_RPR1_8_SET(void);
+
 
 #endif /* INC_EXTI_ASSEMBLY_H_ */

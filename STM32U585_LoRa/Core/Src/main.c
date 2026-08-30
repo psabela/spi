@@ -12,7 +12,7 @@
 
 void DWT_Init(void);
 void RCC_init(void);
-void GPIO_SPI_init(void);
+void SPI_GPIO_init(void);
 void SPI_init(void);
 void DIO_EXTI_init(void);
 void TIM8_init(void);
@@ -38,7 +38,6 @@ int __io_putchar(int ch){
 uint8_t ttest[]					= {0b01010101,0b01010101,0b01010101,0b01010101,0b01010101};
 uint8_t SetStandby[] 			= {0x80, 0x00};  //STDBY_RC = 0; STDBY_XOSC = 1
 uint8_t SetPacketType[] 		= {0x8A, 0x01}; //PACKET_TYPE_LoRa 0x01 LoRa mode
-//uint8_t SetModulationParams[] 	= {0x8B, 0x07, 0x04, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00}; //REVIEWED: Opcode=0x8B, ModParam1=0x07(SF), ModParam2=0x04(125kHz), ModParam3=0x04(CR_4_8), ModParam4=0x00(DataRateOptimaze OFF), ModParam5-8=0x00
 uint8_t SetModulationParams[] 	= {0x8B, 0x07, 0x04, 0x04, 0x01}; //REVIEWED: Opcode=0x8B, ModParam1=0x07(SF), ModParam2=0x04(125kHz), ModParam3=0x04(CR_4_8), ModParam4=0x00(DataRateOptimaze OFF), ModParam5-8=0x00
 uint8_t SetPacketParams[] 		= {0x8C, 0x00, 0x0C, 0x00, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00}; //REVIEWED: Preamble MSB=0x00 LSB=0x0C (12) | Header-0x00 | Len=0x05 | CRC=0x0(oFF) | IQ=0x00(std)
 uint8_t SetTxParams[] 			= {0x8E, 0x16, 0x01};  //REVIEWED Opcode=0x8E, power=0x16(22dBm), RampTime=0x01(20us)
@@ -49,17 +48,14 @@ uint8_t syncWord2[]  			= {0x0d, 0x07, 0x41, 0x24};	//MSB 0x24
 uint8_t SetBufferBaseAddress[]  = {0x8F, 0x00, 0x00};
 uint8_t SetPaConfig[] 			= {0x95, 0x02, 0x03, 0x00, 0x01}; //REVIEWED Opcode=0x95, paDutyCycle=0x02, hpMax=0x03, deviceSel=0x00(SX1262), paLut=0x1(always 0x1) +17dBm
 //uint8_t WriteBuffer[] 			= {0x0E, 0x00, 0x50, 0x45, 0x54, 0x45, 0x52};
+//uint8_t WriteBuffer[] 			= {0x0E, 0x00, 0x50, 0x72, 0x61, 0x79, 0x20, 0x66, 0x6F, 0x72, 0x20, 0x52, 0x61, 0x75, 0x6C, 0x21};
 
-uint8_t WriteBuffer[] 			= {0x0E, 0x00, 0x50, 0x72, 0x61, 0x79, 0x20, 0x66, 0x6F, 0x72, 0x20, 0x50, 0x61, 0x75, 0x6C, 0x21};
-//uint8_t WriteBuffer[] 			= {0x0E, 0x00, 0x50, 0x65, 0x74, 0x65, 0x72, 0x20, 0x43, 0x68, 0x61, 0x72, 0x6c, 0x69, 0x65, 0x21};
-
-
+//uint8_t WriteBuffer[] 			= {0x0E, 0x00, 0x42, 0x72, 0x79, 0x6e, 0x7a, 0x6f, 0x76, 0x79, 0x20, 0x53, 0x79, 0x72, 0x20, 0x20};
 
 uint8_t SetTx[] 				= {0x83, 0x00, 0x00, 0x00};
 uint8_t SetDioIrqParams[]       = {0x08, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00}; //IrqMask byte 1-2, DIO1Mask byte 3-4
 uint8_t GetIrqStatus[] 		    = {0x12, 0x00, 0x00, 0x00};
 uint8_t ClearIrqStatus[]        = {0x02, 0x00, 0x01};
-
 uint8_t GetStatus[]				= {0xC0, 0x00};
 uint8_t SetRegulatorMode[]		= {0x96, 0x00};
 uint8_t ClearDeviceErrors[]		= {0x07, 0x00, 0x00};
@@ -68,99 +64,69 @@ uint8_t SetDio3AsTcxoCtrl[]		= {0x97, 0x07, 0x00, 0x00, 0xFA};
 
 volatile int cmd = 0;
 uint8_t tsize = 0;
-volatile uint8_t	cmd_index;
 uint8_t *command;
 
-const int num_of_cmds = 20;
+volatile uint8_t index;
 
-//volatile uint8_t SetCadParams[] = {0x88, power, rampTime, 99};
-//volatile uint8_t SetLoRaSymbNumTimeout[] = {0xA0, power, rampTime, 99};
-
+volatile uint32_t rx_data;
+volatile uint32_t rx_flag = 0;
 volatile uint32_t timer_pulse;
-volatile uint32_t slave_ready;
-volatile uint8_t  byte_index = 0;
-volatile uint32_t  rx_buffer = 0;
-volatile uint32_t  tx_buffer;
-volatile int _counter = 0;
 volatile uint32_t cpu_freq;
-volatile uint32_t txco;
+int flg = 0;
 
 int main(void){
-	txco = 0;
+	index = 0x31;
+
 	timer_pulse = 0;
-	cmd_index = 0;
-	slave_ready = 2;
 	cpu_freq = Get_SYSCLK_Freq();
 	DWT_Init();
 	RCC_init();
 	GPIO_Lora_Init();
-	//TIM8_init();
-	GPIO_SPI_init();
+//	//TIM8_init();
+	SPI_GPIO_init();
 	DIO_EXTI_init();
 	SPI_init();
 	//starting interrupt handlers
-	NVIC_IPR6_EXTI15_priority();
-	//NVIC_TIM8_Enable_Interupt();
-	NVIC_EXTI15_Enable_Interupt();
-
-//	uint32_t start = DWT->CYCCNT;
-//	__asm__ volatile("nop");
-//	uint32_t cycles = DWT->CYCCNT - start;
-//	uint32_t us = (uint64_t)cycles * 1000000ULL / cpu_freq;
-
-	//TIM8_Set_CEN_Counter_Enable();
-
-	SubmitCommand(cmd_index);
-	while(1){}
-}
-
-void SubmitCommand(cmd_index){
-
-    //After Reset
-	if(cmd_index == 0){ lora_command(SetStandby, (uint8_t)sizeof(SetStandby));	}
-	else if(cmd_index == 1){ lora_command(SetPacketType, (uint8_t)sizeof(SetPacketType));}
-	else if(cmd_index == 2){ lora_command(SetRfFrequency, (uint8_t)sizeof(SetRfFrequency));}
-	else if(cmd_index == 3){ lora_command(SetPaConfig, (uint8_t)sizeof(SetPaConfig));}
-	else if(cmd_index == 4){ lora_command(SetTxParams, (uint8_t)sizeof(SetTxParams));}
-	else if(cmd_index == 5){ lora_command(SetBufferBaseAddress, (uint8_t)sizeof(SetBufferBaseAddress));}
-	else if(cmd_index == 6){ lora_command(WriteBuffer, (uint8_t)sizeof(WriteBuffer));}
-	else if(cmd_index == 7){ lora_command(SetModulationParams, (uint8_t)sizeof(SetModulationParams));}
-	else if(cmd_index == 8){ lora_command(SetPacketParams, (uint8_t)sizeof(SetPacketParams));}
-	else if(cmd_index == 9){ lora_command(SetDioIrqParams, (uint8_t)sizeof(SetDioIrqParams));}
-	else if(cmd_index == 10){ lora_command(SetDio3AsTcxoCtrl, (uint8_t)sizeof(SetDio3AsTcxoCtrl));}
-	else if(cmd_index == 11){ lora_command(SetDio2AsRfSwitchCtrl, (uint8_t)sizeof(SetDio2AsRfSwitchCtrl));}
-	else if(cmd_index == 12){ lora_command(syncWord, (uint8_t)sizeof(syncWord));}
-	else if(cmd_index == 13){ lora_command(SetTx, (uint8_t)sizeof(SetTx));}
-	else if(cmd_index == 14){
-		delay_us(50000);
-		lora_command(ClearIrqStatus, (uint8_t)sizeof(ClearIrqStatus));
-	}
+	NVIC_IPR6_EXTI8_priority();
+//	//NVIC_TIM8_Enable_Interupt();
+	NVIC_EXTI8_Enable_Interupt();
 
 
-	else if(cmd_index == 15){ lora_command(SetBufferBaseAddress, (uint8_t)sizeof(SetBufferBaseAddress));}
+	lora_command(SetStandby, (uint8_t)sizeof(SetStandby));
+	lora_command(SetPacketType, (uint8_t)sizeof(SetPacketType));
+	lora_command(SetRfFrequency, (uint8_t)sizeof(SetRfFrequency));
+	lora_command(SetPaConfig, (uint8_t)sizeof(SetPaConfig));
+	lora_command(SetTxParams, (uint8_t)sizeof(SetTxParams));
+	lora_command(SetBufferBaseAddress, (uint8_t)sizeof(SetBufferBaseAddress));
+	uint8_t WriteBuffer[] = {0x0E, 0x00, index, 0x20, 0x42, 0x72, 0x79, 0x6e, 0x7a, 0x6f, 0x76, 0x79, 0x20, 0x53, 0x79, 0x72};
+	lora_command(WriteBuffer, (uint8_t)sizeof(WriteBuffer));
+	lora_command(SetModulationParams, (uint8_t)sizeof(SetModulationParams));
+	lora_command(SetPacketParams, (uint8_t)sizeof(SetPacketParams));
+	lora_command(SetDioIrqParams, (uint8_t)sizeof(SetDioIrqParams));
+	lora_command(SetDio3AsTcxoCtrl, (uint8_t)sizeof(SetDio3AsTcxoCtrl));
+	lora_command(SetDio2AsRfSwitchCtrl, (uint8_t)sizeof(SetDio2AsRfSwitchCtrl));
+	lora_command(syncWord, (uint8_t)sizeof(syncWord));
+	lora_command(SetTx, (uint8_t)sizeof(SetTx));
 
-	else if(cmd_index == 16){
-		//setpayloadlength  8421   1101 13=0XD
-		//uint8_t SetPacketParams[] 		= {0x8C, 0x00, 0x0C, 0x00, 0x0E, 0x00, 0x00, 0x00, 0x00, 0x00}; //REVIEWED: Preamble MSB=0x00 LSB=0x0C (12) | Header-0x00 | Len=0x05 | CRC=0x0(oFF) | IQ=0x00(std)
-		lora_command(SetPacketParams, (uint8_t)sizeof(SetPacketParams));
-	}
-	else if(cmd_index == 17){
-		//set writebuffer offset Pray for Paul 0x50,0x72,0x61,0x79,0x20,0x66,0x6F,0x72,0x20,0x50,0x61,0x75,0x6C
-		//uint8_t WriteBuffer[] 			= {0x0E, 0x00, 0x50,0x72,0x61,0x79,0x20,0x66,0x6F,0x72,0x20,0x50,0x61,0x75,0x6C,0x21};
+
+	while(1){
+		if (index == 0x39){
+			index = 0x31;
+		}
 		delay_us(500000);
-		lora_command(WriteBuffer, (uint8_t)sizeof(WriteBuffer));
-	}
-	else if(cmd_index == 18){ lora_command(SetTx, (uint8_t)sizeof(SetTx));}
-	else if(cmd_index == 19){
-		delay_us(70000);
 		lora_command(ClearIrqStatus, (uint8_t)sizeof(ClearIrqStatus));
+		lora_command(SetBufferBaseAddress, (uint8_t)sizeof(SetBufferBaseAddress));
+		uint8_t WriteBuffer[] = {0x0E, 0x00, index, 0x20, 0x42, 0x72, 0x79, 0x6e, 0x7a, 0x6f, 0x76, 0x79, 0x20, 0x53, 0x79, 0x72};
+//		lora_command(SetPacketParams, (uint8_t)sizeof(SetPacketParams));
+		lora_command(WriteBuffer, (uint8_t)sizeof(WriteBuffer));
+		lora_command(SetTx, (uint8_t)sizeof(SetTx));
+//		lora_command(ClearIrqStatus, (uint8_t)sizeof(ClearIrqStatus));
+//		lora_command(GetStatus, (uint8_t)sizeof(GetStatus));
+		index = index + 1;
 	}
-	else if(cmd_index == 20){ lora_command(GetStatus, (uint8_t)sizeof(GetStatus)); }
-	else{ return;}
 }
 
 void lora_command(uint8_t *cmd, uint8_t cmd_len){
-
 	tsize   = cmd_len;
 	command = cmd;
 
@@ -169,81 +135,68 @@ void lora_command(uint8_t *cmd, uint8_t cmd_len){
 	ASM_SPI_CR2_TSIZE(tsize);
 	ASM_SPI_CR1_SPE_1();
 
-	GPIOE_BSRR_NSS_RESET();  //LOW
+	GPIOA_BSRR_NSS_RESET();  //LOW
+	ASM_SPI_IER_TXPIE_Set();
 	NVIC_SPI1_Enable_Interupt();
 }
 
-void SPI1_IRQHandler(){
+void Receive(){
 
-	if(ASM_SPI_SR_Get() & (0x1U << 3)){
-		/**
-		 * 	EOT: end of transfer. 1: transfer complete.
-		 */
-//		printf("EOT: end of transfer/transfer complete.\n",cmd_index);
-		GPIOE_BSRR_NSS_SET(); //HIGH
-		ASM_SPI_IFCR_EOTC_Clear();
-		if(cmd_index <= num_of_cmds){
-			printf("SubmitCommand(%d)\n",cmd_index);
-			SubmitCommand(cmd_index);
+		int num_words = (tsize + 3) / 4;   // ceiling division
+		char buffer[tsize + 1];            // +1 for null terminator
+		int idx = 0;
+		uint16_t irq = 0;
+
+
+		for (int i = 0; i < num_words; i++) {
+		    uint32_t rx_data = ASM_SPI_RXDR_Get();
+		    if(rx_flag ==1 && *command==0x12){
+		    	irq = (rx_data >>  16) & 0xFFFF;
+
+				if (irq & 0x0200) {
+					// RxDone → valid packet received
+					printf("RxDone - valid packet received: %x\n", irq);
+					flg = 1;
+				}
+				else if (irq & 0x0002) {
+					// Timeout → CAD detected activity but no packet arrived in time
+					//printf("Timeout - CAD detected activity but no packet arrived in time: %x\n", irq);
+				}
+				else if (irq & 0x0001) {
+					// CadDetected (rare to see alone in CAD_RX)
+					//printf("CadDetected (rare to see alone in CAD_RX): %x\n", irq);
+
+				}
+				else if (irq & 0x8000) {
+					// Only CadDone → channel was free
+					//printf("Only CadDone - channel was free: %x\n", irq);
+				}
+		    }
+		    if (idx < tsize) buffer[idx++] = (rx_data >>  0) & 0xFF;
+		    if (idx < tsize) buffer[idx++] = (rx_data >>  8) & 0xFF;
+		    if (idx < tsize) buffer[idx++] = (rx_data >> 16) & 0xFF;
+		    if (idx < tsize) buffer[idx++] = (rx_data >> 24) & 0xFF;
 		}
-	}
-	if(ASM_SPI_SR_Get() & (0x1U << 1)){
-		/**
-		 *	TXP: Data packet space available
-		 */
-		if(cmd_index <= num_of_cmds){ //
-			while(GPIOC_IDR_RDY_GET() == 2){} //wait until ready
 
-//			printf("About to exec %d-%x\n",cmd_index,command[0]);
+		if(rx_flag ==1 && *command==0x1e && flg == 1){
 
-			//pre-load first byte of the command
-			tx_buffer = ASM_SPI_TXDR_Set(command[0]);
-			//load remaining bytes of the command
-			for(int i = 1; i<tsize; i++){
-				tx_buffer = ASM_SPI_TXDR_Set(command[i]);
-			}
-//			printf("Finished exec %d-%x\n",cmd_index,command[0]);
-			//next command index
-			if(cmd_index == 19){
-				cmd_index = 14;
-			}
-			else{
-				cmd_index = cmd_index + 1;
-			}
+			buffer[idx] = '\0';               // null-terminate
 
-//			printf("Next command is %d\n",cmd_index);
-			//pause
-			//start the transfer (clocks begin for TSIZE frames)
-			ASM_SPI_CR1_CSTART_1();
+			if (idx > 3) {
+			    printf("%s\n", buffer + 3);
+			} else {
+			    printf("\n");                 // nothing left to print
+			}
+			flg = 0;
 		}
-	}
 
-	//while(ASM_SPI_SR_Get() & (0x1U)){
-	if(ASM_SPI_SR_Get() & (0x1U)){
-		/**
-		 *  RXP: Rx-packet available. 1: RxFIFO contains at least one data packet
-		 */
-		rx_buffer = ASM_SPI_RXDR_Get();
-		printf("");
+		buffer[idx] = '\0';               // null-terminate
 
-	}
-
-	if(ASM_SPI_SR_Get() & (0x1U << 6)){
-		//printf("OVR: Bit 6 OVR: overrun.\n");
-		ASM_SPI_RXDR_Get(); //clear RxFIFO
-		ASM_SPI_IFCR_OVRC();
-	}
-
-	if(ASM_SPI_SR_Get() & (0x1U << 4)){
-		//printf("TXTF: transmission transfer filled/TxFIFO upload is finished.\n");
-		delay_us(50);
-		ASM_SPI_IFCR_TXTFC();
-	}
-}
-
-void EXTI15_IRQHandler(){
-	//printf("Inside EXTI 15 interrupt\n");
-	EXTI_RPR1_15_SET();  //to clear bit
+		if (idx > 3) {
+			printf("%s\n", buffer + 3);
+		} else {
+			printf("\n");                 // nothing left to print
+		}
 }
 
 void RCC_init(){
@@ -264,9 +217,9 @@ void RCC_init(){
 
 	//Activate MCO gpio pin PA8
 	ASM_RCC_AHB2ENR1_GPIOAEN_Set();
-	GPIOA_MODER_Set_Alt_Function();
-	GPIOA_AFRH_Set_Alt_Function();
-	GPIOA_OSPEEDR_Set();
+	GPIOA_MODER_MCO_Alt_Function();
+	GPIOA_AFRH_MCO_Alt_Function();
+	GPIOA_OSPEEDR_MCO_Set();
 
 
 	uint8_t msik_range = 4;
@@ -287,90 +240,29 @@ void RCC_init(){
 //	while(!(ASM_RCC_CFGR1_SWS() & 0x3U));
 }
 
-void GPIO_Lora_Init(){
-	//pin8 D7 ARD.D7_IO  PF13  GPIO
-	//This pin controls LORA RESET
-	//The pin should be held low for typically 100µs for the Reset to happen.
+void SPI_GPIO_init(){
 
-	//enable clock on GPIOF
-	ASM_RCC_AHB2ENR1_GPIOFEN_Set();
-	//configure gpio pin PF13
-	GPIOF_MODER_RESET_Output();
-	GPIOF_OSPEEDR_SET_LOW();
-	GPIOF_PUPDR_RESET_NPUPD();
-	//GPIOF_PUPDR_RESET_UP();
-	GPIOF_BSRR_RESET_SET();
-}
+	//PA1	SPI1_SCK
+	//PA2	SPI1_RDY
+	//PA11	SPI1_MISO
+	//PA12	SPI1_MOSI
+	//PA15	SPI1_NSS
 
-void Lora_Reset(){
-	GPIOF_BSRR_RESET_RESET();
-	delay_us(100);
-	GPIOF_BSRR_RESET_SET();
-	//automatic calibration follows
-}
+	//Clock enable
+	ASM_RCC_AHB2ENR1_GPIOAEN_Set();
+	//Configure GPIOA
+	GPIOA_MODER_Set_Alt_Function();
+	GPIOA_AFRL_Set_Alt_Function();
+	GPIOA_AFRH_Set_Alt_Function();
+	GPIOA_OSPEEDR_Set();
+    GPIOA_PUPDR_MOSI_DOWN();
+	GPIOA_PUPDR_MISO_UP();
 
-void GPIO_SPI_init(){
+	GPIOA_MODER_NSS_Output();
+	GPIOA_OSPEEDR_NSS_Set();
+	GPIOA_BSRR_NSS_SET();
 
-	ASM_RCC_AHB2ENR1_GPIOEEN_Set();
-	ASM_RCC_AHB2ENR1_GPIOCEN_Set();
-
-
-	//Configure GPIOE
-	GPIOE_MODER_Set_Alt_Function();
-	GPIOE_AFRH_Set_Alt_Function();
-	GPIOE_OSPEEDR_Set();
-  //GPIOE_PUPDR_Set();
-
-  //GPIOE_PUPDR_MOSI_UP();
-    GPIOE_PUPDR_MOSI_DOWN();
-	GPIOE_PUPDR_MISO_UP();
-  //GPIOE_PUPDR_MISO_DOWN();
-
-  //** GPIO_PUPDR_SCK register bit value gets overwritten by SPI_CPOL bit (clock polarity)
-  //GPIOE_PUPDR_SCK_UP();
-  //GPIOE_PUPDR_CLEAR(26);
-  //GPIOE_PUPDR_SCK_DOWN();
-
-	GPIOE_MODER_NSS_Output();
-	GPIOE_OSPEEDR_NSS_HIGH();
-	GPIOE_BSRR_NSS_SET();
-
-  //** GPIOE_PUPDR_NSS register bit value gets overwritten by SPI_SSIOP bit (SS input/output polarity)
-	//GPIOE_PUPDR_NSS_UP();
-  //GPIOE_PUPDR_NSS_DOWN();
-
-	//Configure GPIOC for RDY
-	//Configure GPIOC for RDY
-	// PC1
-	GPIOC_MODER_Input();
-
-	//lock
-//	GPIOC_LCKR_PIN1_LCKK_0();
-//	GPIOC_LCKR_PIN1_LCKK_1();
-//	GPIOC_LCKR_PIN1_LCKK_0();
-//	GPIOC_LCKR_PIN1_LCKK_1();
-
-
-
-}
-
-void DIO_EXTI_init(){
-
-	//PD15 for DIO1
-	//ASM_RCC_APB3ENR_SYSCFGEN_Set();
-	ASM_RCC_AHB2ENR1_GPIODEN_Set();
-
-	GPIOD_MODER_DIO_INPUT();
-	//GPIOD_PUPDR_DIO_NPUPD();
-	GPIOD_PUPDR_DIO_DOWN();
-	//GPIOD_PUPDR_DIO_UP();
-
-	//EXTI rising edge enable bit
-	EXTI_RTSR1_15_SET();
-	//EXTI port selection
-	EXTI_EXTICR15_DPORT();
-	//EXTI interrupt mask bit
-	EXTI_IMR1_15_SET();
+	GPIOA_MODER_RDY_Input();
 
 }
 
@@ -410,6 +302,114 @@ void SPI_init(){
 
 	ASM_SPI_CR1_SPE_0();
 }
+
+void SPI1_IRQHandler(){
+
+	while(ASM_SPI_SR_Get() & (0x1U)){
+		/**
+		 *  RXP: Rx-packet available. 1: RxFIFO contains at least one data packet
+		 */
+		Receive();
+	}
+
+	if(ASM_SPI_SR_Get() & (0x1U << 3)){
+		/**
+		 * 	EOT: end of transfer. 1: transfer complete.
+		 */
+		GPIOA_BSRR_NSS_SET(); //HIGH
+		ASM_SPI_IFCR_EOTC_Clear();
+	}
+
+	if((ASM_SPI_SR_Get() & (0x1U << 1)) && (ASM_SPI_IER_GET() & (0x1U << 1))){
+		/**
+		 *	TXP: Data packet space available
+		*/
+		while(GPIOA_IDR_RDY_GET() == 2){} //wait until ready
+		// first byte
+
+
+		//		if(*command==0x13){
+		//		    printf("GetRxBufferStatus: %x\n", buffer);
+		//		}
+		ASM_SPI_TXDR_Set(command[0]);
+		// remaining bytes
+		for(int i = 1; i<tsize; i++){
+			ASM_SPI_TXDR_Set(command[i]);
+		}
+
+		//start the transfer (clocks begin for TSIZE frames)
+		ASM_SPI_CR1_CSTART_1();
+
+	}
+
+	if(ASM_SPI_SR_Get() & (0x1U << 6)){
+		//printf("OVR: Bit 6 OVR: overrun.\n");
+		ASM_SPI_RXDR_Get(); //clear RxFIFO
+		ASM_SPI_IFCR_OVRC();
+	}
+
+	if(ASM_SPI_SR_Get() & (0x1U << 4)){
+		//printf("TXTF: transmission transfer filled/TxFIFO upload is finished.\n");
+		delay_us(50);
+		ASM_SPI_IFCR_TXTFC();
+	}
+}
+
+void GPIO_Lora_Init(){
+	//PB3 RESET
+	//pin8 D7 ARD.D7_IO  GPIO
+	//This pin controls LORA RESET
+	//The pin should be held low for typically 100µs for the Reset to happen.
+
+	//enable clock on GPIOB
+	ASM_RCC_AHB2ENR1_GPIOBEN_Set();
+	//configure gpio pin PB3
+	GPIOB_MODER_RESET_Output();
+	GPIOB_OSPEEDR_RESET_SET_LOW();
+	GPIOB_PUPDR_RESET_NPUPD();
+	GPIOB_BSRR_RESET_SET();
+}
+
+void DIO_EXTI_init(){
+
+	//PB8 DIO
+	//ASM_RCC_APB3ENR_SYSCFGEN_Set();
+	ASM_RCC_AHB2ENR1_GPIOBEN_Set();
+
+	GPIOB_MODER_DIO_Input();
+	//GPIOD_PUPDR_DIO_NPUPD();
+	GPIOB_PUPDR_DIO_DOWN();
+	//GPIOD_PUPDR_DIO_UP();
+
+	//EXTI rising edge enable bit
+	EXTI_RTSR1_PB8_SET();
+	//EXTI port selection
+	EXTI_EXTICR8_BPORT();
+	//EXTI interrupt mask bit
+	EXTI_IMR1_8_SET();
+
+}
+
+void EXTI15_IRQHandler(){
+	//Lora DIO interrupt handler
+	//printf("Inside EXTI 15 interrupt\n");
+	EXTI_RPR1_8_SET();  //to clear bit
+}
+
+
+
+
+void Lora_Reset(){
+	GPIOB_BSRR_RESET_RESET();
+	delay_us(100);
+	GPIOB_BSRR_RESET_SET();
+	//automatic calibration follows
+}
+
+
+
+
+
 
 void TIM8_init(){
 

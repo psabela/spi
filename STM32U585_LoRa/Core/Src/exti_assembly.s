@@ -16,6 +16,10 @@
 .global EXTI_IMR1_15_SET
 .global EXTI_RPR1_15_SET
 
+.global EXTI_RTSR1_PB8_SET
+.global EXTI_EXTICR8_BPORT
+.global EXTI_IMR1_8_SET
+.global EXTI_RPR1_8_SET
 
 // Define global variables
 
@@ -31,6 +35,62 @@
 .equ EXTI_LOCKR_OFFSET, 	0x070
 .equ EXTI_IMR1_OFFSET, 		0x080
 .equ EXTI_EMR1_OFFSET, 		0x084
+
+
+
+
+//PB8  LORA DIO
+
+//EXTI rising trigger selection register (EXTI_RTSR1)
+EXTI_RTSR1_PB8_SET:
+	LDR		R1, =EXTI_BASE_ADDR
+	LDR		R2, =EXTI_RTSR1_OFFSET
+	ADDS	R1,	R2
+	LDR		R0, [R1]
+	MOVS	R2, 0x1
+	LSLS	R3, R2, #8
+	ORRS	R0, R3
+	STR		R0,	[R1]
+	BX LR
+
+
+//select port
+EXTI_EXTICR8_BPORT:
+	LDR		R1, =EXTI_BASE_ADDR
+	LDR		R2, =0x68 //EXTI_EXTICR3_OFFSET
+	ADDS	R1,	R2
+	LDR		R0, [R1]
+	MOVS	R2, 0x01 //B port
+	LSLS	R3, R2, #0
+	ORRS	R0, R3
+	STR		R0,	[R1]
+	BX LR
+
+//EXTI CPU wake-up with interrupt mask register (EXTI_IMR1)
+EXTI_IMR1_8_SET:
+	LDR		R1, =EXTI_BASE_ADDR
+	LDR		R2, =EXTI_IMR1_OFFSET
+	ADDS	R1,	R2
+	LDR		R0, [R1]
+	MOVS	R2, 0x1
+	LSLS	R3, R2, #8
+	ORRS	R0, R3
+	STR		R0,	[R1]
+	BX LR
+
+
+EXTI_RPR1_8_SET:
+	LDR		R1, =EXTI_BASE_ADDR
+	LDR		R2, =EXTI_RPR1_OFFSET
+	ADDS	R1,	R2
+	LDR		R0, [R1]
+	MOVS	R2, 0x1
+	LSLS	R3, R2, #8
+	ORRS	R0, R3
+	STR		R0,	[R1]
+	BX LR
+
+
 
 
 

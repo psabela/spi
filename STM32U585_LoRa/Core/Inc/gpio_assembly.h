@@ -8,12 +8,41 @@
 #ifndef GPIO_ASSEMBLY_H_
 #define GPIO_ASSEMBLY_H_
 
-extern void GPIOE_MODER_Set_Alt_Function(void);
-extern void GPIOA_MODER_Set_Alt_Function(void);
-extern void GPIOE_AFRH_Set_Alt_Function(void);
-extern void GPIOA_AFRH_Set_Alt_Function(void);
-extern void GPIOE_OSPEEDR_Set(void);
+extern uint32_t GPIOA_IDR_RDY_GET(void);
+extern void GPIOA_MODER_RDY_Input(void);
+extern void GPIOA_BSRR_NSS_RESET(void);
+extern void GPIOA_BSRR_NSS_SET(void);
+extern void GPIOA_OSPEEDR_NSS_Set(void);
+extern void GPIOA_MODER_NSS_Output(void);
+extern void GPIOA_OSPEEDR_MCO_Set(void);
+extern void GPIOA_AFRH_MCO_Alt_Function(void);
+extern void GPIOA_MODER_MCO_Alt_Function(void);
+extern void GPIOA_PUPDR_MISO_UP(void);
+extern void GPIOA_PUPDR_MOSI_DOWN(void);
 extern void GPIOA_OSPEEDR_Set(void);
+extern void GPIOA_AFRH_Set_Alt_Function(void);
+extern void GPIOA_AFRL_Set_Alt_Function(void);
+extern void GPIOA_MODER_Set_Alt_Function(void);
+
+
+extern void GPIOB_MODER_DIO_Input(void);
+extern void GPIOB_PUPDR_DIO_DOWN(void);
+extern void GPIOB_PUPDR_DIO_UP(void);
+extern void GPIOB_IDR_DIO_GET(void);
+extern void GPIOB_MODER_RESET_Output(void);
+extern void GPIOB_PUPDR_RESET_NPUPD(void);
+extern void GPIOB_PUPDR_RESET_UP(void);
+extern void GPIOB_PUPDR_RESET_DOWN(void);
+extern void GPIOB_BSRR_RESET_SET(void);
+extern void GPIOB_BSRR_RESET_RESET(void);
+extern void GPIOB_BSRR_RESET_SETRESET(void);
+extern void GPIOB_OSPEEDR_RESET_SETGPIOB_MODER_DIO_INPUT_LOW(void);
+
+
+
+extern void GPIOE_MODER_Set_Alt_Function(void);
+extern void GPIOE_AFRH_Set_Alt_Function(void);
+extern void GPIOE_OSPEEDR_Set(void);
 extern void GPIOE_PUPDR_Set(void);
 extern void GPIOE_PUPDR_MOSI_UP(void);
 extern void GPIOE_PUPDR_MOSI_DOWN(void);

@@ -8,6 +8,7 @@
 #ifndef SPI_MASTER_ASSEMBLY_H_
 #define SPI_MASTER_ASSEMBLY_H_
 
+extern uint32_t ASM_SPI_IER_GET(void);
 extern void ASM_SPI_CFG2_MASTER_Set(void);
 extern void ASM_SPI_CFG2_COMM_Full_Duplex(void);
 extern void ASM_SPI_CFG2_CPOL_0(void);
