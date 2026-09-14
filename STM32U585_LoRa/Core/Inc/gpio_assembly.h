@@ -8,6 +8,9 @@
 #ifndef GPIO_ASSEMBLY_H_
 #define GPIO_ASSEMBLY_H_
 
+
+
+
 extern uint32_t GPIOA_IDR_RDY_GET(void);
 extern void GPIOA_MODER_RDY_Input(void);
 extern void GPIOA_BSRR_NSS_RESET(void);
@@ -36,7 +39,9 @@ extern void GPIOB_PUPDR_RESET_DOWN(void);
 extern void GPIOB_BSRR_RESET_SET(void);
 extern void GPIOB_BSRR_RESET_RESET(void);
 extern void GPIOB_BSRR_RESET_SETRESET(void);
-extern void GPIOB_OSPEEDR_RESET_SETGPIOB_MODER_DIO_INPUT_LOW(void);
+extern void GPIOB_OSPEEDR_RESET_SET(void);
+extern void GPIOB_MODER_DIO_INPUT_LOW(void);
+extern void GPIOB_OSPEEDR_RESET_SET_LOW(void);
 
 
 

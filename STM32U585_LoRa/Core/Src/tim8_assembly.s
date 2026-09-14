@@ -11,8 +11,7 @@
 .fpu softvfp
 .thumb
 
-.text
-
+.section .text
 .global TIM8_Set_PSC_Value
 .global TIM8_Set_ARR_Value
 .global TIM8_Clear_UIF_Flag
@@ -74,7 +73,8 @@
 //.equ	PRESCALER, 	0x0f //15   //0x32c7 	//15999/
 //.equ	ARRCOUNTTO, 0x64 //100 //0x3E7	//999	--0.000025
 //.equ	CCRCOUNTTO, 0x64 //0x3E7// 999
-
+    .type TIM8_Set_PSC_Value, %function
+    .thumb_func
 TIM8_Set_PSC_Value:
 	LDR		R1, =TIM8_BASE_OFFSET
 	LDR		R2, =TIMx_PSC_OFFSET
@@ -86,6 +86,8 @@ TIM8_Set_PSC_Value:
 	BX LR
 
 //Auto-Reload Register (TIMx_ARR)
+    .type TIM8_Set_ARR_Value, %function
+    .thumb_func
 TIM8_Set_ARR_Value:
 	LDR		R1, =TIM8_BASE_OFFSET
 	LDR		R2, =TIMx_ARR_OFFSET
@@ -98,6 +100,8 @@ TIM8_Set_ARR_Value:
 	STR		R0, [R1]
 	BX LR
 
+    .type TIM8_Clear_UIF_Flag, %function
+    .thumb_func
 TIM8_Clear_UIF_Flag:
 	LDR		R1, =TIM8_BASE_OFFSET
 	LDR		R2, =TIMx_SR_OFFSET
@@ -109,6 +113,8 @@ TIM8_Clear_UIF_Flag:
 	STR		R0, [R1]
 	BX LR
 
+    .type TIM8_Set_CCnS_To_Channel_Output, %function
+    .thumb_func
 TIM8_Set_CCnS_To_Channel_Output:
 	LDR		R1, =TIM8_BASE_OFFSET
 	LDR		R2, =TIMx_CCMR1_OFFSET
@@ -121,6 +127,8 @@ TIM8_Set_CCnS_To_Channel_Output:
 	STR		R0, [R1]
 	BX LR
 
+    .type TIM8_Set_DITHEN_False, %function
+    .thumb_func
 TIM8_Set_DITHEN_False:
 	LDR		R1, =TIM8_BASE_OFFSET
 	LDR		R2, =TIMx_CR1_OFFSET
@@ -133,6 +141,8 @@ TIM8_Set_DITHEN_False:
 	STR		R0, [R1]
 	BX LR
 
+    .type TIM8_Set_CCRn_WaveGen_Value, %function
+    .thumb_func
 TIM8_Set_CCRn_WaveGen_Value:
 	LDR		R1, =TIM8_BASE_OFFSET
 	LDR		R2, =TIMx_CCR1_OFFSET
@@ -145,6 +155,8 @@ TIM8_Set_CCRn_WaveGen_Value:
 	STR		R0, [R1]
 	BX LR
 
+    .type TIM8_Clear_CC1IF_Flag, %function
+    .thumb_func
 TIM8_Clear_CC1IF_Flag:
 	LDR		R1, =TIM8_BASE_OFFSET
 	LDR		R2, =TIMx_SR_OFFSET
@@ -157,7 +169,8 @@ TIM8_Clear_CC1IF_Flag:
 	STR		R0, [R1]
 	BX LR
 
-
+    .type TIM8_Set_DIR_UpCounter, %function
+    .thumb_func
 TIM8_Set_DIR_UpCounter:
 	LDR		R1, =TIM8_BASE_OFFSET
 	LDR		R2, =TIMx_CR1_OFFSET
@@ -170,6 +183,8 @@ TIM8_Set_DIR_UpCounter:
 	STR		R0, [R1]
 	BX LR
 
+    .type TIM8_Set_OCnM_To_Toggle_Mode, %function
+    .thumb_func
 TIM8_Set_OCnM_To_Toggle_Mode:
 	LDR		R1, =TIM8_BASE_OFFSET
 	LDR		R2, =TIMx_CCMR1_OFFSET
@@ -189,6 +204,8 @@ TIM8_Set_OCnM_To_Toggle_Mode:
 	STR		R0, [R1]
 	BX LR
 
+    .type TIM8_Set_CC1P_Polarity_ActiveHigh, %function
+    .thumb_func
 TIM8_Set_CC1P_Polarity_ActiveHigh:
 	LDR		R1, =TIM8_BASE_OFFSET
 	LDR		R2, =TIMx_CCER_OFFSET
@@ -201,6 +218,8 @@ TIM8_Set_CC1P_Polarity_ActiveHigh:
 	STR		R0, [R1]
 	BX LR
 
+    .type TIM8_Set_CCnE_Output_Enable_To_GPIO, %function
+    .thumb_func
 TIM8_Set_CCnE_Output_Enable_To_GPIO:
 	LDR		R1, =TIM8_BASE_OFFSET
 	LDR		R2, =TIMx_CCER_OFFSET
@@ -211,6 +230,8 @@ TIM8_Set_CCnE_Output_Enable_To_GPIO:
 	STR		R0, [R1]
 	BX LR
 
+    .type TIM8_Set_CEN_Counter_Enable, %function
+    .thumb_func
 TIM8_Set_CEN_Counter_Enable:
 	LDR		R1, =TIM8_BASE_OFFSET
 	LDR		R2, =TIMx_CR1_OFFSET
@@ -221,6 +242,8 @@ TIM8_Set_CEN_Counter_Enable:
 	STR		R0, [R1]
 	BX LR
 
+    .type TIM8_Set_CEN_Counter_Disable, %function
+    .thumb_func
 TIM8_Set_CEN_Counter_Disable:
 	LDR		R1, =TIM8_BASE_OFFSET
 	LDR		R2, =TIMx_CR1_OFFSET
@@ -232,6 +255,8 @@ TIM8_Set_CEN_Counter_Disable:
 	STR		R0, [R1]
 	BX LR
 
+    .type TIM8_Set_MMS_Update_Trigger_Output, %function
+    .thumb_func
 TIM8_Set_MMS_Update_Trigger_Output:
 	LDR		R1, =TIM8_BASE_OFFSET
 	LDR		R2, =TIMx_CR2_OFFSET
@@ -247,6 +272,8 @@ TIM8_Set_MMS_Update_Trigger_Output:
 	STR		R0, [R1]
 	BX LR
 
+    .type TIM8_Set_UIF_Update_Interrupt_Enable, %function
+    .thumb_func
 TIM8_Set_UIF_Update_Interrupt_Enable:
 	LDR		R1, =TIM8_BASE_OFFSET
 	LDR		R2, =TIMx_DIER_OFFSET
@@ -258,6 +285,8 @@ TIM8_Set_UIF_Update_Interrupt_Enable:
 	BX LR
 
 //Bit 1 CC1IE: Capture/Compare 1 interrupt enable
+    .type TIM8_Set_CC1IE_Update_Interrupt_Enable, %function
+    .thumb_func
 TIM8_Set_CC1IE_Update_Interrupt_Enable:
 	LDR		R1, =TIM8_BASE_OFFSET
 	LDR		R2, =TIMx_DIER_OFFSET
@@ -269,11 +298,15 @@ TIM8_Set_CC1IE_Update_Interrupt_Enable:
 	STR		R0, [R1]
 	BX LR
 
+    .type TIM8_Get_SR_Status, %function
+    .thumb_func
 TIM8_Get_SR_Status:
 	LDR		R1, =TIM8_RCR_Set
 	LDRH	R0, [R1]
 	BX LR
 
+    .type TIM8_RCR_Set, %function
+    .thumb_func
 TIM8_RCR_Set:
 	LDR		R1, =TIM8_BASE_OFFSET
 	LDR		R2, =TIMx_RCR_OFFSET

@@ -10,7 +10,7 @@
 .fpu softvfp
 .thumb
 
-.text
+.section .text
 .global EXTI_RTSR1_15_SET
 .global EXTI_EXTICR15_DPORT
 .global EXTI_IMR1_15_SET
@@ -41,7 +41,11 @@
 
 //PB8  LORA DIO
 
-//EXTI rising trigger selection register (EXTI_RTSR1)
+    @ ----------------------------------------------------
+    @ EXTI rising trigger selection register (EXTI_RTSR1))
+    @ ----------------------------------------------------
+    .type EXTI_RTSR1_PB8_SET, %function
+    .thumb_func
 EXTI_RTSR1_PB8_SET:
 	LDR		R1, =EXTI_BASE_ADDR
 	LDR		R2, =EXTI_RTSR1_OFFSET
@@ -54,7 +58,11 @@ EXTI_RTSR1_PB8_SET:
 	BX LR
 
 
-//select port
+    @ ----------------------------------------------------
+    @ select port
+    @ ----------------------------------------------------
+    .type EXTI_EXTICR8_BPORT, %function
+    .thumb_func
 EXTI_EXTICR8_BPORT:
 	LDR		R1, =EXTI_BASE_ADDR
 	LDR		R2, =0x68 //EXTI_EXTICR3_OFFSET
@@ -66,7 +74,11 @@ EXTI_EXTICR8_BPORT:
 	STR		R0,	[R1]
 	BX LR
 
-//EXTI CPU wake-up with interrupt mask register (EXTI_IMR1)
+    @ ----------------------------------------------------
+    @ EXTI CPU wake-up with interrupt mask register (EXTI_IMR1)
+    @ ----------------------------------------------------
+    .type EXTI_IMR1_8_SET, %function
+    .thumb_func
 EXTI_IMR1_8_SET:
 	LDR		R1, =EXTI_BASE_ADDR
 	LDR		R2, =EXTI_IMR1_OFFSET
@@ -78,7 +90,11 @@ EXTI_IMR1_8_SET:
 	STR		R0,	[R1]
 	BX LR
 
-
+    @ ----------------------------------------------------
+    @ EXTI_RPR1_8_SET
+    @ ----------------------------------------------------
+    .type EXTI_RPR1_8_SET, %function
+    .thumb_func
 EXTI_RPR1_8_SET:
 	LDR		R1, =EXTI_BASE_ADDR
 	LDR		R2, =EXTI_RPR1_OFFSET
@@ -91,12 +107,13 @@ EXTI_RPR1_8_SET:
 	BX LR
 
 
-
-
-
 //PD15 pin
 
-//EXTI rising trigger selection register (EXTI_RTSR1)
+    @ ----------------------------------------------------
+    @ EXTI rising trigger selection register (EXTI_RTSR1)
+    @ ----------------------------------------------------
+    .type EXTI_RTSR1_15_SET, %function
+    .thumb_func
 EXTI_RTSR1_15_SET:
 	LDR		R1, =EXTI_BASE_ADDR
 	LDR		R2, =EXTI_RTSR1_OFFSET
@@ -109,7 +126,11 @@ EXTI_RTSR1_15_SET:
 	BX LR
 
 
-//select port
+    @ ----------------------------------------------------
+    @ select port
+    @ ----------------------------------------------------
+    .type EXTI_EXTICR15_DPORT, %function
+    .thumb_func
 EXTI_EXTICR15_DPORT:
 	LDR		R1, =EXTI_BASE_ADDR
 	LDR		R2, =0x6c //EXTI_EXTICR4_OFFSET
@@ -121,7 +142,11 @@ EXTI_EXTICR15_DPORT:
 	STR		R0,	[R1]
 	BX LR
 
-//EXTI CPU wake-up with interrupt mask register (EXTI_IMR1)
+    @ ----------------------------------------------------
+    @ EXTI CPU wake-up with interrupt mask register (EXTI_IMR1)
+    @ ----------------------------------------------------
+    .type EXTI_IMR1_15_SET, %function
+    .thumb_func
 EXTI_IMR1_15_SET:
 	LDR		R1, =EXTI_BASE_ADDR
 	LDR		R2, =EXTI_IMR1_OFFSET
@@ -133,7 +158,11 @@ EXTI_IMR1_15_SET:
 	STR		R0,	[R1]
 	BX LR
 
-
+    @ ----------------------------------------------------
+    @ EXTI_RPR1_15_SET
+    @ ----------------------------------------------------
+    .type EXTI_RPR1_15_SET, %function
+    .thumb_func
 EXTI_RPR1_15_SET:
 	LDR		R1, =EXTI_BASE_ADDR
 	LDR		R2, =EXTI_RPR1_OFFSET

@@ -10,8 +10,7 @@
 .fpu softvfp
 .thumb
 
-.text
-
+.section .text
 .global ASM_RCC_AHB2ENR1_GPIOEEN_Set
 .global ASM_RCC_AHB2ENR1_GPIOAEN_Set
 .global ASM_RCC_AHB2ENR1_GPIODEN_Set
@@ -79,7 +78,11 @@
 .equ RCC_PLL1CFGR_OFFSET,   0x028U
 .equ RCC_PLL1DIVR_OFFSET, 	0x034U
 
-
+    @ ----------------------------------------------------
+    @ ASM_RCC_AHB2ENR1_GPIOBEN_Set
+    @ ----------------------------------------------------
+    .type ASM_RCC_AHB2ENR1_GPIOBEN_Set, %function
+    .thumb_func
 ASM_RCC_AHB2ENR1_GPIOBEN_Set:
 	//enable clock on GPIOB
 	LDR		R1, =RCC_BASE_ADDR
@@ -92,6 +95,11 @@ ASM_RCC_AHB2ENR1_GPIOBEN_Set:
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_APB2ENR_TIM8EN_Set
+    @ ----------------------------------------------------
+    .type ASM_RCC_APB2ENR_TIM8EN_Set, %function
+    .thumb_func
 ASM_RCC_APB2ENR_TIM8EN_Set:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R2, =RCC_APB2ENR_OFFSET
@@ -103,6 +111,11 @@ ASM_RCC_APB2ENR_TIM8EN_Set:
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_APB3ENR_SYSCFGEN_Set
+    @ ----------------------------------------------------
+    .type ASM_RCC_APB3ENR_SYSCFGEN_Set, %function
+    .thumb_func
 ASM_RCC_APB3ENR_SYSCFGEN_Set:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R2, =RCC_APB3ENR_OFFSET
@@ -114,6 +127,11 @@ ASM_RCC_APB3ENR_SYSCFGEN_Set:
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_AHB2ENR1_GPIOEEN_Set
+    @ ----------------------------------------------------
+    .type ASM_RCC_AHB2ENR1_GPIOEEN_Set, %function
+    .thumb_func
 ASM_RCC_AHB2ENR1_GPIOEEN_Set:
 	//enable clock on GPIOE
 	LDR		R1, =RCC_BASE_ADDR
@@ -126,7 +144,11 @@ ASM_RCC_AHB2ENR1_GPIOEEN_Set:
 	STR		R0, [R1]
 	BX LR
 
-
+    @ ----------------------------------------------------
+    @ ASM_RCC_AHB2ENR1_GPIOFEN_Set
+    @ ----------------------------------------------------
+    .type ASM_RCC_AHB2ENR1_GPIOFEN_Set, %function
+    .thumb_func
 ASM_RCC_AHB2ENR1_GPIOFEN_Set:
 	//enable clock on GPIOE
 	LDR		R1, =RCC_BASE_ADDR
@@ -139,6 +161,11 @@ ASM_RCC_AHB2ENR1_GPIOFEN_Set:
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_AHB2ENR1_GPIOAEN_Set
+    @ ----------------------------------------------------
+    .type ASM_RCC_AHB2ENR1_GPIOAEN_Set, %function
+    .thumb_func
 ASM_RCC_AHB2ENR1_GPIOAEN_Set:
 	//enable clock on GPIOH
 	LDR		R1, =RCC_BASE_ADDR
@@ -151,6 +178,11 @@ ASM_RCC_AHB2ENR1_GPIOAEN_Set:
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_AHB2ENR1_GPIODEN_Set
+    @ ----------------------------------------------------
+    .type ASM_RCC_AHB2ENR1_GPIODEN_Set, %function
+    .thumb_func
 ASM_RCC_AHB2ENR1_GPIODEN_Set:
 	//enable clock on GPIOD
 	LDR		R1, =RCC_BASE_ADDR
@@ -163,6 +195,11 @@ ASM_RCC_AHB2ENR1_GPIODEN_Set:
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_AHB2ENR1_GPIOCEN_Set
+    @ ----------------------------------------------------
+    .type ASM_RCC_AHB2ENR1_GPIOCEN_Set, %function
+    .thumb_func
 ASM_RCC_AHB2ENR1_GPIOCEN_Set:
 	//enable clock on GPIOC
 	LDR		R1, =RCC_BASE_ADDR
@@ -175,7 +212,11 @@ ASM_RCC_AHB2ENR1_GPIOCEN_Set:
 	STR		R0, [R1]
 	BX LR
 
-
+    @ ----------------------------------------------------
+    @ ASM_RCC_APB2ENR_SPI1_Set
+    @ ----------------------------------------------------
+    .type ASM_RCC_APB2ENR_SPI1_Set, %function
+    .thumb_func
 ASM_RCC_APB2ENR_SPI1_Set:
 	//Bit 12 SPI1EN: SPI1 clock enable
 	LDR		R1, =RCC_BASE_ADDR
@@ -196,7 +237,11 @@ ASM_RCC_APB2ENR_SPI1_Set:
 //11: MSIK selected
 //Note: The SPI1 is functional in Stop 0 and Stop 1 mode only when the kernel clock is HSI16 or
 //MSIK.
-
+    @ ----------------------------------------------------
+    @ ASM_RCC_CCIPR1_SPI1SEL_MSIK
+    @ ----------------------------------------------------
+    .type ASM_RCC_CCIPR1_SPI1SEL_MSIK, %function
+    .thumb_func
 ASM_RCC_CCIPR1_SPI1SEL_MSIK:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R2, =RCC_CCIPR1_OFFSET
@@ -212,6 +257,11 @@ ASM_RCC_CCIPR1_SPI1SEL_MSIK:
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_CCIPR1_SPI1SEL_HSI16
+    @ ----------------------------------------------------
+    .type ASM_RCC_CCIPR1_SPI1SEL_HSI16, %function
+    .thumb_func
 ASM_RCC_CCIPR1_SPI1SEL_HSI16:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R2, =RCC_CCIPR1_OFFSET
@@ -227,6 +277,11 @@ ASM_RCC_CCIPR1_SPI1SEL_HSI16:
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_CCIPR1_SPI1SEL_PCLK2
+    @ ----------------------------------------------------
+    .type ASM_RCC_CCIPR1_SPI1SEL_PCLK2, %function
+    .thumb_func
 ASM_RCC_CCIPR1_SPI1SEL_PCLK2:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R2, =RCC_CCIPR1_OFFSET
@@ -239,6 +294,11 @@ ASM_RCC_CCIPR1_SPI1SEL_PCLK2:
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_CCIPR1_SPI1SEL_SYSCLK
+    @ ----------------------------------------------------
+    .type ASM_RCC_CCIPR1_SPI1SEL_SYSCLK, %function
+    .thumb_func
 ASM_RCC_CCIPR1_SPI1SEL_SYSCLK:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R2, =RCC_CCIPR1_OFFSET
@@ -274,6 +334,12 @@ value is taken into account.
 1110: SYSCLK divided by 256
 1111: SYSCLK divided by 512
 */
+
+    @ ----------------------------------------------------
+    @ ASM_RCC_CFGR2_HPRE_2
+    @ ----------------------------------------------------
+    .type ASM_RCC_CFGR2_HPRE_2, %function
+    .thumb_func
 ASM_RCC_CFGR2_HPRE_2:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R2, =RCC_CFGR2_OFFSET
@@ -298,6 +364,11 @@ This bitfiled is set and cleared by software to control the division factor of A
 110: PCLK2 divided by 8
 111: PCLK2 divided by 16
 */
+    @ ----------------------------------------------------
+    @ ASM_RCC_CFGR2_PCLK2_2
+    @ ----------------------------------------------------
+    .type ASM_RCC_CFGR2_PCLK2_2, %function
+    .thumb_func
 ASM_RCC_CFGR2_PCLK2_2:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R2, =RCC_CFGR2_OFFSET
@@ -328,6 +399,11 @@ This bitfield is set and cleared by software.
 1001: MSIK clock selected
 Others: reserved
 */
+    @ ----------------------------------------------------
+    @ ASM_RCC_CFGR1_MCOSEL_HSI16
+    @ ----------------------------------------------------
+    .type ASM_RCC_CFGR1_MCOSEL_HSI16, %function
+    .thumb_func
 ASM_RCC_CFGR1_MCOSEL_HSI16:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R2, =RCC_CFGR1_OFFSET
@@ -343,6 +419,11 @@ ASM_RCC_CFGR1_MCOSEL_HSI16:
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_CFGR1_MCOSEL_HSE
+    @ ----------------------------------------------------
+    .type ASM_RCC_CFGR1_MCOSEL_HSE, %function
+    .thumb_func
 ASM_RCC_CFGR1_MCOSEL_HSE:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R2, =RCC_CFGR1_OFFSET
@@ -358,6 +439,11 @@ ASM_RCC_CFGR1_MCOSEL_HSE:
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_CFGR1_MCOSEL_MSIS
+    @ ----------------------------------------------------
+    .type ASM_RCC_CFGR1_MCOSEL_MSIS, %function
+    .thumb_func
 ASM_RCC_CFGR1_MCOSEL_MSIS:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R2, =RCC_CFGR1_OFFSET
@@ -373,6 +459,11 @@ ASM_RCC_CFGR1_MCOSEL_MSIS:
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_CFGR1_MCOSEL_MSIK
+    @ ----------------------------------------------------
+    .type ASM_RCC_CFGR1_MCOSEL_MSIK, %function
+    .thumb_func
 ASM_RCC_CFGR1_MCOSEL_MSIK:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R2, =RCC_CFGR1_OFFSET
@@ -388,6 +479,11 @@ ASM_RCC_CFGR1_MCOSEL_MSIK:
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_CFGR1_MCOSEL_SYSCLK
+    @ ----------------------------------------------------
+    .type ASM_RCC_CFGR1_MCOSEL_SYSCLK, %function
+    .thumb_func
 ASM_RCC_CFGR1_MCOSEL_SYSCLK:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R2, =RCC_CFGR1_OFFSET
@@ -403,6 +499,11 @@ ASM_RCC_CFGR1_MCOSEL_SYSCLK:
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_CFGR1_MCOSEL_HSI48
+    @ ----------------------------------------------------
+    .type ASM_RCC_CFGR1_MCOSEL_HSI48, %function
+    .thumb_func
 ASM_RCC_CFGR1_MCOSEL_HSI48:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R2, =RCC_CFGR1_OFFSET
@@ -418,6 +519,11 @@ ASM_RCC_CFGR1_MCOSEL_HSI48:
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_CFGR1_MCOSEL_PLL1
+    @ ----------------------------------------------------
+    .type ASM_RCC_CFGR1_MCOSEL_PLL1, %function
+    .thumb_func
 ASM_RCC_CFGR1_MCOSEL_PLL1:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R2, =RCC_CFGR1_OFFSET
@@ -443,6 +549,11 @@ indirectly as system clock.
 0: HSI16 oscillator off
 1: HSI16 oscillator on
 */
+    @ ----------------------------------------------------
+    @ ASM_RCC_CR_HSI16
+    @ ----------------------------------------------------
+    .type ASM_RCC_CR_HSI16, %function
+    .thumb_func
 ASM_RCC_CR_HSI16:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R0, [R1]
@@ -460,6 +571,11 @@ is enabled by software (by setting HSION).
 1: HSI16 oscillator ready
 Note: Once the HSION bit is cleared, HSIRDY goes low after six HSI16 clock cycles.
 */
+    @ ----------------------------------------------------
+    @ ASM_RCC_CR_HSI16RDY
+    @ ----------------------------------------------------
+    .type ASM_RCC_CR_HSI16RDY, %function
+    .thumb_func
 ASM_RCC_CR_HSI16RDY:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R0, [R1]
@@ -468,7 +584,11 @@ ASM_RCC_CR_HSI16RDY:
 	ANDS	R0, R2, R0
 	BX LR
 
-
+    @ ----------------------------------------------------
+    @ ASM_RCC_CR_HSI48
+    @ ----------------------------------------------------
+    .type ASM_RCC_CR_HSI48, %function
+    .thumb_func
 ASM_RCC_CR_HSI48:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R0, [R1]
@@ -478,6 +598,11 @@ ASM_RCC_CR_HSI48:
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_CR_HSI48RDY
+    @ ----------------------------------------------------
+    .type ASM_RCC_CR_HSI48RDY, %function
+    .thumb_func
 ASM_RCC_CR_HSI48RDY:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R0, [R1]
@@ -486,6 +611,11 @@ ASM_RCC_CR_HSI48RDY:
 	ANDS	R0, R2, R0
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_CR_SYSCLK
+    @ ----------------------------------------------------
+    .type ASM_RCC_CR_SYSCLK, %function
+    .thumb_func
 ASM_RCC_CR_SYSCLK:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R0, [R1]
@@ -495,6 +625,11 @@ ASM_RCC_CR_SYSCLK:
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_CR_SYSCLKRDY
+    @ ----------------------------------------------------
+    .type ASM_RCC_CR_SYSCLKRDY, %function
+    .thumb_func
 ASM_RCC_CR_SYSCLKRDY:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R0, [R1]
@@ -503,6 +638,11 @@ ASM_RCC_CR_SYSCLKRDY:
 	ANDS	R0, R2, R0
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_CR_MSIK
+    @ ----------------------------------------------------
+    .type ASM_RCC_CR_MSIK, %function
+    .thumb_func
 ASM_RCC_CR_MSIK:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R0, [R1]
@@ -512,6 +652,11 @@ ASM_RCC_CR_MSIK:
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_CR_MSIKRDY
+    @ ----------------------------------------------------
+    .type ASM_RCC_CR_MSIKRDY, %function
+    .thumb_func
 ASM_RCC_CR_MSIKRDY:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R0, [R1]
@@ -520,6 +665,11 @@ ASM_RCC_CR_MSIKRDY:
 	ANDS	R0, R2, R0
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_CR_MSIS
+    @ ----------------------------------------------------
+    .type ASM_RCC_CR_MSIS, %function
+    .thumb_func
 ASM_RCC_CR_MSIS:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R0, [R1]
@@ -529,6 +679,11 @@ ASM_RCC_CR_MSIS:
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_CR_MSISRDY
+    @ ----------------------------------------------------
+    .type ASM_RCC_CR_MSISRDY, %function
+    .thumb_func
 ASM_RCC_CR_MSISRDY:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R0, [R1]
@@ -537,6 +692,11 @@ ASM_RCC_CR_MSISRDY:
 	ANDS	R0, R2, R0
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_CR_HSE
+    @ ----------------------------------------------------
+    .type ASM_RCC_CR_HSE, %function
+    .thumb_func
 ASM_RCC_CR_HSE:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R0, [R1]
@@ -546,6 +706,11 @@ ASM_RCC_CR_HSE:
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_CR_HSERDY
+    @ ----------------------------------------------------
+    .type ASM_RCC_CR_HSERDY, %function
+    .thumb_func
 ASM_RCC_CR_HSERDY:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R0, [R1]
@@ -554,6 +719,11 @@ ASM_RCC_CR_HSERDY:
 	ANDS	R0, R2, R0
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_CR_PLL1
+    @ ----------------------------------------------------
+    .type ASM_RCC_CR_PLL1, %function
+    .thumb_func
 ASM_RCC_CR_PLL1:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R0, [R1]
@@ -563,6 +733,11 @@ ASM_RCC_CR_PLL1:
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_CR_PLL1RDY
+    @ ----------------------------------------------------
+    .type ASM_RCC_CR_PLL1RDY, %function
+    .thumb_func
 ASM_RCC_CR_PLL1RDY:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R0, [R1]
@@ -581,6 +756,11 @@ must be zero.
 10: HSI16 clock selected as PLL1 clock entry
 11: HSE clock selected as PLL1 clock entry
 */
+    @ ----------------------------------------------------
+    @ ASM_RCC_PLL1CFGR_PLL1SRC_HSI16
+    @ ----------------------------------------------------
+    .type ASM_RCC_PLL1CFGR_PLL1SRC_HSI16, %function
+    .thumb_func
 ASM_RCC_PLL1CFGR_PLL1SRC_HSI16:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR 	R2, =RCC_PLL1CFGR_OFFSET
@@ -614,6 +794,11 @@ power, PLL1PEN and PLL1P bits must be set to 0 when pll1_p_ck is not used.
 0: pll1_p_ck output disabled
 1: pll1_p_ck output enabled
 */
+    @ ----------------------------------------------------
+    @ ASM_RCC_PLL1CFGR_PLL1PEN
+    @ ----------------------------------------------------
+    .type ASM_RCC_PLL1CFGR_PLL1PEN, %function
+    .thumb_func
 ASM_RCC_PLL1CFGR_PLL1PEN:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR 	R2, =RCC_PLL1CFGR_OFFSET
@@ -625,6 +810,11 @@ ASM_RCC_PLL1CFGR_PLL1PEN:
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_PLL1CFGR_PLL1QEN
+    @ ----------------------------------------------------
+    .type ASM_RCC_PLL1CFGR_PLL1QEN, %function
+    .thumb_func
 ASM_RCC_PLL1CFGR_PLL1QEN:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR 	R2, =RCC_PLL1CFGR_OFFSET
@@ -636,6 +826,11 @@ ASM_RCC_PLL1CFGR_PLL1QEN:
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_PLL1CFGR_PLL1REN
+    @ ----------------------------------------------------
+    .type ASM_RCC_PLL1CFGR_PLL1REN, %function
+    .thumb_func
 ASM_RCC_PLL1CFGR_PLL1REN:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR 	R2, =RCC_PLL1CFGR_OFFSET
@@ -658,6 +853,11 @@ This bit can be written only when the PLL1 is disabled (PLL1ON = 0 and PLL1RDY =
 ...
 1111: division by 16
 */
+    @ ----------------------------------------------------
+    @ ASM_RCC_PLL1CFGR_PLL1M_3
+    @ ----------------------------------------------------
+    .type ASM_RCC_PLL1CFGR_PLL1M_3, %function
+    .thumb_func
 ASM_RCC_PLL1CFGR_PLL1M_3:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR 	R2, =RCC_PLL1CFGR_OFFSET
@@ -693,6 +893,11 @@ PLL1N between 4 and 512
 –
 input frequency Fref1_ck between 4 and 16 MHz
 */
+    @ ----------------------------------------------------
+    @ ASM_RCC_PLL1DIVR_PLL1N_4
+    @ ----------------------------------------------------
+    .type ASM_RCC_PLL1DIVR_PLL1N_4, %function
+    .thumb_func
 ASM_RCC_PLL1DIVR_PLL1N_4:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR 	R2, =RCC_PLL1DIVR_OFFSET
@@ -710,6 +915,11 @@ ASM_RCC_PLL1DIVR_PLL1N_4:
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_PLL1DIVR_PLL1N_5
+    @ ----------------------------------------------------
+    .type ASM_RCC_PLL1DIVR_PLL1N_5, %function
+    .thumb_func
 ASM_RCC_PLL1DIVR_PLL1N_5:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR 	R2, =RCC_PLL1DIVR_OFFSET
@@ -727,6 +937,11 @@ ASM_RCC_PLL1DIVR_PLL1N_5:
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_PLL1DIVR_PLL1N_6
+    @ ----------------------------------------------------
+    .type ASM_RCC_PLL1DIVR_PLL1N_6, %function
+    .thumb_func
 ASM_RCC_PLL1DIVR_PLL1N_6:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR 	R2, =RCC_PLL1DIVR_OFFSET
@@ -758,6 +973,11 @@ when exiting Stop mode or in case of HSE oscillator failure, depending on STOPWU
 10: HSE selected as system clock
 11: PLL pll1_r_ck selected as system clock
 */
+    @ ----------------------------------------------------
+    @ ASM_RCC_CFGR1_SW_PLL1
+    @ ----------------------------------------------------
+    .type ASM_RCC_CFGR1_SW_PLL1, %function
+    .thumb_func
 ASM_RCC_CFGR1_SW_PLL1:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R2, =RCC_CFGR1_OFFSET
@@ -768,6 +988,11 @@ ASM_RCC_CFGR1_SW_PLL1:
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_CFGR1_SWS
+    @ ----------------------------------------------------
+    .type ASM_RCC_CFGR1_SWS, %function
+    .thumb_func
 ASM_RCC_CFGR1_SWS:
 	LDR		R1, =RCC_BASE_ADDR
 	LDR		R2, =RCC_CFGR1_OFFSET
@@ -775,6 +1000,11 @@ ASM_RCC_CFGR1_SWS:
 	LDR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ RUN_COUNTER
+    @ ----------------------------------------------------
+    .type RUN_COUNTER, %function
+    .thumb_func
 RUN_COUNTER:
 	MOVS r6, #0
 	iloop:
@@ -782,11 +1012,21 @@ RUN_COUNTER:
 		b iloop
 	bx lr
 
+    @ ----------------------------------------------------
+    @ RESET_COUNTER
+    @ ----------------------------------------------------
+    .type RESET_COUNTER, %function
+    .thumb_func
 RESET_COUNTER:
 	MOVS R0, R6
 	MOVS R6, #0
 	bx lr
 
+    @ ----------------------------------------------------
+    @ ASM_RCC_ICSCR1_MSIKRANGE_SET
+    @ ----------------------------------------------------
+    .type ASM_RCC_ICSCR1_MSIKRANGE_SET, %function
+    .thumb_func
 ASM_RCC_ICSCR1_MSIKRANGE_SET:
 	LDR R1, =RCC_BASE_ADDR
 	LDR R2, =RCC_ICSCR1_OFFSET
@@ -802,9 +1042,11 @@ ASM_RCC_ICSCR1_MSIKRANGE_SET:
 	STR R3, [R1]
 	BX LR
 
-
-
-
+    @ ----------------------------------------------------
+    @ ASM_RCC_ICSCR1_MSIRGSEL_1
+    @ ----------------------------------------------------
+    .type ASM_RCC_ICSCR1_MSIRGSEL_1, %function
+    .thumb_func
 ASM_RCC_ICSCR1_MSIRGSEL_1:
 	LDR R1, =RCC_BASE_ADDR
 	LDR R2, = RCC_ICSCR1_OFFSET

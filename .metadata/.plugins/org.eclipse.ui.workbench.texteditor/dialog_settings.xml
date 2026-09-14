@@ -35,4 +35,12 @@
 		<item key="DIALOG_HEIGHT" value="437"/>
 		<item key="DIALOG_FONT_NAME" value="1|Ubuntu|11.0|0|GTK|1|"/>
 	</section>
+	<section name="java.lang.Class">
+		<list key="findhistory">
+			<item value="GPIOB_MODER_RESET_Output"/>
+			<item value="GPIOB_MODER_RESET_OutputGPIOB_MODER_RESET_Output"/>
+			<item value="type"/>
+			<item value="GPIOB_OSPEEDR_RESET_SET_LOW"/>
+		</list>
+	</section>
 </section>

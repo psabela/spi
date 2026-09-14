@@ -10,7 +10,7 @@
 .fpu softvfp
 .thumb
 
-.text
+.section .text
 # PORT A
 .global GPIOA_IDR_RDY_GET
 .global GPIOA_MODER_RDY_Input
@@ -114,6 +114,11 @@
 
 // GPIO B PORT
 
+    @ ----------------------------------------------------
+    @ GPIOB_MODER_DIO_Input
+    @ ----------------------------------------------------
+    .type GPIOB_MODER_DIO_Input, %function
+    .thumb_func
 GPIOB_MODER_DIO_Input:
 	//PB8  LORA DIO
 	//00: Input mode
@@ -131,6 +136,11 @@ GPIOB_MODER_DIO_Input:
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOB_PUPDR_DIO_DOWN
+    @ ----------------------------------------------------
+    .type GPIOB_PUPDR_DIO_DOWN, %function
+    .thumb_func
 GPIOB_PUPDR_DIO_DOWN:
 	//PB8  LORA DIO
 	LDR		R1, =GPIOB_BASE_ADDR
@@ -143,6 +153,11 @@ GPIOB_PUPDR_DIO_DOWN:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOB_PUPDR_DIO_UP
+    @ ----------------------------------------------------
+    .type GPIOB_PUPDR_DIO_UP, %function
+    .thumb_func
 GPIOB_PUPDR_DIO_UP:
 	LDR		R1, =GPIOB_BASE_ADDR
 	LDR		R2, =GPIOx_PUPDR_OFFSET
@@ -154,6 +169,8 @@ GPIOB_PUPDR_DIO_UP:
 	STR		R0,	[R1]
 	BX LR
 
+    .type GPIOB_IDR_DIO_GET, %function
+    .thumb_func
 GPIOB_IDR_DIO_GET:
 	LDR R1, =GPIOB_BASE_ADDR
 	LDR R2, =GPIOx_IDR_OFFSET
@@ -161,6 +178,8 @@ GPIOB_IDR_DIO_GET:
 	LDR		R0, [R1]
 	BX LR
 
+    .type GPIOB_MODER_RESET_Output, %function
+    .thumb_func
 GPIOB_MODER_RESET_Output:
 	//PB3  LORA RESET
 	//00: Input mode
@@ -181,7 +200,11 @@ GPIOB_MODER_RESET_Output:
 	STR		R0, [R1]
 	BX LR
 
-
+    @ ----------------------------------------------------
+    @ GPIOB_PUPDR_RESET_NPUPD
+    @ ----------------------------------------------------
+    .type GPIOB_PUPDR_RESET_NPUPD, %function
+    .thumb_func
 GPIOB_PUPDR_RESET_NPUPD:
 	//00: No pull-up, pull-down
 	//01: Pull-up
@@ -198,6 +221,11 @@ GPIOB_PUPDR_RESET_NPUPD:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOB_PUPDR_RESET_UP
+    @ ----------------------------------------------------
+    .type GPIOB_PUPDR_RESET_UP, %function
+    .thumb_func
 GPIOB_PUPDR_RESET_UP:
 	//00: No pull-up, pull-down
 	//01: Pull-up
@@ -217,6 +245,11 @@ GPIOB_PUPDR_RESET_UP:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOB_PUPDR_RESET_DOWN
+    @ ----------------------------------------------------
+    .type GPIOB_PUPDR_RESET_DOWN, %function
+    .thumb_func
 GPIOB_PUPDR_RESET_DOWN:
 	//00: No pull-up, pull-down
 	//01: Pull-up
@@ -232,8 +265,12 @@ GPIOB_PUPDR_RESET_DOWN:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ PB3  LORA SET
+    @ ----------------------------------------------------
+    .type GPIOB_BSRR_RESET_SET, %function
+    .thumb_func
 GPIOB_BSRR_RESET_SET:
-	//PB3  LORA RESET
 	LDR		R1, =GPIOB_BASE_ADDR
 	LDR		R2, =GPIOx_BSRR_OFFSET
 	ADDS	R1,	R2
@@ -244,8 +281,12 @@ GPIOB_BSRR_RESET_SET:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ PB3  LORA RESET
+    @ ----------------------------------------------------
+    .type GPIOB_BSRR_RESET_RESET, %function
+    .thumb_func
 GPIOB_BSRR_RESET_RESET:
-	//PB3  LORA RESET
 	LDR		R1, =GPIOB_BASE_ADDR
 	LDR		R2, =GPIOx_BSRR_OFFSET
 	ADDS	R1,	R2
@@ -256,6 +297,11 @@ GPIOB_BSRR_RESET_RESET:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOB_BSRR_RESET_SETRESET
+    @ ----------------------------------------------------
+    .type GPIOB_BSRR_RESET_SETRESET, %function
+    .thumb_func
 GPIOB_BSRR_RESET_SETRESET:
 	//PB3  LORA RESET
 	LDR		R1, =GPIOB_BASE_ADDR
@@ -285,6 +331,12 @@ GPIOB_BSRR_RESET_SETRESET:
 	STR		R0,	[R1]
 	BX LR
 
+
+    @ ----------------------------------------------------
+    @ GPIOB_OSPEEDR_RESET_SET_LOW
+    @ ----------------------------------------------------
+    .type GPIOB_OSPEEDR_RESET_SET_LOW, %function
+    .thumb_func
 GPIOB_OSPEEDR_RESET_SET_LOW:
 	///PB3  LORA RESET
 	LDR		R1, =GPIOB_BASE_ADDR
@@ -303,6 +355,12 @@ GPIOB_OSPEEDR_RESET_SET_LOW:
 
 // GPIO A PORT
 
+
+    @ ----------------------------------------------------
+    @ GPIOA_MODER_Set_Alt_Function
+    @ ----------------------------------------------------
+    .type GPIOA_MODER_Set_Alt_Function, %function
+    .thumb_func
 GPIOA_MODER_Set_Alt_Function:
 	//PA1	SPI1_SCK
 	//PA11	SPI1_MISO
@@ -336,6 +394,11 @@ GPIOA_MODER_Set_Alt_Function:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOA_AFRL_Set_Alt_Function
+    @ ----------------------------------------------------
+    .type GPIOA_AFRL_Set_Alt_Function, %function
+    .thumb_func
 GPIOA_AFRL_Set_Alt_Function:
 	//0101: AF5
 	//PA1	SPI1_SCK
@@ -354,7 +417,11 @@ GPIOA_AFRL_Set_Alt_Function:
 	STR		R0,	[R1]
 	BX LR
 
-
+    @ ----------------------------------------------------
+    @ GPIOA_AFRH_Set_Alt_Function
+    @ ----------------------------------------------------
+    .type GPIOA_AFRH_Set_Alt_Function, %function
+    .thumb_func
 GPIOA_AFRH_Set_Alt_Function:
 	//0101: AF5
 	//PA11	SPI1_MISO
@@ -382,6 +449,11 @@ GPIOA_AFRH_Set_Alt_Function:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOA_OSPEEDR_Set
+    @ ----------------------------------------------------
+    .type GPIOA_OSPEEDR_Set, %function
+    .thumb_func
 GPIOA_OSPEEDR_Set:
 	//PA1	SPI1_SCK
 	//PA11	SPI1_MISO
@@ -407,6 +479,11 @@ GPIOA_OSPEEDR_Set:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOA_PUPDR_MOSI_DOWN
+    @ ----------------------------------------------------
+    .type GPIOA_PUPDR_MOSI_DOWN, %function
+    .thumb_func
 GPIOA_PUPDR_MOSI_DOWN:
 	//00: No pull-up, pull-down
 	//01: Pull-up
@@ -422,6 +499,11 @@ GPIOA_PUPDR_MOSI_DOWN:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOA_PUPDR_MISO_UP
+    @ ----------------------------------------------------
+    .type GPIOA_PUPDR_MISO_UP, %function
+    .thumb_func
 GPIOA_PUPDR_MISO_UP:
 	//00: No pull-up, pull-down
 	//01: Pull-up
@@ -437,6 +519,11 @@ GPIOA_PUPDR_MISO_UP:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOA_MODER_MCO_Alt_Function
+    @ ----------------------------------------------------
+    .type GPIOA_MODER_MCO_Alt_Function, %function
+    .thumb_func
 GPIOA_MODER_MCO_Alt_Function:
 	//PA8	MCO clock interrupt
 	//MODER bits = 10: Alternate function mode
@@ -454,6 +541,11 @@ GPIOA_MODER_MCO_Alt_Function:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOA_AFRH_MCO_Alt_Function
+    @ ----------------------------------------------------
+    .type GPIOA_AFRH_MCO_Alt_Function, %function
+    .thumb_func
 GPIOA_AFRH_MCO_Alt_Function:
 	//0000: AF0
 	//PA8	MCO
@@ -468,6 +560,11 @@ GPIOA_AFRH_MCO_Alt_Function:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOA_OSPEEDR_MCO_Set
+    @ ----------------------------------------------------
+    .type GPIOA_OSPEEDR_MCO_Set, %function
+    .thumb_func
 GPIOA_OSPEEDR_MCO_Set:
 	//PA8	MCO clock interrupt
 	LDR		R1, =GPIOA_BASE_ADDR
@@ -481,7 +578,11 @@ GPIOA_OSPEEDR_MCO_Set:
 	STR		R0,	[R1]
 	BX LR
 
-
+    @ ----------------------------------------------------
+    @ GPIOA_MODER_NSS_Output
+    @ ----------------------------------------------------
+    .type GPIOA_MODER_NSS_Output, %function
+    .thumb_func
 GPIOA_MODER_NSS_Output:
 	//PA15	SPI1_NSS
 	LDR		R1, =GPIOA_BASE_ADDR
@@ -498,6 +599,11 @@ GPIOA_MODER_NSS_Output:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOA_OSPEEDR_NSS_Set
+    @ ----------------------------------------------------
+    .type GPIOA_OSPEEDR_NSS_Set, %function
+    .thumb_func
 GPIOA_OSPEEDR_NSS_Set:
 	//PA15	SPI1_NSS
 	LDR		R1, =GPIOA_BASE_ADDR
@@ -511,6 +617,11 @@ GPIOA_OSPEEDR_NSS_Set:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOA_BSRR_NSS_SET
+    @ ----------------------------------------------------
+    .type GPIOA_BSRR_NSS_SET, %function
+    .thumb_func
 GPIOA_BSRR_NSS_SET:
 	//PA15	SPI1_NSS
 	LDR		R1, =GPIOA_BASE_ADDR
@@ -523,6 +634,11 @@ GPIOA_BSRR_NSS_SET:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOA_BSRR_NSS_RESET
+    @ ----------------------------------------------------
+    .type GPIOA_BSRR_NSS_RESET, %function
+    .thumb_func
 GPIOA_BSRR_NSS_RESET:
 	//PA15	SPI1_NSS
 	LDR		R1, =GPIOA_BASE_ADDR
@@ -535,7 +651,11 @@ GPIOA_BSRR_NSS_RESET:
 	STR		R0,	[R1]
 	BX LR
 
-
+    @ ----------------------------------------------------
+    @ GPIOA_MODER_RDY_Input
+    @ ----------------------------------------------------
+    .type GPIOA_MODER_RDY_Input, %function
+    .thumb_func
 GPIOA_MODER_RDY_Input:
 	//PA2	SPI1_RDY
 	//00: Input mode
@@ -550,6 +670,11 @@ GPIOA_MODER_RDY_Input:
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOA_IDR_RDY_GET
+    @ ----------------------------------------------------
+    .type GPIOA_IDR_RDY_GET, %function
+    .thumb_func
 GPIOA_IDR_RDY_GET:
 	//PA2	SPI1_RDY
 	LDR R1, =GPIOA_BASE_ADDR
@@ -569,6 +694,11 @@ GPIOA_IDR_RDY_GET:
 #PE14-SPI1_MISO	PE14
 #PE15-SPI1_MOSI	PE15
 
+    @ ----------------------------------------------------
+    @ GPIOE_MODER_Set_Alt_Function
+    @ ----------------------------------------------------
+    .type GPIOE_MODER_Set_Alt_Function, %function
+    .thumb_func
 GPIOE_MODER_Set_Alt_Function:
 	//PE11 PE12, PE13, PE14, PE15
 	//MODER bits = 10: Alternate function mode
@@ -608,7 +738,11 @@ GPIOE_MODER_Set_Alt_Function:
 	BX LR
 
 
-
+    @ ----------------------------------------------------
+    @ GPIOE_MODER_NSS_Output
+    @ ----------------------------------------------------
+    .type GPIOE_MODER_NSS_Output, %function
+    .thumb_func
 GPIOE_MODER_NSS_Output:
 	//PE12
 	LDR		R1, =GPIOE_BASE_ADDR
@@ -633,7 +767,11 @@ GPIOE_MODER_NSS_Output:
 #PE13-SPI1_SCK
 #PE14-SPI1_MISO
 #PE15-SPI1_MOSI
-
+    @ ----------------------------------------------------
+    @ GPIOE_AFRH_Set_Alt_Function
+    @ ----------------------------------------------------
+    .type GPIOE_AFRH_Set_Alt_Function, %function
+    .thumb_func
 GPIOE_AFRH_Set_Alt_Function:
 	//0101: AF5 16,20,24,28
 	LDR		R1, =GPIOE_BASE_ADDR
@@ -675,6 +813,11 @@ GPIOE_AFRH_Set_Alt_Function:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOE_OSPEEDR_Set
+    @ ----------------------------------------------------
+    .type GPIOE_OSPEEDR_Set, %function
+    .thumb_func
 GPIOE_OSPEEDR_Set:
 	LDR		R1, =GPIOE_BASE_ADDR
 	LDR		R2, =GPIOx_OSPEEDR_OFFSET
@@ -693,7 +836,11 @@ GPIOE_OSPEEDR_Set:
 	BX LR
 
 
-
+    @ ----------------------------------------------------
+    @ GPIOE_PUPDR_NSS_DOWN
+    @ ----------------------------------------------------
+    .type GPIOE_PUPDR_NSS_DOWN, %function
+    .thumb_func
 GPIOE_PUPDR_NSS_DOWN:
 	LDR		R1, =GPIOE_BASE_ADDR
 	LDR		R2, =GPIOx_PUPDR_OFFSET
@@ -705,6 +852,11 @@ GPIOE_PUPDR_NSS_DOWN:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOE_PUPDR_NSS_UP
+    @ ----------------------------------------------------
+    .type GPIOE_PUPDR_NSS_UP, %function
+    .thumb_func
 GPIOE_PUPDR_NSS_UP:
 	LDR		R1, =GPIOE_BASE_ADDR
 	LDR		R2, =GPIOx_PUPDR_OFFSET
@@ -716,6 +868,11 @@ GPIOE_PUPDR_NSS_UP:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOE_BSRR_NSS_SET
+    @ ----------------------------------------------------
+    .type GPIOE_BSRR_NSS_SET, %function
+    .thumb_func
 GPIOE_BSRR_NSS_SET:
 	LDR		R1, =GPIOE_BASE_ADDR
 	LDR		R2, =GPIOx_BSRR_OFFSET
@@ -727,6 +884,11 @@ GPIOE_BSRR_NSS_SET:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOE_BSRR_NSS_RESET
+    @ ----------------------------------------------------
+    .type GPIOE_BSRR_NSS_RESET, %function
+    .thumb_func
 GPIOE_BSRR_NSS_RESET:
 	LDR		R1, =GPIOE_BASE_ADDR
 	LDR		R2, =GPIOx_BSRR_OFFSET
@@ -738,6 +900,11 @@ GPIOE_BSRR_NSS_RESET:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOE_PUPDR_MOSI_UP
+    @ ----------------------------------------------------
+    .type GPIOE_PUPDR_MOSI_UP, %function
+    .thumb_func
 GPIOE_PUPDR_MOSI_UP:
 	LDR		R1, =GPIOE_BASE_ADDR
 	LDR		R2, =GPIOx_PUPDR_OFFSET
@@ -752,6 +919,11 @@ GPIOE_PUPDR_MOSI_UP:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOE_OSPEEDR_NSS_HIGH
+    @ ----------------------------------------------------
+    .type GPIOE_OSPEEDR_NSS_HIGH, %function
+    .thumb_func
 GPIOE_OSPEEDR_NSS_HIGH:
 //10: High speed
 	LDR		R1, =GPIOE_BASE_ADDR
@@ -769,7 +941,11 @@ GPIOE_OSPEEDR_NSS_HIGH:
 	BX LR
 
 
-
+    @ ----------------------------------------------------
+    @ GPIOE_PUPDR_SCK_DOWN
+    @ ----------------------------------------------------
+    .type GPIOE_PUPDR_SCK_DOWN, %function
+    .thumb_func
 GPIOE_PUPDR_SCK_DOWN:
 	LDR		R1, =GPIOE_BASE_ADDR
 	LDR		R2, =GPIOx_PUPDR_OFFSET
@@ -781,6 +957,11 @@ GPIOE_PUPDR_SCK_DOWN:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOE_PUPDR_SCK_UP
+    @ ----------------------------------------------------
+    .type GPIOE_PUPDR_SCK_UP, %function
+    .thumb_func
 GPIOE_PUPDR_SCK_UP:
 	LDR		R1, =GPIOE_BASE_ADDR
 	LDR		R2, =GPIOx_PUPDR_OFFSET
@@ -792,6 +973,11 @@ GPIOE_PUPDR_SCK_UP:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOE_PUPDR_MISO_DOWN
+    @ ----------------------------------------------------
+    .type GPIOE_PUPDR_MISO_DOWN, %function
+    .thumb_func
 GPIOE_PUPDR_MISO_DOWN:
 	LDR		R1, =GPIOE_BASE_ADDR
 	LDR		R2, =GPIOx_PUPDR_OFFSET
@@ -803,6 +989,11 @@ GPIOE_PUPDR_MISO_DOWN:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOE_PUPDR_MISO_UP
+    @ ----------------------------------------------------
+    .type GPIOE_PUPDR_MISO_UP, %function
+    .thumb_func
 GPIOE_PUPDR_MISO_UP:
 	LDR		R1, =GPIOE_BASE_ADDR
 	LDR		R2, =GPIOx_PUPDR_OFFSET
@@ -814,6 +1005,11 @@ GPIOE_PUPDR_MISO_UP:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOE_PUPDR_MOSI_DOWN
+    @ ----------------------------------------------------
+    .type GPIOE_PUPDR_MOSI_DOWN, %function
+    .thumb_func
 GPIOE_PUPDR_MOSI_DOWN:
 	LDR		R1, =GPIOE_BASE_ADDR
 	LDR		R2, =GPIOx_PUPDR_OFFSET
@@ -826,7 +1022,11 @@ GPIOE_PUPDR_MOSI_DOWN:
 	BX LR
 
 
-
+    @ ----------------------------------------------------
+    @ GPIOC_PUPDR_RDY_UP
+    @ ----------------------------------------------------
+    .type GPIOC_PUPDR_RDY_UP, %function
+    .thumb_func
 GPIOC_PUPDR_RDY_UP:
 	LDR		R1, =GPIOC_BASE_ADDR
 	LDR		R2, =GPIOx_PUPDR_OFFSET
@@ -838,6 +1038,11 @@ GPIOC_PUPDR_RDY_UP:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOC_PUPDR_RDY_DOWN
+    @ ----------------------------------------------------
+    .type GPIOC_PUPDR_RDY_DOWN, %function
+    .thumb_func
 GPIOC_PUPDR_RDY_DOWN:
 	LDR		R1, =GPIOC_BASE_ADDR
 	LDR		R2, =GPIOx_PUPDR_OFFSET
@@ -849,6 +1054,11 @@ GPIOC_PUPDR_RDY_DOWN:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOC_IDR_RDY_GET
+    @ ----------------------------------------------------
+    .type GPIOC_IDR_RDY_GET, %function
+    .thumb_func
 GPIOC_IDR_RDY_GET:
 	LDR R1, =GPIOC_BASE_ADDR
 	LDR R2, =GPIOx_IDR_OFFSET
@@ -856,6 +1066,11 @@ GPIOC_IDR_RDY_GET:
 	LDR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOC_LCKR_PIN1_LCKK_1
+    @ ----------------------------------------------------
+    .type GPIOC_LCKR_PIN1_LCKK_1, %function
+    .thumb_func
 GPIOC_LCKR_PIN1_LCKK_1:
 	LDR		R1, =GPIOC_BASE_ADDR
 	LDR		R2, =GPIOx_LCKR_OFFSET
@@ -869,6 +1084,11 @@ GPIOC_LCKR_PIN1_LCKK_1:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOC_LCKR_PIN1_LCKK_0
+    @ ----------------------------------------------------
+    .type GPIOC_LCKR_PIN1_LCKK_0, %function
+    .thumb_func
 GPIOC_LCKR_PIN1_LCKK_0:
 	LDR		R1, =GPIOC_BASE_ADDR
 	LDR		R2, =GPIOx_LCKR_OFFSET
@@ -884,15 +1104,6 @@ GPIOC_LCKR_PIN1_LCKK_0:
 	BX LR
 
 
-
-
-
-
-
-
-
-
-
 /************************************************
 	Rail: CN14
 	Rail Pin: D4
@@ -906,7 +1117,11 @@ GPIOC_LCKR_PIN1_LCKK_0:
 ***********************************************/
 
 
-
+    @ ----------------------------------------------------
+    @ GPIOE_MODER_BUSY_INPUT
+    @ ----------------------------------------------------
+    .type GPIOE_MODER_BUSY_INPUT, %function
+    .thumb_func
 GPIOE_MODER_BUSY_INPUT: //PE7
 	LDR 	R1, =GPIOE_BASE_ADDR
 	LDR 	R2, =GPIOx_MODER_OFFSET
@@ -919,7 +1134,11 @@ GPIOE_MODER_BUSY_INPUT: //PE7
 	STR		R0, [R1]
 	BX LR
 
-
+    @ ----------------------------------------------------
+    @ GPIOE_PURDR_BUSY_NPUPD
+    @ ----------------------------------------------------
+    .type GPIOE_PURDR_BUSY_NPUPD, %function
+    .thumb_func
 GPIOE_PURDR_BUSY_NPUPD: //PE7
 	LDR R1, =GPIOE_BASE_ADDR
 	LDR R2, =GPIOx_PUPDR_OFFSET
@@ -932,6 +1151,11 @@ GPIOE_PURDR_BUSY_NPUPD: //PE7
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOE_PURDR_BUSY_UP
+    @ ----------------------------------------------------
+    .type GPIOE_PURDR_BUSY_UP, %function
+    .thumb_func
 GPIOE_PURDR_BUSY_UP: //PE7
 	LDR R1, =GPIOE_BASE_ADDR
 	LDR R2, =GPIOx_PUPDR_OFFSET
@@ -947,6 +1171,11 @@ GPIOE_PURDR_BUSY_UP: //PE7
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOE_IDR_BUSY_GET
+    @ ----------------------------------------------------
+    .type GPIOE_IDR_BUSY_GET, %function
+    .thumb_func
 GPIOE_IDR_BUSY_GET: //PE7
 	LDR R1, =GPIOE_BASE_ADDR
 	LDR R2, =GPIOx_IDR_OFFSET
@@ -954,6 +1183,11 @@ GPIOE_IDR_BUSY_GET: //PE7
 	LDR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOD_MODER_DIO_INPUT
+    @ ----------------------------------------------------
+    .type GPIOD_MODER_DIO_INPUT, %function
+    .thumb_func
 GPIOD_MODER_DIO_INPUT: //PD15
 	LDR R1, =GPIOD_BASE_ADDR
 	LDR R2, =GPIOx_MODER_OFFSET
@@ -966,6 +1200,11 @@ GPIOD_MODER_DIO_INPUT: //PD15
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOD_PUPDR_DIO_NPUPD
+    @ ----------------------------------------------------
+    .type GPIOD_PUPDR_DIO_NPUPD, %function
+    .thumb_func
 GPIOD_PUPDR_DIO_NPUPD: //PD15
 	LDR R1, =GPIOD_BASE_ADDR
 	LDR R2, =GPIOx_PUPDR_OFFSET
@@ -978,6 +1217,11 @@ GPIOD_PUPDR_DIO_NPUPD: //PD15
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOD_PUPDR_DIO_DOWN
+    @ ----------------------------------------------------
+    .type GPIOD_PUPDR_DIO_DOWN, %function
+    .thumb_func
 GPIOD_PUPDR_DIO_DOWN: //PD15
 	LDR		R1, =GPIOD_BASE_ADDR
 	LDR		R2, =GPIOx_PUPDR_OFFSET
@@ -989,6 +1233,11 @@ GPIOD_PUPDR_DIO_DOWN: //PD15
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOD_PUPDR_DIO_UP
+    @ ----------------------------------------------------
+    .type GPIOD_PUPDR_DIO_UP, %function
+    .thumb_func
 GPIOD_PUPDR_DIO_UP:
 	LDR		R1, =GPIOD_BASE_ADDR
 	LDR		R2, =GPIOx_PUPDR_OFFSET
@@ -1000,6 +1249,11 @@ GPIOD_PUPDR_DIO_UP:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOD_IDR_DIO_GET
+    @ ----------------------------------------------------
+    .type GPIOD_IDR_DIO_GET, %function
+    .thumb_func
 GPIOD_IDR_DIO_GET: //PD15
 	LDR R1, =GPIOD_BASE_ADDR
 	LDR R2, =GPIOx_IDR_OFFSET
@@ -1007,7 +1261,11 @@ GPIOD_IDR_DIO_GET: //PD15
 	LDR		R0, [R1]
 	BX LR
 
-
+    @ ----------------------------------------------------
+    @ GPIOF_MODER_RESET_Output
+    @ ----------------------------------------------------
+    .type GPIOF_MODER_RESET_Output, %function
+    .thumb_func
 GPIOF_MODER_RESET_Output:
 	//PF13
 	LDR		R1, =GPIOF_BASE_ADDR
@@ -1024,6 +1282,11 @@ GPIOF_MODER_RESET_Output:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOF_PUPDR_RESET_NPUPD
+    @ ----------------------------------------------------
+    .type GPIOF_PUPDR_RESET_NPUPD, %function
+    .thumb_func
 GPIOF_PUPDR_RESET_NPUPD:
 	//PF13
 	LDR R1, =GPIOF_BASE_ADDR
@@ -1037,7 +1300,11 @@ GPIOF_PUPDR_RESET_NPUPD:
 	STR		R0, [R1]
 	BX LR
 
-
+    @ ----------------------------------------------------
+    @ GPIOF_PUPDR_RESET_UP
+    @ ----------------------------------------------------
+    .type GPIOF_PUPDR_RESET_UP, %function
+    .thumb_func
 GPIOF_PUPDR_RESET_UP:
 	//PF13
 	LDR R1, =GPIOF_BASE_ADDR
@@ -1054,7 +1321,11 @@ GPIOF_PUPDR_RESET_UP:
 	STR		R0, [R1]
 	BX LR
 
-
+    @ ----------------------------------------------------
+    @ GPIOF_PUPDR_RESET_DOWN
+    @ ----------------------------------------------------
+    .type GPIOF_PUPDR_RESET_DOWN, %function
+    .thumb_func
 GPIOF_PUPDR_RESET_DOWN:
 	//PF13
 	LDR R1, =GPIOF_BASE_ADDR
@@ -1071,6 +1342,11 @@ GPIOF_PUPDR_RESET_DOWN:
 	STR		R0, [R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOF_BSRR_RESET_SET
+    @ ----------------------------------------------------
+    .type GPIOF_BSRR_RESET_SET, %function
+    .thumb_func
 GPIOF_BSRR_RESET_SET:
 	//PF13
 	LDR		R1, =GPIOF_BASE_ADDR
@@ -1083,6 +1359,11 @@ GPIOF_BSRR_RESET_SET:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOF_BSRR_RESET_RESET
+    @ ----------------------------------------------------
+    .type GPIOF_BSRR_RESET_RESET, %function
+    .thumb_func
 GPIOF_BSRR_RESET_RESET:
 	//PF13
 	LDR		R1, =GPIOF_BASE_ADDR
@@ -1095,6 +1376,11 @@ GPIOF_BSRR_RESET_RESET:
 	STR		R0,	[R1]
 	BX LR
 
+    @ ----------------------------------------------------
+    @ GPIOF_BSRR_RESET_SETRESET
+    @ ----------------------------------------------------
+    .type GPIOF_BSRR_RESET_SETRESET, %function
+    .thumb_func
 GPIOF_BSRR_RESET_SETRESET:
 	LDR		R1, =GPIOF_BSRR_ADDR
 	LDR		R0, [R1]
@@ -1120,7 +1406,11 @@ GPIOF_BSRR_RESET_SETRESET:
 	BX LR
 
 
-
+    @ ----------------------------------------------------
+    @ GPIOF_OSPEEDR_SET_LOW
+    @ ----------------------------------------------------
+    .type GPIOF_OSPEEDR_SET_LOW, %function
+    .thumb_func
 GPIOF_OSPEEDR_SET_LOW:
 	//PF13
 	LDR		R1, =GPIOF_BASE_ADDR
