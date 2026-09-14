@@ -23,6 +23,9 @@ void GPIO_Lora_Init();
 uint32_t Get_SYSCLK_Freq(void);
 void SubmitCommand(int);
 
+void lora_command(uint8_t *, uint8_t);
+void delay_us(uint32_t);
+
 
 int _write(int file, char *ptr, int len){
 	for(int i = 0; i < len; i++){

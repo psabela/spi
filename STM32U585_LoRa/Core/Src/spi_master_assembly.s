@@ -9,7 +9,7 @@
 .fpu softvfp
 .thumb
 
-.text
+.section .text
 
 .global ASM_SPI_CFG2_MASTER_Set
 .global ASM_SPI_CFG2_COMM_Full_Duplex
@@ -76,6 +76,8 @@
 
 //SPI_CR2
 
+    .type ASM_SPI_IER_EOTIE_Set, %function
+    .thumb_func
 ASM_SPI_IER_EOTIE_Set:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_IER_OFFSET
@@ -87,6 +89,8 @@ ASM_SPI_IER_EOTIE_Set:
 	STR		R0, [R1]
 	BX LR
 
+    .type ASM_SPI_IER_TXPIE_Set, %function
+    .thumb_func
 ASM_SPI_IER_TXPIE_Set:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_IER_OFFSET
@@ -103,6 +107,8 @@ Bit 0 RXPIE: RXP interrupt enable
 0: RXP interrupt disabled
 1: RXP interrupt enabled
 */
+    .type ASM_SPI_IER_RXPIE_Set, %function
+    .thumb_func
 ASM_SPI_IER_RXPIE_Set:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_IER_OFFSET
@@ -113,8 +119,8 @@ ASM_SPI_IER_RXPIE_Set:
 	STR		R0, [R1]
 	BX LR
 
-
-
+    .type ASM_SPI_IER_TXTFIE_Set, %function
+    .thumb_func
 ASM_SPI_IER_TXTFIE_Set:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_IER_OFFSET
@@ -126,6 +132,8 @@ ASM_SPI_IER_TXTFIE_Set:
 	STR		R0, [R1]
 	BX LR
 
+    .type ASM_SPI_SR_Get, %function
+    .thumb_func
 ASM_SPI_SR_Get:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_SR_OFFSET
@@ -133,6 +141,8 @@ ASM_SPI_SR_Get:
 	LDR		R0, [R1]
 	BX LR
 
+    .type ASM_SPI_IFCR_EOTC_Clear, %function
+    .thumb_func
 ASM_SPI_IFCR_EOTC_Clear:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_IFCR_OFFSET
@@ -144,6 +154,8 @@ ASM_SPI_IFCR_EOTC_Clear:
 	STR		R0, [R1]
 	BX LR
 
+    .type ASM_SPI_IFCR_OVRC, %function
+    .thumb_func
 ASM_SPI_IFCR_OVRC:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_IFCR_OFFSET
@@ -155,6 +167,8 @@ ASM_SPI_IFCR_OVRC:
 	STR		R0, [R1]
 	BX LR
 
+    .type ASM_SPI_IFCR_TXTFC, %function
+    .thumb_func
 ASM_SPI_IFCR_TXTFC:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_IFCR_OFFSET
@@ -166,6 +180,8 @@ ASM_SPI_IFCR_TXTFC:
 	STR		R0, [R1]
 	BX LR
 
+    .type ASM_SPI_CR2_TSIZE, %function
+    .thumb_func
 ASM_SPI_CR2_TSIZE:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CR2_OFFSET
@@ -185,7 +201,8 @@ ASM_SPI_CR2_TSIZE:
 	STR		R2, [R1]
 	BX LR
 
-
+    .type ASM_SPI_CFG2_MASTER_Set, %function
+    .thumb_func
 ASM_SPI_CFG2_MASTER_Set:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CFG2_OFFSET
@@ -197,7 +214,8 @@ ASM_SPI_CFG2_MASTER_Set:
 	STR		R0, [R1]
 	BX LR
 
-
+    .type ASM_SPI_CFG2_COMM_Full_Duplex, %function
+    .thumb_func
 ASM_SPI_CFG2_COMM_Full_Duplex:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CFG2_OFFSET
@@ -210,6 +228,8 @@ ASM_SPI_CFG2_COMM_Full_Duplex:
 	STR		R0, [R1]
 	BX LR
 
+    .type ASM_SPI_CFG2_CPOL_0, %function
+    .thumb_func
 ASM_SPI_CFG2_CPOL_0:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CFG2_OFFSET
@@ -222,6 +242,8 @@ ASM_SPI_CFG2_CPOL_0:
 	STR		R0, [R1]
 	BX LR
 
+    .type ASM_SPI_CFG2_CPOL_1, %function
+    .thumb_func
 ASM_SPI_CFG2_CPOL_1:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CFG2_OFFSET
@@ -233,6 +255,8 @@ ASM_SPI_CFG2_CPOL_1:
 	STR		R0, [R1]
 	BX LR
 
+    .type ASM_SPI_CFG2_CPHA_0, %function
+    .thumb_func
 ASM_SPI_CFG2_CPHA_0:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CFG2_OFFSET
@@ -245,7 +269,10 @@ ASM_SPI_CFG2_CPHA_0:
 	STR		R0, [R1]
 	BX LR
 
+
 //Hardware SS management (SSM = 0)
+    .type ASM_SPI_CFG2_SSM_0, %function
+    .thumb_func
 ASM_SPI_CFG2_SSM_0:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CFG2_OFFSET
@@ -258,6 +285,8 @@ ASM_SPI_CFG2_SSM_0:
 	STR		R0, [R1]
 	BX LR
 
+    .type ASM_SPI_CFG2_SSM_1, %function
+    .thumb_func
 ASM_SPI_CFG2_SSM_1:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CFG2_OFFSET
@@ -270,6 +299,8 @@ ASM_SPI_CFG2_SSM_1:
 	BX LR
 
 //SS output enable (SSOE = 1):
+    .type ASM_SPI_CFG2_SSOE_1, %function
+    .thumb_func
 ASM_SPI_CFG2_SSOE_1:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CFG2_OFFSET
@@ -281,6 +312,8 @@ ASM_SPI_CFG2_SSOE_1:
 	STR		R0, [R1]
 	BX LR
 
+    .type ASM_SPI_CFG2_SSOE_0, %function
+    .thumb_func
 ASM_SPI_CFG2_SSOE_0:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CFG2_OFFSET
@@ -301,6 +334,8 @@ ASM_SPI_CFG2_SSOE_0:
 
 
 //SPI_CFG1 Bits 4:0 DSIZE[4:0]: number of bits in at single SPI data frame
+    .type ASM_SPI_CFG1_DSIZE_8, %function
+    .thumb_func
 ASM_SPI_CFG1_DSIZE_8:
 	BX LR
 
@@ -313,6 +348,8 @@ Defines number of data frames at single data packet. Size of the packet should n
 0010: 3-data
 0011: 4-data
 */
+    .type ASM_SPI_CFG1_FTHLV_2, %function
+    .thumb_func
 ASM_SPI_CFG1_FTHLV_2:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CFG1_OFFSET
@@ -328,6 +365,8 @@ ASM_SPI_CFG1_FTHLV_2:
 	STR		R0, [R1]
 	BX LR
 
+    .type ASM_SPI_CFG1_FTHLV, %function
+    .thumb_func
 ASM_SPI_CFG1_FTHLV:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CFG1_OFFSET
@@ -343,6 +382,8 @@ ASM_SPI_CFG1_FTHLV:
 	STR		R3, [R1]
 	BX LR
 
+    .type ASM_SPI_CFG1_FTHLV_1, %function
+    .thumb_func
 ASM_SPI_CFG1_FTHLV_1:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CFG1_OFFSET
@@ -361,6 +402,8 @@ ASM_SPI_CFG1_FTHLV_1:
 //Bit 30 SSOM: SS output management in Master mode
 //0: SS is kept at active level till data transfer is completed, it becomes inactive with EOT flag
 //1: SPI data frames are interleaved with SS non active pulses when MIDI[3:0]>1
+    .type ASM_SPI_CFG2_SSOM_1, %function
+    .thumb_func
 ASM_SPI_CFG2_SSOM_1:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CFG2_OFFSET
@@ -372,6 +415,8 @@ ASM_SPI_CFG2_SSOM_1:
 	STR		R0, [R1]
 	BX LR
 
+    .type ASM_SPI_CFG2_SSOM_0, %function
+    .thumb_func
 ASM_SPI_CFG2_SSOM_0:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CFG2_OFFSET
@@ -392,6 +437,8 @@ ASM_SPI_CFG2_SSOM_0:
 //0001: 1 clock cycle period delay
 //...
 //1111: 15 clock cycle periods delay
+    .type ASM_SPI_CFG2_MIDI_Set, %function
+    .thumb_func
 ASM_SPI_CFG2_MIDI_Set:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CFG2_OFFSET
@@ -415,6 +462,8 @@ ASM_SPI_CFG2_MIDI_Set:
 //0001: 1 clock cycle period delay added
 //...
 //1111: 15 clock cycle periods delay added
+    .type ASM_SPI_CFG2_MSSI_Set, %function
+    .thumb_func
 ASM_SPI_CFG2_MSSI_Set:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CFG2_OFFSET
@@ -440,7 +489,8 @@ ASM_SPI_CFG2_MSSI_Set:
 //110: SPI master clock/128
 //111: SPI master clock/256
 
-
+    .type ASM_SPI_CFG1_MBR_4, %function
+    .thumb_func
 ASM_SPI_CFG1_MBR_4:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CFG1_OFFSET
@@ -456,6 +506,8 @@ ASM_SPI_CFG1_MBR_4:
 	STR		R0, [R1]
 	BX LR
 
+    .type ASM_SPI_CFG1_MBR_256, %function
+    .thumb_func
 ASM_SPI_CFG1_MBR_256:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CFG1_OFFSET
@@ -467,6 +519,8 @@ ASM_SPI_CFG1_MBR_256:
 	STR		R0, [R1]
 	BX LR
 
+    .type ASM_SPI_CFG1_MBR_64, %function
+    .thumb_func
 ASM_SPI_CFG1_MBR_64:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CFG1_OFFSET
@@ -481,6 +535,8 @@ ASM_SPI_CFG1_MBR_64:
 //Bit 31 BPASS: bypass of the prescaler at master baud rate clock generator
 //0: bypass is disabled
 //1: bypass is enabled
+    .type ASM_SPI_CFG1_BPASS_0, %function
+    .thumb_func
 ASM_SPI_CFG1_BPASS_0:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CFG1_OFFSET
@@ -493,6 +549,8 @@ ASM_SPI_CFG1_BPASS_0:
 	STR		R0, [R1]
 	BX LR
 
+    .type ASM_SPI_CFG1_BPASS_1, %function
+    .thumb_func
 ASM_SPI_CFG1_BPASS_1:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CFG1_OFFSET
@@ -504,6 +562,8 @@ ASM_SPI_CFG1_BPASS_1:
 	STR		R0, [R1]
 	BX LR
 
+    .type ASM_SPI_CFG2_LSBFRST_MSB, %function
+    .thumb_func
 ASM_SPI_CFG2_LSBFRST_MSB:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CFG2_OFFSET
@@ -516,6 +576,8 @@ ASM_SPI_CFG2_LSBFRST_MSB:
 	STR		R0, [R1]
 	BX LR
 
+    .type ASM_SPI_CFG2_LSBFRST_LSB, %function
+    .thumb_func
 ASM_SPI_CFG2_LSBFRST_LSB:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CFG2_OFFSET
@@ -531,6 +593,8 @@ ASM_SPI_CFG2_LSBFRST_LSB:
 //This bit is taken into account when SPE = 0 only
 //0: The peripheral takes no control of GPIOs while it is disabled
 //1: The peripheral keeps always control of all associated GPIOs
+    .type ASM_SPI_CFG2_AFCNTR_1, %function
+    .thumb_func
 ASM_SPI_CFG2_AFCNTR_1:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CFG2_OFFSET
@@ -546,6 +610,8 @@ ASM_SPI_CFG2_AFCNTR_1:
 //This bit is set by and cleared by software.
 //0: Serial peripheral disabled.
 //1: Serial peripheral enabled
+    .type ASM_SPI_CR1_SPE_1, %function
+    .thumb_func
 ASM_SPI_CR1_SPE_1:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CR1_OFFSET
@@ -557,6 +623,8 @@ ASM_SPI_CR1_SPE_1:
 	STR		R0, [R1]
 	BX LR
 
+    .type ASM_SPI_CR1_SPE_0, %function
+    .thumb_func
 ASM_SPI_CR1_SPE_0:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CR1_OFFSET
@@ -575,6 +643,8 @@ ASM_SPI_CR1_SPE_0:
 //request is accepted.
 //0: master transfer is at idle
 //1: master transfer is ongoing or temporary suspended by automatic suspend
+    .type ASM_SPI_CR1_CSTART_1, %function
+    .thumb_func
 ASM_SPI_CR1_CSTART_1:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CR1_OFFSET
@@ -589,6 +659,8 @@ ASM_SPI_CR1_CSTART_1:
 //Bit 12 SSI: internal SS signal input level
 //This bit has an effect only when the SSM bit is set. The value of this bit is forced onto the
 //peripheral SS input internally and the I/O value of the SS pin is ignored.
+    .type ASM_SPI_CR1_SSI_1, %function
+    .thumb_func
 ASM_SPI_CR1_SSI_1:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CR1_OFFSET
@@ -600,6 +672,8 @@ ASM_SPI_CR1_SSI_1:
 	STR		R0, [R1]
 	BX LR
 
+    .type ASM_SPI_CR1_SSI_0, %function
+    .thumb_func
 ASM_SPI_CR1_SSI_0:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CR1_OFFSET
@@ -612,7 +686,8 @@ ASM_SPI_CR1_SSI_0:
 	STR		R0, [R1]
 	BX LR
 
-
+    .type ASM_SPI_TXDR_Set, %function
+    .thumb_func
 ASM_SPI_TXDR_Set:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_TXDR_OFFSET
@@ -621,6 +696,8 @@ ASM_SPI_TXDR_Set:
 	STRB	R3, [R1]
 	BX LR
 
+    .type ASM_SPI_RXDR_Get, %function
+    .thumb_func
 ASM_SPI_RXDR_Get:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_RXDR_OFFSET
@@ -634,6 +711,8 @@ ASM_SPI_RXDR_Get:
  * 0: low level is active for SS signal
  * 1: high level is active for SS signal
  */
+     .type ASM_SPI_CFG2_SSIOP_0, %function
+    .thumb_func
 ASM_SPI_CFG2_SSIOP_0:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CFG2_OFFSET
@@ -646,6 +725,8 @@ ASM_SPI_CFG2_SSIOP_0:
 	STR		R0, [R1]
 	BX LR
 
+    .type ASM_SPI_CFG2_SSIOP_1, %function
+    .thumb_func
 ASM_SPI_CFG2_SSIOP_1:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CFG2_OFFSET
@@ -657,6 +738,8 @@ ASM_SPI_CFG2_SSIOP_1:
 	STR		R0, [R1]
 	BX LR
 
+    .type ASM_SPI_CFG2_RDIOM_1_SIMULATE_RDY, %function
+    .thumb_func
 ASM_SPI_CFG2_RDIOM_1_SIMULATE_RDY:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_CFG2_OFFSET
@@ -668,6 +751,8 @@ ASM_SPI_CFG2_RDIOM_1_SIMULATE_RDY:
 	STR		R0, [R1]
 	BX LR
 
+    .type ASM_SPI_IER_GET, %function
+    .thumb_func
 ASM_SPI_IER_GET:
 	LDR		R1, =SPI_BASE_ADDR
 	LDR		R2, =SPI_IER_OFFSET
