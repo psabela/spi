@@ -5,3 +5,5 @@ rx_flag
 tsize
 payloadLen
 rx_data
+startAddr
+buffer

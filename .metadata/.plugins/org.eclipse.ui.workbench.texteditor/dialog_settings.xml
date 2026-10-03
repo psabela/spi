@@ -18,13 +18,16 @@
 		<item value="txpie"/>
 	</list>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="System"/>
+		<item key="selection" value="ReadBuffer"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="ReadBuffer"/>
+			<item value="lora_command"/>
+			<item value="SetBufferBaseAddress"/>
 			<item value="SystemCore"/>
 			<item value="System"/>
 			<item value="SystemCoreClock"/>
@@ -37,9 +40,6 @@
 			<item value="ASM_SPI_CFG2_MIDI_Set"/>
 			<item value="ASM_SPI_CFG1_FTHLV_2"/>
 			<item value="TSIZE"/>
-			<item value="ASM_SPI_CR2_TSIZE"/>
-			<item value="GPIOE_BSRR_NSS_RESET"/>
-			<item value="GPIO_SPI_init"/>
 		</list>
 		<list key="replacehistory">
 			<item value=""/>
